@@ -11,7 +11,7 @@ To use this API you must make use of JSON. Below are all the possible routes and
 **[Users](#Users) | [Comments](#Comments) | [Videos](#Videos) | [Questions](#Questions)**
 
 ### Users
-The table 'Users' contains data about each user, this includes their full name, business e-mail, r/u number and their role. You can update an user's name, e-mail and course.
+The table 'Users' contains data about each user, this includes their full name, business e-mail, r/u number and their role. You can update an user's name, e-mail and course.  
 *Please note: for users, id means their r/u number.*
 | Request (URL) | Request Type |
 | ----------- | ----------- |
@@ -33,7 +33,7 @@ The table 'Users' contains data about each user, this includes their full name, 
 ```
 
 ### Comments
-The table 'Comments' contains data about every comment, including the text, whether it's feedback, date, author and under which video it is. You can update a comment's text.
+The table 'Comments' contains data about every comment, including the text, whether it's feedback, date, author and under which video it is. You can update a comment's text.  
 *Please note: for comments, id means 'commentaar_id'.*
 | Request (URL) | Request Type |
 | ----------- | ----------- |
@@ -54,7 +54,7 @@ The table 'Comments' contains data about every comment, including the text, whet
 ```
 
 ### Videos
-The table 'Videos' contains data about every video, including the title, date and time, author and the server-side url to the video. You can update a video's title.
+The table 'Videos' contains data about every video, including the title, date and time, author and the server-side url to the video. You can update a video's title.  
 *Please note: for videos, id means 'video_id'.*
 | Request (URL) | Request Type |
 | ----------- | ----------- |
@@ -73,7 +73,7 @@ The table 'Videos' contains data about every video, including the title, date an
 ```
 
 ### Questions
-The table 'Questions' contains data about every question, including the question itself as its category. You can update a question's text.
+The table 'Questions' contains data about every question, including the question itself as its category. You can update a question's text.  
 *Please note: for questions, id means 'vraag_id'.*
 | Request (URL) | Request Type |
 | ----------- | ----------- |
@@ -154,7 +154,7 @@ git clone https://github.com/ucll-ap-sollicitatie/backend.git name-of-folder
 cd path/to/soc-backend
 ```
 Once inside the folder, go ahead and execute the following command: **`npm install`**
-This command will install all needed dependencies for the application to work leaving out the single most important one which we must install seperately, the Express.js framework (v4.17.1 or later). 
+This command will install all needed dependencies for the application to work leaving out the single most important one which we must install seperately, the Express.js framework (v4.17.1 or later).  
 To do this simply execute the command: **`npm install express --save`** and if all went without error we can enjoy the application to the fullest with just one command: **`node app.js`**.
 ## Prerequisites
 
@@ -164,28 +164,29 @@ To start up the application you need:
 - **[PostgreSQL](https://www.postgresql.org/)** (14 or later)
 
 To install npm and node.js please refer to a tutorial. (**[Linux](https://linuxize.com/post/how-to-install-node-js-on-ubuntu-20-04/)** | **[Windows](https://phoenixnap.com/kb/install-node-js-npm-on-windows)** | **[Mac](https://www.newline.co/@Adele/how-to-install-nodejs-and-npm-on-macos--22782681)**)
+
 An installation guide for PostgreSQL is provided on their official **[website](https://www.postgresql.org/)**.
 You may choose how to host the database server, this could be local or using a service.
 
 ## FAQ
 
-Some features do not work for me, why?
-: Some functionality may be missing due to not all files being in the repository or some functions relying on credentials not provided. 
+### Some features do not work for me, why?
+Some functionality may be missing due to not all files being in the repository or some functions relying on credentials not provided. 
 
-What query language is this application based on?
-: The app is made with PostgreSQL 14 in mind.
+### What query language is this application based on?
+The app is made with PostgreSQL 14 in mind.
 
-What port does the application run on?
-: The app runs on 3001, this can be changed by accessing the 'app.js' file and changing the port to the desired one. 
+### What port does the application run on?
+The app runs on 3001, this can be changed by accessing the 'app.js' file and changing the port to the desired one.  
 `const port = 3001`
 
-What type of data does this application use?
-: This application strictly uses `application/json`.
+### What type of data does this application use?
+This application strictly uses `application/json`.
 
-Can I use this project for my own needs?
-: This is made strictly for and by UC Leuven-Limburg and is not to be used outside its limits.
+### Can I use this project for my own needs?
+This is made strictly for and by UC Leuven-Limburg and is not to be used outside its limits.
 
-Who's the mysterious person behind the team?
-: The one and of course, only... *Frederic Vogels*.
+### Who's the mysterious person behind the team?
+The one and of course, only... *Frederic Vogels*.
 
 ![UCLL](https://user-images.githubusercontent.com/55389806/154109962-3bc1cba1-6d18-4ee0-ba81-bbff7a01f369.png)
