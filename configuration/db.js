@@ -1,13 +1,18 @@
-const mysql = require('mysql2/promise');
-const config = require('config');
+const password = require('./secret');
 
-async function query(sql, params) {
-  const connection = await mysql.createConnection(config.db);
-  const [results, ] = await connection.execute(sql, params);
+// Configuration for the database, is exported as 'config'
+const Pool = require('pg').Pool
+const db = new Pool({
+  user: 'dlhkwpnu',
+  host: 'tyke.db.elephantsql.com',
+  database: 'dlhkwpnu',
+  password: password,
+  port: 5432,
+  max: 20,
+  idleTimeoutMillis: 0,
+  connectionTimeoutMillis: 0,
+})
 
-  return results;
-}
+db.query("SET search_path TO 'solicitaties';")
 
-module.exports = {
-  query
-}
+module.exports = db;
