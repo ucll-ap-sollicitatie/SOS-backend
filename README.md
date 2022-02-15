@@ -188,4 +188,4 @@ Can I use this project for my own needs?
 Who's the mysterious person behind the team?
 : The one and of course, only... *Frederic Vogels*.
 
-![logo](https://intranet.ucll.be/nl/system/files/hulpbronnen/Communicatie/huisstijl/Logo_UCLL_RGB.png)
+![UCLL](https://user-images.githubusercontent.com/55389806/154109962-3bc1cba1-6d18-4ee0-ba81-bbff7a01f369.png)
