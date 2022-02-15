@@ -13,6 +13,11 @@ const db = new Pool({
   connectionTimeoutMillis: 0,
 })
 
-db.query("SET search_path TO 'solicitaties';")
+//db.query("SET search_path TO 'solicitaties';")
+
+db.on('connect', (client) => {
+  client.query("SET search_path TO 'solicitaties';")
+})
+
 
 module.exports = db;
