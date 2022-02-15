@@ -2,7 +2,7 @@
 
 An API created for the functioning of the web application '**Slim Op Sollicitatie**', a place to practice job interviews without fear or pressure. Created with the ease and efficiency of Express.js, a Node.js framework.
 
-[Usage](#Usage) | [Installation](#Installation) | [Prerequisites](#Prerequisites) | [FAQ](#FAQ)
+==[Usage](#Usage)== | ==[Installation](#Installation)== | ==[Prerequisites](#Prerequisites)== | ==[FAQ](#FAQ)==
 
 ## Usage
 
@@ -184,3 +184,8 @@ What type of data does this application use?
 
 Can I use this project for my own needs?
 : This is made strictly for and by UC Leuven-Limburg and is not to be used outside its limits.
+
+Who's the mysterious person behind the team?
+: The one and of course, only... *Frederic Vogels*.
+
+![logo](https://intranet.ucll.be/nl/system/files/hulpbronnen/Communicatie/huisstijl/Logo_UCLL_RGB.png)
