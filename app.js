@@ -3,12 +3,18 @@ const app = express();
 const port = 3001;
 const usersService = require('./services/users')
 const questionsService = require('./services/questions')
+const commentsService = require('./services/comments');
 
 app.use(express.json())
+
 app.use(
     express.urlencoded({
         extended: true,
-    })
+    }),
+    (req, res, next) => {
+        res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+        next()
+    }
 )
 
 app.get('/', (req, res) => {
@@ -28,5 +34,12 @@ app.get('/questions/:vraag_id', questionsService.getQuestionById)
 app.post('/questions', questionsService.createQuestion)
 app.put('/questions/:vraag_id', questionsService.updateQuestion)
 app.delete('/questions/:vraag_id', questionsService.deleteQuestion)
+
+// CRUD routes for comments
+app.get('/comments', commentsService.getAllComments)
+app.get('/comments/:comment_id', commentsService.getCommentById)
+app.post('/comments', commentsService.createComment)
+app.put('/comments/:comment_id', commentsService.updateComment)
+app.delete('/comments/:comment_id', commentsService.deleteComment)
 
 app.listen(port, () => console.log(`Currently listening on port ${port}`))
