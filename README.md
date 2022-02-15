@@ -2,7 +2,7 @@
 
 An API created for the functioning of the web application '**Slim Op Sollicitatie**', a place to practice job interviews without fear or pressure. Created with the ease and efficiency of Express.js, a Node.js framework.
 
-==[Usage](#Usage)== | ==[Installation](#Installation)== | ==[Prerequisites](#Prerequisites)== | ==[FAQ](#FAQ)==
+**[Usage](#Usage) | [Installation](#Installation) | [Prerequisites](#Prerequisites) | [FAQ](#FAQ)**
 
 ## Usage
 
