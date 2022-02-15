@@ -1,7 +1,7 @@
 const password = require('./secret');
+const Pool = require('pg').Pool
 
 // Configuration for the database, is exported as 'config'
-const Pool = require('pg').Pool
 const db = new Pool({
   user: 'dlhkwpnu',
   host: 'tyke.db.elephantsql.com',

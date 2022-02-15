@@ -3,7 +3,8 @@ const app = express();
 const port = 3001;
 const usersService = require('./services/users')
 const questionsService = require('./services/questions')
-const commentsService = require('./services/comments');
+const commentsService = require('./services/comments')
+const videosService = require('./services/videos');
 
 app.use(express.json())
 
@@ -41,5 +42,12 @@ app.get('/comments/:comment_id', commentsService.getCommentById)
 app.post('/comments', commentsService.createComment)
 app.put('/comments/:comment_id', commentsService.updateComment)
 app.delete('/comments/:comment_id', commentsService.deleteComment)
+
+// CRUD routes for videos
+app.get('/videos', videosService.getAllVideos)
+app.get('/videos/:video_id', videosService.getVideoById)
+app.post('/videos', videosService.createVideo)
+app.put('/videos/:video_id', videosService.updateVideo)
+app.delete('/videos/:video_id', videosService.deleteVideo)
 
 app.listen(port, () => console.log(`Currently listening on port ${port}`))

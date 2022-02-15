@@ -1,4 +1,5 @@
-const db = require('../configuration/db');
+// Contains all the queries for the table 'comments'
+const db = require('../configuration/db')
 
 const getAllComments = (req, res) => {
     db.query('SELECT * FROM commentaar ORDER BY commentaar_id ASC', (err, results) => {
