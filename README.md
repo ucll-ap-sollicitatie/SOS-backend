@@ -1,10 +1,10 @@
 # Slim Op Sollicitatie API
----
+--
 An API created for the functioning of the web application '**Slim Op Sollicitatie**', a place to practice job interviews without fear or pressure. Created with the ease and efficiency of Express.js, a Node.js framework.
 
 [Usage](#Usage) | [Installation](#Installation) | [Prerequisites](#Prerequisites) | [FAQ](#FAQ)
 ## Installation
----
+--
 To begin, we must set up a PostgreSQL (psql) database server. To install it, please refer to the [prerequisites](#Prerequisites). Once you have a database server configured we can begin created a schema, database and the needed tables.
 
 In the terminal of your psql server execute the following commands to create the database and schema:
@@ -65,7 +65,7 @@ cd path/to/soc-backend**
 Once inside the folder, go ahead and execute the following command: **`npm install`**
 This command will install all needed dependencies for the application to work leaving out the single most important one which we must install seperately, the Express.js framework (v4.17.1 or later). To do this simply execute the command: **`npm install express --save`** and if all went without error we can enjoy the application to the fullest with just one command: **`node app.js`**.
 ## Prerequisites
----
+--
 To start up the application you need: 
 - **[npm](https://www.npmjs.com/)** (v8.5.0 or later)
 - **[Node.js](https://nodejs.org/en/)** (v16.13.1 or later)
