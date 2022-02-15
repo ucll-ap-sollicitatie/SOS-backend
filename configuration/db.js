@@ -8,7 +8,7 @@ const db = new Pool({
   database: 'dlhkwpnu',
   password: password,
   port: 5432,
-  max: 20,
+  max: 2,
   idleTimeoutMillis: 0,
   connectionTimeoutMillis: 0,
 })
