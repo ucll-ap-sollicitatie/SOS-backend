@@ -22,11 +22,11 @@ const getUserById = (req, res) => {
 }
 
 const createUser = (req, res) => {
-    const {r_u_number, voornaam, familienaam, e_mail, richting, wachtwoord} = req.body
-    console.log(`Request to create user with ${r_u_number}, ${voornaam}, ${familienaam}, ${e_mail}, ${richting}, ${wachtwoord}`)
-    bcrypt.hash(wachtwoord, saltRounds, (err, hash) => {
+    const {r_u_number, name, surname, email, formation, password} = req.body
+    console.log(`Request to create user with ${r_u_number}, ${name}, ${surname}, ${email}, ${formation}, ${password}`)
+    bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) throw err
-        db.query('INSERT INTO users (r_u_number, voornaam, familienaam, e_mail, richting, hashed_wachtwoord) VALUES ($1, $2, $3, $4, $5, $6)', [r_u_number, voornaam, familienaam, e_mail, richting, hash], (err, results) => {
+        db.query('INSERT INTO users (r_u_number, name, surname, email, formation, hashed_password) VALUES ($1, $2, $3, $4, $5, $6)', [r_u_number, name, surname, email, formation, hash], (err, results) => {
             if (err) throw err
             res.status(200).send(`User created with id: ${r_u_number}`)
         })
@@ -39,9 +39,9 @@ const createUser = (req, res) => {
 
 const updateUser = (req, res) => {
     const r_u_number = req.params.r_u_number
-    const {voornaam, familienaam, e_mail, richting} = req.body
-    console.log(`Request to update user with id ${r_u_number} and ${voornaam}, ${familienaam}, ${e_mail}, ${richting}`)
-    db.query('UPDATE users SET voornaam = $1, familienaam = $2, e_mail = $3, richting = $4 WHERE r_u_number = $5', [voornaam, familienaam, e_mail, richting, r_u_number], (err, results) => {
+    const {name, surname, email, formation} = req.body
+    console.log(`Request to update user with id ${r_u_number} and ${name}, ${surname}, ${email}, ${formation}`)
+    db.query('UPDATE users SET name = $1, surname = $2, email = $3, formation = $4 WHERE r_u_number = $5', [name, surname, email, formation, r_u_number], (err, results) => {
         if (err) throw err
         res.status(200).send(`User updated with id: ${r_u_number}`)
     })

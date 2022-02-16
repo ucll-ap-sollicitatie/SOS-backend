@@ -19,21 +19,21 @@ const getQuestionById = (req, res) => {
 }
 
 const createQuestion = (req, res) => {
-    const {vraag} = req.body
-    console.log(`Request to create comment with ${vraag}`)
-    db.query('INSERT INTO questions (vraag) VALUES ($1)', [vraag], (err, results) => {
+    const {question} = req.body
+    console.log(`Request to create comment with ${question}`)
+    db.query('INSERT INTO questions (question) VALUES ($1)', [question], (err, results) => {
         if (err) throw err
-        res.status(200).send(`Question created with text: ${vraag}`)
+        res.status(200).send(`Question created with text: ${question}`)
     })
 }
 
 const updateQuestion = (req, res) => {
     const question_id = req.params.question_id
-    const {vraag} = req.body
-    console.log(`Request to update question with id #${question_id} and ${vraag}`)
-    db.query('UPDATE questions SET vraag = $1 WHERE question_id = $2', [vraag, question_id], (err, results) => {
+    const {question} = req.body
+    console.log(`Request to update question with id #${question_id} and ${question}`)
+    db.query('UPDATE questions SET question = $1 WHERE question_id = $2', [question, question_id], (err, results) => {
         if (err) throw err
-        res.status(200).send(`Question #${question_id} updated with text: ${vraag}`)
+        res.status(200).send(`Question #${question_id} updated with text: ${question}`)
     })
 }
 

@@ -19,21 +19,21 @@ const getVideoById = (req, res) => {
 }
 
 const createVideo = (req, res) => {
-    const {titel, eigenaar_r_nummer} = req.body
-    console.log(`Request to create video with ${titel}, ${eigenaar_r_nummer}`)
-    db.query('INSERT INTO videos (titel, eigenaar_r_nummer) VALUES ($1, $2)', [titel, eigenaar_r_nummer], (err, results) => {
+    const {title, r_u_number} = req.body
+    console.log(`Request to create video with ${title}, ${r_u_number}`)
+    db.query('INSERT INTO videos (title, r_u_number) VALUES ($1, $2)', [title, r_u_number], (err, results) => {
         if (err) throw err
-        res.status(200).send(`Video created with title: ${titel} by ${eigenaar_r_nummer}`)
+        res.status(200).send(`Video created with title: ${title} by ${r_u_number}`)
     })
 }
 
 const updateVideo = (req, res) => {
     const video_id = req.params.video_id
-    const {titel} = req.body
-    console.log(`Request to update video with id #${video_id} and ${titel}`)
-    db.query('UPDATE videos SET titel = $1 WHERE video_id = $2', [titel, video_id], (err, results) => {
+    const {title} = req.body
+    console.log(`Request to update video with id #${video_id} and ${title}`)
+    db.query('UPDATE videos SET title = $1 WHERE video_id = $2', [title, video_id], (err, results) => {
         if (err) throw err
-        res.status(200).send(`Video #${video_id} has been updated to ${titel}`)
+        res.status(200).send(`Video #${video_id} has been updated to ${title}`)
     })
 }
 
