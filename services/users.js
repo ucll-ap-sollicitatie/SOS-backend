@@ -31,10 +31,6 @@ const createUser = (req, res) => {
             res.status(200).send(`User created with id: ${r_u_number}`)
         })
     })
-    // db.query('INSERT INTO users (r_u_number, voornaam, familienaam, e_mail, richting) VALUES ($1, $2, $3, $4, $5)', [r_u_number, voornaam, familienaam, e_mail, richting], (err, results) => {
-    //     if (err) throw err
-    //     res.status(200).send(`User created with id: ${r_u_number}`)
-    // })
 }
 
 const updateUser = (req, res) => {
