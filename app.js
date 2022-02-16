@@ -92,4 +92,4 @@ app.delete('/videos/:video_id', Video.deleteVideo)
 // Log in & Register
 app.post('/login', Authentication.logIn)
 
-app.listen(port, () => console.log(`Currently listening on port ${port}`))
+app.listen(port, () => console.log(`Currently listening on port ${port}`));

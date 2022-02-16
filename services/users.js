@@ -1,6 +1,6 @@
 // Contains all the queries for the table 'users'
-const db = require("../configuration/db")
-const bcrypt = require('bcrypt');
+const db = require("../configuration/db");
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const findAll = () => {
