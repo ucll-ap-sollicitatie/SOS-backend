@@ -18,5 +18,7 @@ db.on('connect', (client) => {
   client.query("SET search_path TO 'sollicitaties'")
 })
 
+// process.on('exit', db.client.)
+
 
 module.exports = db;
