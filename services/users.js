@@ -17,7 +17,7 @@ const getUserById = (req, res) => {
     console.log(`Request for user by id with id ${r_u_number}`)
     db.query('SELECT r_u_number, name, surname, email, photo_url, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1', [r_u_number], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows)
+        res.status(200).json(results.rows[0])
     })
 }
 
