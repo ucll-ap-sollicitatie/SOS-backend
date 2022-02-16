@@ -22,11 +22,11 @@ const getUserById = (req, res) => {
 }
 
 const createUser = (req, res) => {
-    const {r_u_number, name, surname, email, formation, password} = req.body
-    console.log(`Request to create user with ${r_u_number}, ${name}, ${surname}, ${email}, ${formation}, ${password}`)
+    const {r_u_number, name, surname, email, password, formation_id, role_id} = req.body
+    console.log(`Request to create user with ${r_u_number}, ${name}, ${surname}, ${email}, formation: ${formation_id}, role: ${role_id} ${password}`)
     bcrypt.hash(password, saltRounds, (err, hash) => {
         if (err) throw err
-        db.query('INSERT INTO users (r_u_number, name, surname, email, formation, hashed_password) VALUES ($1, $2, $3, $4, $5, $6)', [r_u_number, name, surname, email, formation, hash], (err, results) => {
+        db.query('INSERT INTO users (r_u_number, name, surname, email, hashed_password, formation_id, role_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [r_u_number, name, surname, email, hash, formation_id, role_id], (err, results) => {
             if (err) throw err
             res.status(200).send(`User created with id: ${r_u_number}`)
         })
