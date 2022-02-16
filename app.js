@@ -1,69 +1,95 @@
+const cors = require('cors')
+const helmet = require('helmet')
+const responseHelper = require('express-response-helper').helper();
 const express = require('express');
-const usersService = require('./services/users')
-const questionsService = require('./services/questions')
-const questionCategoriesService = require('./services/question_categories')
-const commentsService = require('./services/comments')
-const videosService = require('./services/videos')
+const User = require('./services/users')
+const Question = require('./services/questions')
+const Question_categories = require('./services/question_categories')
+const Comment = require('./services/comments')
+const Video = require('./services/videos')
+const Authentication = require('./services/authentication')
+
 const app = express();
 const port = 3001;
 
-app.use(express.json());
-app.use(
-  express.urlencoded({
-    extended: true,
-  }),
-  (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET,HEAD,OPTIONS,POST,PUT,DELETE"
-    );
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
-    next();
-  }
-);
+const corsOptions = {
+  origin: 'http://localhost:3000'
+}
 
-app.get('/', (req, res) => { res.json({message: "Slim op sollicitatie"}) })
+app.use(responseHelper)
+app.use(helmet())
+app.use(cors(corsOptions))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+  // (req, res, next) => {
+  //   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  //   res.header(
+  //     "Access-Control-Allow-Methods",
+  //     "GET,HEAD,OPTIONS,POST,PUT,DELETE"
+  //   );
+  //   res.header(
+  //     "Access-Control-Allow-Headers",
+  //     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  //   );
+  //   next();
+  // }
+
+app.get('/', (req, res) => { 
+  res.respond({message: "Slim op sollicitatie API"}) 
+})
 
 // CRUD routes for users
-app.get('/users', usersService.getAllUsers)
-app.get('/users/:r_u_number', usersService.getUserById)
-app.post('/users', usersService.createUser)
-app.put('/users/:r_u_number', usersService.updateUser)
-app.delete('/users/:r_u_number', usersService.deleteUser)
+app.get('/users', async (req, res) => {
+  let result = await User.findAll()
+  res.respond(result)
+ })
+
+app.get('/users/:r_u_number', async (req, res) => {
+  let result = await User.findOne(req.params.r_u_number)
+  res.respond(result)
+})
+app.post('/users', async (req, res) => {
+  const {r_u_number, name, surname, email, password, formation_id, role_id} = req.body
+  let result = await User.add(r_u_number, name, surname, email, password, formation_id, role_id)
+  res.respond(result)
+})
+// app.put('/users/:r_u_number', (req, res) => {
+//   res.status(200).json(User.update(req, res))
+// })
+app.delete('/users/:r_u_number', async (req, res) => {
+  let result = await User.deleteOne(req.params.r_u_number)
+  res.respond(result)
+})
 
 // CRUD routes for questions
-app.get('/questions', questionsService.getAllQuestions)
-app.get('/questions-by-category/:question_category_id', questionsService.getAllQuestionsByQuestionCategoryId)
-app.get('/questions/:question_id', questionsService.getQuestionById)
-app.post('/questions', questionsService.createQuestion)
-app.put('/questions/:question_id', questionsService.updateQuestion)
-app.delete('/questions/:question_id', questionsService.deleteQuestion)
+app.get('/questions', Question.getAllQuestions)
+app.get('/questions-by-category/:question_category_id', Question.getAllQuestionsByQuestionCategoryId)
+app.get('/questions/:question_id', Question.getQuestionById)
+app.post('/questions', Question.createQuestion)
+app.put('/questions/:question_id', Question.updateQuestion)
+app.delete('/questions/:question_id', Question.deleteQuestion)
 
 // CRUD routes for question categories
-app.get('/question-categories', questionCategoriesService.getAllQuestionCategories)
-app.get('/question-categories/:question_category_id', questionCategoriesService.getQuestionCategoriesById)
-app.get('/question-categories/:category', questionCategoriesService.getQuestionCategoriesByName)
-app.post('/question-categories', questionCategoriesService.createQuestionCategory)
+app.get('/question-categories', Question_categories.getAllQuestionCategories)
+app.get('/question-categories/:question_category_id', Question_categories.getQuestionCategoriesById)
+app.get('/question-categories/:category', Question_categories.getQuestionCategoriesByName)
+app.post('/question-categories', Question_categories.createQuestionCategory)
 
 // CRUD routes for comments
-app.get('/comments', commentsService.getAllComments)
-app.get('/comments/:comment_id', commentsService.getCommentById)
-app.post('/comments', commentsService.createComment)
-app.put('/comments/:comment_id', commentsService.updateComment)
-app.delete('/comments/:comment_id', commentsService.deleteComment)
+app.get('/comments', Comment.getAllComments)
+app.get('/comments/:comment_id', Comment.getCommentById)
+app.post('/comments', Comment.createComment)
+app.put('/comments/:comment_id', Comment.updateComment)
+app.delete('/comments/:comment_id', Comment.deleteComment)
 
 // CRUD routes for videos
-app.get('/videos', videosService.getAllVideos)
-app.get('/videos/:video_id', videosService.getVideoById)
-app.post('/videos', videosService.createVideo)
-app.put('/videos/:video_id', videosService.updateVideo)
-app.delete('/videos/:video_id', videosService.deleteVideo)
+app.get('/videos', Video.getAllVideos)
+app.get('/videos/:video_id', Video.getVideoById)
+app.post('/videos', Video.createVideo)
+app.put('/videos/:video_id', Video.updateVideo)
+app.delete('/videos/:video_id', Video.deleteVideo)
 
 // Log in & Register
-app.post('/login', usersService.logIn)
+app.post('/login', Authentication.logIn)
 
 app.listen(port, () => console.log(`Currently listening on port ${port}`))
