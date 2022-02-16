@@ -22,19 +22,19 @@ const getUserById = (req, res) => {
 }
 
 const createUser = (req, res) => {
-    const {r_u_nummer, voornaam, familienaam, e_mail, richting} = req.body
-    console.log(`Request to create comment with ${r_u_nummer}, ${voornaam}, ${familienaam}, ${e_mail}, ${richting}`)
-    // bcrypt.hash(wachtwoord, saltRounds, (err, hash) => {
-    //     if (err) throw err
-    //     db.query('INSERT INTO gebruikers (r_u_nummer, voornaam, familienaam, e_mail, richting, hashed_wachtwoord) VALUES ($1, $2, $3, $4, $5, $6)', [r_u_nummer, voornaam, familienaam, e_mail, richting, hash], (err, results) => {
-    //         if (err) throw err
-    //         res.status(200).send(`User created with id: ${r_u_nummer}`)
-    //     })
-    // })
-    db.query('INSERT INTO gebruikers (r_u_nummer, voornaam, familienaam, e_mail, richting) VALUES ($1, $2, $3, $4, $5)', [r_u_nummer, voornaam, familienaam, e_mail, richting], (err, results) => {
+    const {r_u_nummer, voornaam, familienaam, e_mail, richting, wachtwoord} = req.body
+    console.log(`Request to create user with ${r_u_nummer}, ${voornaam}, ${familienaam}, ${e_mail}, ${richting}, ${wachtwoord}`)
+    bcrypt.hash(wachtwoord, saltRounds, (err, hash) => {
         if (err) throw err
-        res.status(200).send(`User created with id: ${r_u_nummer}`)
+        db.query('INSERT INTO gebruikers (r_u_nummer, voornaam, familienaam, e_mail, richting, hashed_wachtwoord) VALUES ($1, $2, $3, $4, $5, $6)', [r_u_nummer, voornaam, familienaam, e_mail, richting, hash], (err, results) => {
+            if (err) throw err
+            res.status(200).send(`User created with id: ${r_u_nummer}`)
+        })
     })
+    // db.query('INSERT INTO gebruikers (r_u_nummer, voornaam, familienaam, e_mail, richting) VALUES ($1, $2, $3, $4, $5)', [r_u_nummer, voornaam, familienaam, e_mail, richting], (err, results) => {
+    //     if (err) throw err
+    //     res.status(200).send(`User created with id: ${r_u_nummer}`)
+    // })
 }
 
 const updateUser = (req, res) => {
