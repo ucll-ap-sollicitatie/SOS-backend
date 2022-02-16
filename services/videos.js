@@ -14,7 +14,7 @@ const getVideoById = (req, res) => {
     console.log(`Request for video by id with id #${video_id}`)
     db.query('SELECT * FROM videos WHERE video_id = $1', [video_id], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows)
+        res.status(200).json(results.rows[0])
     })
 }
 

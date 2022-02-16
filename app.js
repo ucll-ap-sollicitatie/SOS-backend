@@ -90,4 +90,7 @@ app.get("/formations", formationsService.getAllFormations);
 app.get("/formations/:formation_id", formationsService.getFormationById);
 app.get("/formations-by-name/:formation", formationsService.getFormationByName);
 
+// Log in & Register
+app.post("/login", usersService.logIn);
+
 app.listen(port, () => console.log(`Currently listening on port ${port}`));

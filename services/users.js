@@ -77,10 +77,35 @@ const deleteUser = (req, res) => {
   );
 };
 
+const logIn = (req, res) => {
+  const { r_u_number, password } = req.body;
+  console.log(
+    `Log in attempt with r_u_number: ${r_u_number} and password: ${password}`
+  );
+  const hashed_password = db.query(
+    "SELECT hashed_password FROM users WHERE r_u_number = $1",
+    [r_u_number],
+    (err, results) => {
+      if (err) res.redirect("/auth/login");
+      return results.rows[0];
+    }
+  );
+  bcrypt.compare(password, hashed_password, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.redirect("/auth/login");
+    } else {
+      res.session.user = r_u_number;
+      res.redirect("/");
+    }
+  });
+};
+
 module.exports = {
   getAllUsers,
   getUserById,
   createUser,
   updateUser,
   deleteUser,
+  logIn,
 };

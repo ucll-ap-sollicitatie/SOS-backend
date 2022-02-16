@@ -14,7 +14,7 @@ const getAllQuestionsByQuestionCategoryId = (req, res) => {
     console.log(`Request for all questions by category with category id #${question_category_id}`)
     db.query('SELECT * FROM questions WHERE question_category_id = $1', [question_category_id], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows)
+        res.status(200).json(results.rows[0])
     })
 }
 
@@ -23,7 +23,7 @@ const getQuestionById = (req, res) => {
     console.log(`Request for question by id with id #${question_id}`)
     db.query('SELECT * FROM questions WHERE question_id = $1', [question_id], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows)
+        res.status(200).json(results.rows[0])
     })
 }
 
