@@ -32,7 +32,8 @@ app.post('/questions', questionsService.createQuestion)
 app.put('/questions/:question_id', questionsService.updateQuestion)
 app.delete('/questions/:question_id', questionsService.deleteQuestion)
 
-app.get('/questions/categories', questionsService.getAllQuestionCategories)
+// CRUD routes for question categories
+app.get('/questions-categories', questionsService.getAllQuestionCategories)
 
 // CRUD routes for comments
 app.get('/comments', commentsService.getAllComments)
