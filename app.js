@@ -17,10 +17,7 @@ app.use(
     }
 )
 
-app.get('/', (req, res) => {
-    res.json({message: "Slim op sollicitatie"})
-})
-
+app.get('/', (req, res) => { res.json({message: "Slim op sollicitatie"}) })
 // CRUD routes for users
 app.get('/users', usersService.getAllUsers)
 app.get('/users/:r_u_number', usersService.getUserById)

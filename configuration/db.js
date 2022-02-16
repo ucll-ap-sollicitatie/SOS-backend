@@ -3,14 +3,15 @@ const Pool = require('pg').Pool
 
 // Configuration for the database, is exported as 'config'
 const db = new Pool({
-  user: secret.r_u_number,
-  host: 'databanken.ucll.be',
-  database: 'probeer',
+  user: secret.username,
   password: secret.password,
-  port: 52122,
-  max: 20,
+  host: 'tyke.db.elephantsql.com',
+  database: 'dlhkwpnu',
+  port: 5432,
+  max: 1,
   idleTimeoutMillis: 0,
   connectionTimeoutMillis: 0,
+  ssl: true
 })
 
 db.on('connect', (client) => {
