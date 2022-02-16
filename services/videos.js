@@ -2,7 +2,8 @@
 const db = require('../configuration/db')
 
 const getAllVideos = (req, res) => {
-    db.query('SELECT * FROM video ORDER BY video_id ASC', (err, results) => {
+    console.log(`Request for all videos`)
+    db.query('SELECT * FROM videos ORDER BY video_id ASC', (err, results) => {
         if (err) throw err
         res.status(200).json(results.rows)
     })
@@ -10,35 +11,36 @@ const getAllVideos = (req, res) => {
 
 const getVideoById = (req, res) => {
     const video_id = req.params.video_id
-
-    db.query('SELECT * FROM video WHERE video_id = $1', [video_id], (err, results) => {
+    console.log(`Request for video by id with id #${video_id}`)
+    db.query('SELECT * FROM videos WHERE video_id = $1', [video_id], (err, results) => {
         if (err) throw err
         res.status(200).json(results.rows)
     })
 }
 
 const createVideo = (req, res) => {
-    const {titel, eigenaar_r_nummer} = req.body
-
-    db.query('INSERT INTO video (titel, eigenaar_r_nummer) VALUES ($1, $2)', [titel, eigenaar_r_nummer], (err, results) => {
+    const {title, r_u_number} = req.body
+    console.log(`Request to create video with ${title}, ${r_u_number}`)
+    db.query('INSERT INTO videos (title, r_u_number) VALUES ($1, $2)', [title, r_u_number], (err, results) => {
         if (err) throw err
-        res.status(200).send(`Video created with title: ${titel} by ${eigenaar_r_nummer}`)
+        res.status(200).send(`Video created with title: ${title} by ${r_u_number}`)
     })
 }
 
 const updateVideo = (req, res) => {
     const video_id = req.params.video_id
-    const {titel} = req.body
-    db.query('UPDATE video SET titel = $1 WHERE video_id = $2', [titel, video_id], (err, results) => {
+    const {title} = req.body
+    console.log(`Request to update video with id #${video_id} and ${title}`)
+    db.query('UPDATE videos SET title = $1 WHERE video_id = $2', [title, video_id], (err, results) => {
         if (err) throw err
-        res.status(200).send(`Video #${video_id} has been updated to ${titel}`)
+        res.status(200).send(`Video #${video_id} has been updated to ${title}`)
     })
 }
 
 const deleteVideo = (req, res) => {
     const video_id = req.params.video_id
-
-    db.query('DELETE FROM video WHERE video_id = $1', [video_id], (err, results) => {
+    console.log(`Request to delete video with id #${video_id}`)
+    db.query('DELETE FROM videos WHERE video_id = $1', [video_id], (err, results) => {
         if (err) throw err
         res.status(200).send(`Comment deleted with id: ${video_id}`)
     })

@@ -4,6 +4,15 @@ An API created for the functioning of the web application '**Slim Op Sollicitati
 
 **[Usage](#Usage) | [Installation](#Installation) | [Prerequisites](#Prerequisites) | [FAQ](#FAQ)**
 
+## Secret
+In the `configuration` folder, create a `secret.js` file with following structure:
+```js
+const r_u_number = 'r_u_number'
+const password = 'password'
+
+module.exports = password
+``` 
+
 ## Usage
 
 To use this API you must make use of JSON. Below are all the possible routes and example request bodies to help you create, read, update and delete data from the used database tables: 

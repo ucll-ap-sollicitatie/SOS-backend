@@ -1,18 +1,16 @@
-const password = require('./secret');
+const secret = require('./secret')
 const Pool = require('pg').Pool
 
 // Configuration for the database, is exported as 'config'
 const db = new Pool({
-  user: 'dlhkwpnu',
-  host: 'tyke.db.elephantsql.com',
-  database: 'dlhkwpnu',
-  password: password,
-  port: 5432,
-  max: 2,
-  idleTimeoutMillis: 0,
-  connectionTimeoutMillis: 0,
+  user: secret.credentials.username,
+  password: secret.credentials.password,
+  host: '193.191.177.196',
+  database: 'soc',
+  port: 5432
 })
 
-db.query("SET search_path TO 'solicitaties';")
+// process.on('exit', db.client.)
+
 
 module.exports = db;
