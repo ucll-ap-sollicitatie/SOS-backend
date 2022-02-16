@@ -3,18 +3,18 @@ const Pool = require('pg').Pool
 
 // Configuration for the database, is exported as 'config'
 const db = new Pool({
-  user: 'dlhkwpnu',
-  host: 'tyke.db.elephantsql.com',
-  database: 'dlhkwpnu',
+  user: 'r0790938',
+  host: 'databanken.ucll.be',
+  database: 'probeer',
   password: password,
-  port: 5432,
-  max: 2,
+  port: 52122,
+  max: 20,
   idleTimeoutMillis: 0,
   connectionTimeoutMillis: 0,
 })
 
 db.on('connect', (client) => {
-  client.query("SET search_path TO 'solicitaties'")
+  client.query("SET search_path TO 'sollicitaties'")
 })
 
 
