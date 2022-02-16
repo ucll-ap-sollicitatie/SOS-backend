@@ -1,4 +1,4 @@
-const password = require('./secret');
+const password = require('./secret')
 const Pool = require('pg').Pool
 
 // Configuration for the database, is exported as 'config'
@@ -13,10 +13,8 @@ const db = new Pool({
   connectionTimeoutMillis: 0,
 })
 
-//db.query("SET search_path TO 'solicitaties';")
-
 db.on('connect', (client) => {
-  client.query("SET search_path TO 'solicitaties';")
+  client.query("SET search_path TO 'solicitaties'")
 })
 
 

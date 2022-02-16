@@ -2,12 +2,11 @@ const express = require('express');
 const usersService = require('./services/users')
 const questionsService = require('./services/questions')
 const commentsService = require('./services/comments')
-const videosService = require('./services/videos');
+const videosService = require('./services/videos')
 const app = express();
 const port = 3001;
 
 app.use(express.json())
-
 app.use(
     express.urlencoded({
         extended: true,
