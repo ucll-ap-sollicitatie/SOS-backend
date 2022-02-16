@@ -14,7 +14,7 @@ const getCommentById = (req, res) => {
     console.log(`Request for comment by id with id #${comment_id}`)
     db.query('SELECT * FROM comments WHERE comment_id = $1', [comment_id], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows)
+        res.status(200).json(results.rows[0])
     })
 }
 

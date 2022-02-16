@@ -23,7 +23,7 @@ const getQuestionCategoriesByName = (req, res) => {
     console.log(`Request for question category by name with name: ${category}`)
     db.query('SELECT * FROM question_categories WHERE category = $1', [category], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows)
+        res.status(200).json(results.rows[0])
     })
 }
 

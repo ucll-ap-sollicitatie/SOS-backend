@@ -63,4 +63,7 @@ app.post('/videos', videosService.createVideo)
 app.put('/videos/:video_id', videosService.updateVideo)
 app.delete('/videos/:video_id', videosService.deleteVideo)
 
+// Log in & Register
+app.post('/login', usersService.logIn)
+
 app.listen(port, () => console.log(`Currently listening on port ${port}`))

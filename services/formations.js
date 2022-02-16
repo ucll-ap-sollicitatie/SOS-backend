@@ -14,7 +14,7 @@ const getFormationById = (req, res) => {
     console.log(`Request for formation by id with id #${formation_id}`)
     db.query('SELECT * FROM formations WHERE formation_id = $1', [formation_id], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows)
+        res.status(200).json(results.rows[0])
     })
 }
 
@@ -23,6 +23,6 @@ const getFormationByName = (req, res) => {
     console.log(`Request for formation by name with name: ${formation_name}`)
     db.query('SELECT * FROM formations WHERE formation = $1', [formation_name], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows)
+        res.status(200).json(results.rows[0])
     })
 }
