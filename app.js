@@ -14,6 +14,7 @@ app.use(
     }),
     (req, res, next) => {
         res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+        res.setHeader('Content-Type', 'application/json');
         next()
     }
 )
@@ -37,7 +38,7 @@ app.delete('/questions/:question_id', questionsService.deleteQuestion)
 
 // CRUD routes for question categories
 app.get('/question-categories', questionCategoriesService.getAllQuestionCategories)
-app.get('/question-categories/:category_id', questionCategoriesService.getQuestionCategoriesById)
+app.get('/question-categories/:question_category_id', questionCategoriesService.getQuestionCategoriesById)
 app.get('/question-categories/:category', questionCategoriesService.getQuestionCategoriesByName)
 app.post('/question-categories', questionCategoriesService.createQuestionCategory)
 
