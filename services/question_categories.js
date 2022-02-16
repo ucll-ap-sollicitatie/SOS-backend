@@ -35,3 +35,10 @@ const createQuestionCategory = (req, res) => {
         res.status(200).send(`Question category created with: ${category}`)
     })
 }
+
+module.exports = {
+    getAllQuestionCategories,
+    getQuestionCategoriesById,
+    getQuestionCategoriesByName,
+    createQuestionCategory,
+}
