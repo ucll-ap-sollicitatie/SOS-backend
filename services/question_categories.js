@@ -14,7 +14,7 @@ const getQuestionCategoriesById = (req, res) => {
     console.log(`Request for question category by id with id #${question_category_id}`)
     db.query('SELECT * FROM question_categories WHERE question_category_id = $1', [question_category_id], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows)
+        res.status(200).json(results.rows[0])
     })
 }
 
@@ -34,4 +34,11 @@ const createQuestionCategory = (req, res) => {
         if (err) throw err
         res.status(200).send(`Question category created with: ${category}`)
     })
+}
+
+module.exports = {
+    getAllQuestionCategories,
+    getQuestionCategoriesById,
+    getQuestionCategoriesByName,
+    createQuestionCategory,
 }

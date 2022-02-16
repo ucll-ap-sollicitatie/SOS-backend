@@ -9,6 +9,15 @@ const getAllQuestions = (req, res) => {
     })
 }
 
+const getAllQuestionsByQuestionCategoryId = (req, res) => {
+    const question_category_id = req.params.question_category_id
+    console.log(`Request for all questions by category with category id #${question_category_id}`)
+    db.query('SELECT * FROM questions WHERE question_category_id = $1', [question_category_id], (err, results) => {
+        if (err) throw err
+        res.status(200).json(results.rows)
+    })
+}
+
 const getQuestionById = (req, res) => {
     const question_id = req.params.question_id
     console.log(`Request for question by id with id #${question_id}`)
@@ -56,6 +65,7 @@ const getAllQuestionCategories = (req, res) => {
 
 module.exports = {
     getAllQuestions,
+    getAllQuestionsByQuestionCategoryId,
     getQuestionById,
     createQuestion,
     updateQuestion,

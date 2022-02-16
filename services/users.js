@@ -6,7 +6,7 @@ const saltRounds = 10;
 
 const getAllUsers = (req, res) => {
     console.log(`Request for all users`)
-    db.query('SELECT * FROM users ORDER BY r_u_number ASC', (error, results) => {
+    db.query('SELECT r_u_number, name, surname, email, photo_url, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) ORDER BY r_u_number ASC', (error, results) => {
         if (error) throw error
         res.status(200).json(results.rows)
     })
@@ -15,9 +15,9 @@ const getAllUsers = (req, res) => {
 const getUserById = (req, res) => {
     const r_u_number = req.params.r_u_number
     console.log(`Request for user by id with id ${r_u_number}`)
-    db.query('SELECT * FROM users WHERE r_u_number = $1', [r_u_number], (err, results) => {
+    db.query('SELECT r_u_number, name, surname, email, photo_url, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1', [r_u_number], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows)
+        res.status(200).json(results.rows[0])
     })
 }
 
