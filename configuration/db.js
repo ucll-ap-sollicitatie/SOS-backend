@@ -1,9 +1,10 @@
+const r_u_number = require('./secret')
 const password = require('./secret')
 const Pool = require('pg').Pool
 
 // Configuration for the database, is exported as 'config'
 const db = new Pool({
-  user: 'r0790938',
+  user: r_u_number,
   host: 'databanken.ucll.be',
   database: 'probeer',
   password: password,

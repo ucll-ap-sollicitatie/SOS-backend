@@ -23,17 +23,19 @@ app.get('/', (req, res) => {
 
 // CRUD routes for users
 app.get('/users', usersService.getAllUsers)
-app.get('/users/:r_u_nummer', usersService.getUserById)
+app.get('/users/:r_u_number', usersService.getUserById)
 app.post('/users', usersService.createUser)
-app.put('/users/:r_u_nummer', usersService.updateUser)
-app.delete('/users/:r_u_nummer', usersService.deleteUser)
+app.put('/users/:r_u_number', usersService.updateUser)
+app.delete('/users/:r_u_number', usersService.deleteUser)
 
 // CRUD routes for questions
 app.get('/questions', questionsService.getAllQuestions)
-app.get('/questions/:vraag_id', questionsService.getQuestionById)
+app.get('/questions/:question_id', questionsService.getQuestionById)
 app.post('/questions', questionsService.createQuestion)
-app.put('/questions/:vraag_id', questionsService.updateQuestion)
-app.delete('/questions/:vraag_id', questionsService.deleteQuestion)
+app.put('/questions/:question_id', questionsService.updateQuestion)
+app.delete('/questions/:question_id', questionsService.deleteQuestion)
+
+app.get('/questions/categories', questionsService.getAllQuestionCategories)
 
 // CRUD routes for comments
 app.get('/comments', commentsService.getAllComments)
