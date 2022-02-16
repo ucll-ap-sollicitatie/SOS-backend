@@ -7,17 +7,24 @@ const videosService = require('./services/videos')
 const app = express();
 const port = 3001;
 
-app.use(express.json())
+app.use(express.json());
 app.use(
-    express.urlencoded({
-        extended: true,
-    }),
-    (req, res, next) => {
-        res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
-        res.setHeader('Content-Type', 'application/json');
-        next()
-    }
-)
+  express.urlencoded({
+    extended: true,
+  }),
+  (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET,HEAD,OPTIONS,POST,PUT,DELETE"
+    );
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    next();
+  }
+);
 
 app.get('/', (req, res) => { res.json({message: "Slim op sollicitatie"}) })
 
