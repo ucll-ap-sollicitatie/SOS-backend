@@ -14,7 +14,7 @@ const getAllQuestionsByQuestionCategoryId = (req, res) => {
     console.log(`Request for all questions by category with category id #${question_category_id}`)
     db.query('SELECT * FROM questions WHERE question_category_id = $1', [question_category_id], (err, results) => {
         if (err) throw err
-        res.status(200).json(results.rows[0])
+        res.status(200).json(results.rows)
     })
 }
 
@@ -28,7 +28,7 @@ const getQuestionById = (req, res) => {
 }
 
 const createQuestion = (req, res) => {
-    const {question} = req.body
+    const { question } = req.body
     console.log(`Request to create comment with ${question}`)
     db.query('INSERT INTO questions (question) VALUES ($1)', [question], (err, results) => {
         if (err) throw err
@@ -38,7 +38,7 @@ const createQuestion = (req, res) => {
 
 const updateQuestion = (req, res) => {
     const question_id = req.params.question_id
-    const {question} = req.body
+    const { question } = req.body
     console.log(`Request to update question with id #${question_id} and ${question}`)
     db.query('UPDATE questions SET question = $1 WHERE question_id = $2', [question, question_id], (err, results) => {
         if (err) throw err
