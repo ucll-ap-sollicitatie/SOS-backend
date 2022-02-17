@@ -16,9 +16,9 @@ const findAll = () => {
     })
 }
 
-const findOne = (r_u_number) => {
+const findOneByEmail = (email) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT r_u_number, name, surname, email, photo_url, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1', [r_u_number], (err, results) => {
+        db.query('SELECT r_u_number, name, surname, email, photo_url, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE email = $1', [email], (err, results) => {
             if (err) return reject(err)
             if (results.rowCount == 1) {
                 resolve(results.rows[0])
@@ -61,7 +61,7 @@ const deleteOne = (r_u_number) => {
 
 module.exports = {
     findAll,
-    findOne,
+    findOneByEmail,
     add,
     // update,
     deleteOne

@@ -5,9 +5,9 @@ const findAll = async (req, res) => {
     res.respond(result)
 }
 
-const findOne = async (req, res) => {
-    const r_u_number = req.params.r_u_number
-    let result = await User.findOne(r_u_number)
+const findOneByEmail = async (req, res) => {
+    const email = req.params.email
+    let result = await User.findOneByEmail(email)
     res.respond(result)
 }
 
@@ -32,7 +32,7 @@ const deleteOne = async (req, res) => {
 
 module.exports = {
     findAll,
-    findOne,
+    findOneByEmail,
     add,
     update,
     deleteOne

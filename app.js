@@ -12,15 +12,18 @@ const Authentication = require('./routes/authentication')
 const cors = require('cors')
 const helmet = require('helmet')
 const responseHelper = require('express-response-helper').helper();
+const session = require('express-session');
 
 // Application
 const express = require('express');
 const app = express();
 const port = 3001;
 const corsOptions = { origin: 'http://localhost:3000' }
+const sessionOptions = { secret: 'test_secret_key', resave: true, saveUninitialized: true }
 
 app.use(responseHelper)
 app.use(helmet())
+app.use(session(sessionOptions))
 app.use(cors(corsOptions))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,7 +34,7 @@ app.get('/', (req, res) => {
 
 // Routes for users
 app.get('/users', User.findAll)
-app.get('/users/:r_u_number', User.findOne)
+app.get('/users/:r_u_number', User.findOneByEmail)
 app.post('/users', User.add)
 app.put('/users/:r_u_number', User.update)
 app.delete('/users/:r_u_number', User.deleteOne)
