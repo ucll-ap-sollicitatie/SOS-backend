@@ -11,7 +11,7 @@ const logIn = async (req, res) => {
     User.findOneByEmail(email)
     .then(user => {
         bcrypt.compare(password, user.hashed_password, (err, result) => {
-            if (err) console.error(err)
+            if (err) res.fail(error)
             if (result) {
                 res.respond(user)
             } else {
