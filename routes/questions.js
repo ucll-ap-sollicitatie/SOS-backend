@@ -44,6 +44,9 @@ const deleteOne = async (req, res) => {
 
 const findAllQuestionsByQuestionCategory = async (req, res) => {
     let result = await Question.findAllQuestionsByQuestionCategory(req.params.question_category_id)
+    .catch((e) => {
+        res.fail(e)
+    })
     res.respond(result)
 }
 
