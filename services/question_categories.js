@@ -1,44 +1,72 @@
 // Contains all the queries for the table 'queston categories'
 const db = require('../configuration/db')
 
-const getAllQuestionCategories = (req, res) => {
-    console.log(`Request for all question categories`)
-    db.query('SELECT * FROM question_categories ORDER BY question_category_id ASC', (err, results) => {
-        if (err) throw err
-        res.status(200).json(results.rows)
+const findAll = () => {
+    return new Promise((resolve, reject) => {  
+        db.query('SELECT * FROM question_categories', (err, results) => {
+            if (err) reject(err)
+            if (results.rowCount != 0) {
+                resolve(results.rows)
+            } else {
+                resolve({error: 'No question categories.'})
+            }
+        })
     })
 }
 
-const getQuestionCategoriesById = (req, res) => {
-    const question_category_id = req.params.question_category_id
-    console.log(`Request for question category by id with id #${question_category_id}`)
-    db.query('SELECT * FROM question_categories WHERE question_category_id = $1', [question_category_id], (err, results) => {
-        if (err) throw err
-        res.status(200).json(results.rows[0])
+const findOneById = (question_category_id) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM question_categories WHERE question_category_id = $1', [question_category_id], (err, results) => {
+            if (err) reject(err)
+            if (results.rowCount == 1) {
+                resolve(results.rows[0])
+            } else {
+                resolve({error: 'Question category not found.'})
+            }
+        })
     })
 }
 
-const getQuestionCategoriesByName = (req, res) => {
-    const category = req.params.category
-    console.log(`Request for question category by name with name: ${category}`)
-    db.query('SELECT * FROM question_categories WHERE category = $1', [category], (err, results) => {
-        if (err) throw err
-        res.status(200).json(results.rows[0])
+const findOneByName = (category) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM question_categories WHERE question_category_id = $1', [question_category_id], (err, results) => {
+            if (err) reject(err)
+            if (results.rowCount == 1) {
+                resolve(results.rows[0])
+            } else {
+                resolve({error: 'Question category not found.'})
+            }
+        })
     })
 }
 
-const createQuestionCategory = (req, res) => {
-    const {category} = req.body
-    console.log(`Request to create question category with: ${category}`)
-    db.query('INSERT INTO question_categories (category) VALUES ($1)', [category], (err, results) => {
-        if (err) throw err
-        res.status(200).send(`Question category created with: ${category}`)
+const add = (category) => {
+    return new Promise((resolve, reject) => { 
+        db.query('INSERT INTO question_categories (category) VALUES ($1)', [category], (err, results) => {
+            if (err) reject(err)
+            resolve({success: 'Question category added.'})
+        })
+    })
+}
+
+
+const findAllQuestionsByQuestionCategory = (question_category_id) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM questions WHERE question_category_id = $1', [question_category_id], (err, results) => {
+            if (err) reject(err)
+            if (results.rowCount != 0) {
+                resolve(results.rows)
+            } else {
+                resolve({error: 'No questions for this question category.'})
+            }
+        })
     })
 }
 
 module.exports = {
-    getAllQuestionCategories,
-    getQuestionCategoriesById,
-    getQuestionCategoriesByName,
-    createQuestionCategory,
+    findAll,
+    findOneById,
+    findOneByName,
+    add,
+    findAllQuestionsByQuestionCategory
 }

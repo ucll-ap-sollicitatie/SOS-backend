@@ -21,18 +21,6 @@ app.use(helmet())
 app.use(cors(corsOptions))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-  // (req, res, next) => {
-  //   res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  //   res.header(
-  //     "Access-Control-Allow-Methods",
-  //     "GET,HEAD,OPTIONS,POST,PUT,DELETE"
-  //   );
-  //   res.header(
-  //     "Access-Control-Allow-Headers",
-  //     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  //   );
-  //   next();
-  // }
 
 app.get('/', (req, res) => { 
   res.respond({message: "Slim op sollicitatie API"}) 
@@ -62,19 +50,54 @@ app.delete('/users/:r_u_number', async (req, res) => {
 })
 
 // CRUD routes for questions
-app.get('/questions', Question.getAllQuestions)
-app.get('/questions-by-category/:question_category_id', Question.getAllQuestionsByQuestionCategoryId)
-app.get('/questions/:question_id', Question.getQuestionById)
-app.post('/questions', Question.createQuestion)
-app.put('/questions/:question_id', Question.updateQuestion)
-app.delete('/questions/:question_id', Question.deleteQuestion)
+app.get('/questions', async (req, res) => {
+  let result = await Question.findAll()
+  res.respond(result)
+})
+app.get('/questions/:question_id', async (req, res) => {
+  let result = await Question.findOne(req.params.question_id)
+  res.respond(result)
+})
+app.post('/questions', async (req, res) => {
+  const {question} = req.body
+  let result = await Question.add(question)
+  res.respond(result)
+})
+app.put('/questions/:question_id', async (req, res) => {
+  const question_id = req.params.question_id
+  const {question} = req.body
+  let result = await Question.update(question_id, question)
+  res.respond(result)
+})
+app.delete('/questions/:question_id', async (req, res) => {
+  const question_id = req.params.question_id
+  let result = await Question.deleteOne(question_id)
+  res.respond(result)
+})
 
 // CRUD routes for question categories
-app.get('/question-categories', Question_categories.getAllQuestionCategories)
-app.get('/question-categories/:question_category_id', Question_categories.getQuestionCategoriesById)
-app.get('/question-categories/:category', Question_categories.getQuestionCategoriesByName)
-app.post('/question-categories', Question_categories.createQuestionCategory)
-
+app.get('/question-categories', async (req, res) => {
+  let result = await Question_categories.findAll()
+  res.respond(result)
+})
+app.get('/question-categories/:question_category_id', async (req, res) => {
+  let result = await Question_categories.findOneById(req.params.question_category_id)
+  res.respond(result)
+})
+app.get('/question-categories/:category', async (req, res) => {
+  const category = req.params.category
+  let result = await Question_categories.findOneByName(category)
+  res.respond(result)
+})
+app.post('/question-categories', async (req, res) => {
+  const {category} = req.body
+  let result = await Question_categories.add(category)
+  res.respond(result)
+})
+app.get('/question-by-category/:question_category_id', async (req, res) => {
+  let result = await Question_categories.findAllQuestionsByQuestionCategory(req.params.question_category_id)
+  res.respond(result)
+})
 // CRUD routes for comments
 app.get('/comments', Comment.getAllComments)
 app.get('/comments/:comment_id', Comment.getCommentById)
