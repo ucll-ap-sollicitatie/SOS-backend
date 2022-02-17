@@ -1,30 +1,34 @@
-const Question_categories = require('../data/question_categories')
+const Question_categories = require("../data/question_categories");
 
 const findAll = async (req, res) => {
-    let result = await Question_categories.findAll()
-    res.respond(result)
-}
+  Question_categories.findAll()
+    .then((result) => res.respond(result))
+    .catch((error) => res.failNotFound(error));
+};
 
 const findOneById = async (req, res) => {
-    let result = await Question_categories.findOneById(req.params.question_category_id)
-    res.respond(result)
-}
+  Question_categories.findOneById(req.params.question_category_id)
+    .then((result) => res.respond(result))
+    .catch((error) => res.failNotFound(error));
+};
 
 const findOneByCategory = async (req, res) => {
-    const category = req.params.category
-    let result = await Question_categories.findOneByName(category)
-    res.respond(result)
-}
+  const category = req.params.category;
+  Question_categories.findOneByName(category)
+    .then((result) => res.respond(result))
+    .catch((error) => res.failNotFound(error));
+};
 
-const add = async (req, res) => { 
-    const {category} = req.body
-    let result = await Question_categories.add(category)
-    res.respond(result)
-}
+const add = async (req, res) => {
+  const { category } = req.body;
+  Question_categories.add(category)
+    .then((result) => res.respondCreated(null, result))
+    .catch((error) => res.fail(error));
+};
 
 module.exports = {
-    findAll,
-    findOneById,
-    findOneByCategory,
-    add
-}
+  findAll,
+  findOneById,
+  findOneByCategory,
+  add,
+};
