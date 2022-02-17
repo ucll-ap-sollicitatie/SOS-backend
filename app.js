@@ -76,11 +76,6 @@ app.delete('/videos/:video_id', Video.deleteOne)
 // Route for roles
 app.get('/roles', Role.findAll)
 
-// CRUD routes for formations
-app.get("/formations", Formation.findAll);
-app.get("/formations/:formation_id", Formation.findOneById);
-app.get("/formations/name/:formation", Formation.findOneByName);
-
 // Log in & Register
 app.post('/login', Authentication.logIn)
 

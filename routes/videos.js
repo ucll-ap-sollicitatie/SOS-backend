@@ -1,49 +1,39 @@
 const Video = require('../data/videos')
 
 const findAll = async (req, res) => {
-    let result = await Video.findAll()
-    .catch((e) => {
-        res.fail(e)
-    })
-    res.respond(result)
+    Video.findAll()
+    .then(result => res.respond(result))
+    .catch(error => res.failNotFound(error))
 }
 
 const findOne = async (req, res) => {
     const video_id = req.params.video_id
-    let result = await Video.findOne(video_id)
-    .catch((e) => {
-        res.fail(e)
-    })
-    res.respond(result)
+    await Video.findOne(video_id)
+    .then(result => res.respond(result))
+    .catch(error => res.failNotFound(error))
     
 }
 
 const add = async (req, res) => { 
     const {title, r_u_number} = req.body
-    let result = await Video.add(title, r_u_number)
-    .catch((e) => {
-        res.fail(e)
-    })
-    res.respond(result)
+    Video.add(title, r_u_number)
+    .then(result => res.respondCreated(null, result))
+    .catch(e => { res.fail(e) })
 }
 
 const update = async (req, res) => {
     const video_id = req.params.video_id
     const {title} = req.body
-    let result = await Video.update(title, video_id)
-    .catch((e) => {
-        res.fail(e)
-    })
-    res.respond(result)
+    Video.update(title, video_id)
+    .then(result => res.respondUpdated(null, result))
+    .catch(error => res.fail(error))
 }
 
 const deleteOne = async (req, res) => {
     const video_id = req.params.video_id
-    let result = await Video.deleteOne(video_id)
-    .catch((e) => {
-        res.fail(e)
-    })
-    res.respond(result)
+    Video.deleteOne(video_id)
+    .then(result => res.respondDeleted(null, result))
+    .catch(error => res.fail(error))
 }
 
 module.exports = {

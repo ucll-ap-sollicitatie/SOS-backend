@@ -1,4 +1,5 @@
 // Contains all the queries for the table 'questions'
+const e = require('express')
 const db = require('../configuration/db')
 
 const findAll = () => {
@@ -8,7 +9,7 @@ const findAll = () => {
             if (results.rowCount != 0) {
                 resolve(results.rows)
             } else {
-                reject({error: 'No questions found.'})
+                reject('No questions found.')
             }
         })
     })
@@ -21,7 +22,20 @@ const findOne = (question_id) => {
             if (results.rowCount == 1) {
                 resolve(results.rows[0])
             } else {
-                reject({error: 'Question not found.'})
+                reject('Question not found.')
+            }
+        })
+    })
+}
+
+const findOneByQuestion = (question) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT * FROM questions WHERE question = $1', [question], (err, results) => {
+            if (err) reject(err)
+            if (results.rowCount == 1) {
+                resolve(results.rows[0])
+            } else {
+                reject('Question not found.')
             }
         })
     })
@@ -29,10 +43,15 @@ const findOne = (question_id) => {
 
 const add = (question, question_category_id) => {
     return new Promise((resolve, reject) => {
-        db.query('INSERT INTO questions (question, question_category_id) VALUES ($1, $2)', [question, question_category_id], (err, results) => {
-            if (err) reject(err)
-            resolve({success: 'Question added.'})
-        })
+        const check = findOneByQuestion(question)
+        if (check) {
+            reject('Question already exists.')
+        } else {
+            db.query('INSERT INTO questions (question, question_category_id) VALUES ($1, $2)', [question, question_category_id], (err, results) => {
+                if (err) reject(err)
+                resolve('Question added.')
+            })
+        }
     })
 }
 
@@ -41,9 +60,9 @@ const update = (question_id, question) => {
         db.query('UPDATE questions SET question = $1 WHERE question_id = $2 RETURNING question_id', [question, question_id], (err, results) => {
             if (err) reject(err)
             if (results.rowCount == 1) {
-                resolve({success: 'Question updated.'})
+                resolve('Question updated.')
             } else {
-                reject({error: `Question #${question_id} does not exist.`})
+                reject(`Question #${question_id} does not exist.`)
             }
         })
     })
@@ -54,9 +73,9 @@ const deleteOne = (question_id) => {
         db.query('DELETE FROM questions WHERE question_id = $1 RETURNING question_id', [question_id], (err, results) => {
             if (err) reject(err)
             if (results.rowCount == 1) {
-                resolve({success: 'Question deleted.'})
+                resolve('Question deleted.')
             } else {
-                reject({error: `Question #${question_id} does not exist.`})
+                reject(`Question #${question_id} does not exist.`)
             }
         })
     })
@@ -69,7 +88,7 @@ const findAllQuestionsByQuestionCategory = (question_category_id) => {
             if (results.rowCount != 0) {
                 resolve(results.rows)
             } else {
-                reject({error: 'No questions for this question category.'})
+                reject('No questions for this question category.')
             }
         })
     })

@@ -8,7 +8,7 @@ const findAll = () => {
             if (results.rowCount != 0) {
                 resolve(results.rows)
             } else {
-                reject({error: 'No videos found.'})
+                reject('No videos found.')
             }
         })
     })
@@ -21,7 +21,7 @@ const findOne = (video_id) => {
             if (results.rowCount == 1) {
                 resolve(results.rows[0])
             } else {
-                reject({error: 'Video not found.'})
+                reject('Video not found.')
             }
         })
     })
@@ -31,7 +31,7 @@ const add = (title, r_u_number) => {
     return new Promise((resolve, reject) => { 
         db.query('INSERT INTO videos (title, r_u_number) VALUES ($1, $2)', [title, r_u_number], (err, results) => {
             if (err) reject(err)
-            resolve({success: 'Video created.'})
+            resolve('Video created.')
         })
     })
 }
@@ -41,9 +41,9 @@ const update = (title, video_id) => {
         db.query('UPDATE videos SET title = $1 WHERE video_id = $2 RETURNING video_id', [title, video_id], (err, results) => {
             if (err) reject(err)
             if (results.rowCount == 1) {
-                resolve({success: 'Video updated.'})
+                resolve('Video updated.')
             } else {
-                reject({error: `Video #${video_id} not found.`})
+                reject(`Video #${video_id} not found.`)
             }
         })
     })
@@ -54,9 +54,9 @@ const deleteOne = (video_id) => {
         db.query('DELETE FROM videos WHERE video_id = $1 RETURNING video_id', [video_id], (err, results) => {
             if (err) reject(err)
             if (results.rowCount == 1) {
-                resolve({success: 'Video deleted.'})
+                resolve('Video deleted.')
             } else {
-                reject({error: `Video #${video_id} not found.`})
+                reject(`Video #${video_id} not found.`)
             }
         })
     })

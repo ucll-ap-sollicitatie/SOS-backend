@@ -10,7 +10,7 @@ const findAll = () => {
             if (results.rowCount != 0) {
                 resolve(results.rows)
             } else {
-                reject({error: 'No users found.'})
+                reject('No users found.')
             }
         })
     })
@@ -19,11 +19,12 @@ const findAll = () => {
 const findOneByEmail = (email) => {
     return new Promise((resolve, reject) => {
         db.query('SELECT r_u_number, name, surname, email, image, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE email = $1', [email], (err, results) => {
-            if (err) return reject(err)
+            if (err) reject(err)
+            console.log(results);
             if (results.rowCount == 1) {
                 resolve(results.rows[0])
             } else {
-                reject({error: 'User not found.'})
+                reject('User not found.')
             }
         })
     })
@@ -32,11 +33,11 @@ const findOneByEmail = (email) => {
 const findOneById = (r_u_number) => {
     return new Promise((resolve, reject) => {
         db.query('SELECT r_u_number, name, surname, email, image, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1', [r_u_number], (err, results) => {
-            if (err) return reject(err)
+            if (err) reject(err)
             if (results.rowCount == 1) {
                 resolve(results.rows[0])
             } else {
-                reject({error: 'User not found.'})
+                reject('User not found.')
             }
         })
     })
@@ -45,13 +46,18 @@ const findOneById = (r_u_number) => {
 
 const add = (r_u_number, name, surname, email, password, role_id, formation_id) => {
     return new Promise((resolve, reject) => {
-        bcrypt.hash(password, saltRounds, (hash_err, hash) => {
-            if (hash_err) reject(hash_err)
-            db.query('INSERT INTO users (r_u_number, name, surname, email, hashed_password, role_id, formation_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [r_u_number, name, surname, email, hash, role_id, formation_id], (err, results) => {
-                if (err) reject(err)
-                resolve({success: 'User added.'})
+        const check = findOneByEmail(email)
+        if (check) {
+            reject(`User already exists.`)
+        } else {
+            bcrypt.hash(password, saltRounds, (hash_err, hash) => {
+                if (hash_err) reject(hash_err)
+                db.query('INSERT INTO users (r_u_number, name, surname, email, hashed_password, role_id, formation_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', [r_u_number, name, surname, email, hash, role_id, formation_id], (err, results) => {
+                    if (err) reject(err)
+                    resolve('User added.')
+                })
             })
-        })
+        }
     })
 }
 
@@ -69,9 +75,9 @@ const deleteOne = (r_u_number) => {
         db.query('DELETE FROM users WHERE r_u_number = $1 RETURNING r_u_number', [r_u_number], (err, results) => {
             if (err) reject(err)
             if (results.rowCount == 1) {
-                resolve({success: 'User deleted.'})
+                resolve('User deleted.')
             } else {
-                reject({error: `User #${r_u_number} does not exist.`})
+                reject(`User #${r_u_number} does not exist.`)
             }
         })
     })

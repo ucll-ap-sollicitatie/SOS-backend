@@ -8,7 +8,7 @@ const findAll = () => {
         if (results.rowCount != 0) {
           resolve(results.rows)
         } else {
-          reject({error: 'No formations found.'})
+          reject('No formations found.')
         }
       }
     );
@@ -39,7 +39,7 @@ const checkSingleRow = (resolve, reject, count, results) => {
   if (count == 1) {
     resolve(results.rows)
   } else {
-    reject({error: 'Formation not found.'})
+    reject('Formation not found.')
   }
 }
 

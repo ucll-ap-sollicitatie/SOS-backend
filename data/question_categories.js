@@ -8,7 +8,7 @@ const findAll = () => {
             if (results.rowCount != 0) {
                 resolve(results.rows)
             } else {
-                reject({error: 'No question categories.'})
+                reject('No question categories.')
             }
         })
     })
@@ -21,7 +21,7 @@ const findOneById = (question_category_id) => {
             if (results.rowCount == 1) {
                 resolve(results.rows[0])
             } else {
-                reject({error: 'Question category not found.'})
+                reject('Question category not found.')
             }
         })
     })
@@ -34,7 +34,7 @@ const findOneByName = (category) => {
             if (results.rowCount == 1) {
                 resolve(results.rows[0])
             } else {
-                reject({error: 'Question category not found.'})
+                reject('Question category not found.')
             }
         })
     })
@@ -42,24 +42,15 @@ const findOneByName = (category) => {
 
 const add = (category) => {
     return new Promise((resolve, reject) => { 
-        db.query('INSERT INTO question_categories (category) VALUES ($1)', [category], (err, results) => {
-            if (err) reject(err)
-            resolve({success: 'Question category added.'})
-        })
-    })
-}
-
-
-const findAllQuestionsByQuestionCategory = (question_category_id) => {
-    return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM questions WHERE question_category_id = $1', [question_category_id], (err, results) => {
-            if (err) reject(err)
-            if (results.rowCount != 0) {
-                resolve(results.rows)
-            } else {
-                reject({error: 'No questions for this question category.'})
-            }
-        })
+        const check = findOneByName(category)
+        if (check) {
+            reject('Question category already exists.')
+        } else {
+            db.query('INSERT INTO question_categories (category) VALUES ($1)', [category], (err, results) => {
+                if (err) reject(err)
+                resolve('Question category added.')
+            })
+        }
     })
 }
 
@@ -67,6 +58,5 @@ module.exports = {
     findAll,
     findOneById,
     findOneByName,
-    add,
-    findAllQuestionsByQuestionCategory
+    add
 }

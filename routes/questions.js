@@ -1,53 +1,44 @@
 const Question = require('../data/questions')
 
 const findAll = async (req, res) => {
-    let result = await Question.findAll()
-    res.respond(result)
+    Question.findAll()
+    .then(result => res.respond(result))
+    .catch(error => res.failNotFound(error))
 }
 
 const findOne = async (req, res) => {
     const question_id = req.params.question_id
-    let result = await Question.findOne(question_id)
-    .catch((e) => {
-        res.fail(e)
-    })
-    res.respond(result)
+    Question.findOne(question_id)
+    .then(result => res.respond(result))
+    .catch(error => res.failNotFound(error))
 }
 
 const add = async (req, res) => { 
     const {question, question_category_id} = req.body
-    let result = await Question.add(question, question_category_id)
-    .catch((error) => {
-        res.fail(error)
-    })
-    res.respond(result)
+    Question.add(question, question_category_id)
+    .then(result => res.respondCreated(null, result))
+    .catch(error => res.fail(error))
 }
 
 const update = async (req, res) => {
     const question_id = req.params.question_id
     const {question} = req.body
-    let result = await Question.update(question_id, question)
-    .catch((e) => {
-        res.fail(e)
-    })
-    res.respond(result) 
+    Question.update(question_id, question)
+    .then(result => res.respondUpdated(null, result))
+    .catch(error => res.fail(error))
 }
 
 const deleteOne = async (req, res) => {
     const question_id = req.params.question_id
-    let result = await Question.deleteOne(question_id)
-    .catch((e) => {
-        res.fail(e)
-    })
-    res.respond(result)
+    Question.deleteOne(question_id)
+    .then(result => res.respondDeleted(null, result))
+    .catch(error => res.fail(error))
 }
 
 const findAllQuestionsByQuestionCategory = async (req, res) => {
-    let result = await Question.findAllQuestionsByQuestionCategory(req.params.question_category_id)
-    .catch((e) => {
-        res.fail(e)
-    })
-    res.respond(result)
+    Question.findAllQuestionsByQuestionCategory(req.params.question_category_id)
+    .then(result => res.respond(result))
+    .catch(error => res.failNotFound(error))
 }
 
 module.exports = {

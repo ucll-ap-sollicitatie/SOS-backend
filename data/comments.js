@@ -8,7 +8,7 @@ const findAll = () => {
             if (results.rowCount != 0) {
                 resolve(results.rows)
             } else {
-                reject({error: 'No comments found.'})
+                reject('No comments found.')
             }
         })
     })
@@ -21,7 +21,7 @@ const findOne = (comment_id) => {
             if (results.rowCount == 1) {
                 resolve(results.rows[0])
             } else {
-                reject({error: 'Comment not found.'})
+                reject('Comment not found.')
             }
         })
     })
@@ -31,7 +31,7 @@ const add = (text, feedback, author, video_id) => {
     return new Promise((resolve, reject) => { 
         db.query('INSERT INTO comments (text, feedback, author, video_id) VALUES ($1, $2, $3, $4)', [text, feedback, author, video_id], (err, results) => {
             if (err) reject(err)
-            resolve({success: 'Comment added.'})
+            resolve('Comment added.')
         })
     })
 }
@@ -41,9 +41,9 @@ const update = (text, comment_id) => {
         db.query('UPDATE comments SET text = $1 WHERE comment_id = $2 RETURNING comment_id', [text, comment_id], (err, results) => {
             if (err) reject(err)
             if (results.rowCount == 1) {
-                resolve({success: 'Comment updated.'})
+                resolve('Comment updated.')
             } else {
-                reject({error: `Comment #${comment_id} does not exist.`})
+                reject(`Comment #${comment_id} does not exist.`)
             }
         })
     })
@@ -54,9 +54,9 @@ const deleteOne = (comment_id) => {
         db.query('DELETE FROM comments WHERE comment_id = $1', [comment_id], (err, results) => {
             if (err) reject(err)
             if (results.rowCount == 1) {
-                resolve({success: 'Comment deleted.'})
+                resolve('Comment deleted.')
             } else {
-                reject({error: `Comment #${comment_id} does not exist.`})
+                reject(`Comment #${comment_id} does not exist.`)
             }
         })
     })

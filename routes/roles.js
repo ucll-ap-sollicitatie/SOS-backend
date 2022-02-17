@@ -1,8 +1,9 @@
 const Role = require('../data/roles')
 
 const findAll = async (req, res) => {
-  let result = await Role.findAll()
-  res.respond(result)
+  Role.findAll()
+  .then(result => res.respond(result))
+  .catch(error => res.fail(error))
 }
 
 module.exports = {

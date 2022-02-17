@@ -5,13 +5,13 @@ const logIn = async (req, res) => {
     const {email, password} = req.body
 
     if (!email || !password) {
-        res.respond({error: 'Email or password not provided'})
+        res.failValidationError('Email or password not provided.')
     }
 
     User.findOneByEmail(email)
     .then(user => {
         bcrypt.compare(password, user.hashed_password, (err, result) => {
-            if (err) res.fail(error)
+            if (err) res.failServerError(err)
             if (result) {
                 res.respond(user)
             } else {
@@ -20,7 +20,12 @@ const logIn = async (req, res) => {
         })
     })
     .catch((error) => {
-        res.failNotFound(error)
+        if (error.status == 500) {
+            res.failServerError(error)
+        } else {
+            res.failNotFound(error)
+        }
+        
     })
 }
 
