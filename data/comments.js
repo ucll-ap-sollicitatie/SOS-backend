@@ -29,7 +29,7 @@ const findOne = (comment_id) => {
 
 const add = (text, feedback, author, video_id) => {
     return new Promise((resolve, reject) => { 
-        db.query('INSERT INTO comments (tekst, feedback, author, video_id) VALUES ($1, $2, $3, $4)', [text, feedback, author, video_id], (err, results) => {
+        db.query('INSERT INTO comments (text, feedback, author, video_id) VALUES ($1, $2, $3, $4)', [text, feedback, author, video_id], (err, results) => {
             if (err) reject(err)
             resolve({success: 'Comment added.'})
         })
@@ -38,9 +38,13 @@ const add = (text, feedback, author, video_id) => {
 
 const update = (text, comment_id) => {
     return new Promise((resolve, reject) => {  
-        db.query('UPDATE comments SET text = $1 WHERE comment_id = $2', [text, comment_id], (err, results) => {
+        db.query('UPDATE comments SET text = $1 WHERE comment_id = $2 RETURNING comment_id', [text, comment_id], (err, results) => {
             if (err) reject(err)
-            resolve({success: 'Comment updated.'})
+            if (results.rowCount == 1) {
+                resolve({success: 'Comment updated.'})
+            } else {
+                reject({error: `Comment #${comment_id} does not exist.`})
+            }
         })
     })
 }
@@ -49,7 +53,11 @@ const deleteOne = (comment_id) => {
     return new Promise((resolve, reject) => {  
         db.query('DELETE FROM comments WHERE comment_id = $1', [comment_id], (err, results) => {
             if (err) reject(err)
-            resolve({success: 'Comment deleted.'})
+            if (results.rowCount == 1) {
+                resolve({success: 'Comment deleted.'})
+            } else {
+                reject({error: `Comment #${comment_id} does not exist.`})
+            }
         })
     })
 }

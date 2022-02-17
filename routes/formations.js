@@ -8,12 +8,18 @@ const findAll = async (req, res) => {
 const findOneById = async (req, res) => {
   const formation_id = req.params.formation_id
   let result = await Formation.findOneById(formation_id)
+  .catch((e) => {
+    res.fail(e)
+  })
   res.respond(result)
 }
 
 const findOneByName = async (req, res) => {
   const formation_name = req.params.formation_name
   let result = await Formation.findOneByName(formation_name)
+  .catch((e) => {
+    res.fail(e)
+  })
   res.respond(result)
 }
 

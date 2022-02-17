@@ -29,6 +29,20 @@ const findOneByEmail = (email) => {
     })
 }
 
+const findOneById = (r_u_number) => {
+    return new Promise((resolve, reject) => {
+        db.query('SELECT r_u_number, name, surname, email, photo_url, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1', [r_u_number], (err, results) => {
+            if (err) return reject(err)
+            if (results.rowCount == 1) {
+                resolve(results.rows[0])
+            } else {
+                reject({error: 'User not found.'})
+            }
+        })
+    })
+}
+
+
 const add = (r_u_number, name, surname, email, password, role_id, formation_id) => {
     return new Promise((resolve, reject) => {
         bcrypt.hash(password, saltRounds, (hash_err, hash) => {
@@ -45,16 +59,20 @@ const add = (r_u_number, name, surname, email, password, role_id, formation_id) 
 //     const r_u_number = req.params.r_u_number
 //     const {name, surname, email, formation} = req.body
 //     console.log(`Request to update user with id ${r_u_number} and ${name}, ${surname}, ${email}, ${formation}`)
-//     db.query('UPDATE users SET name = $1, surname = $2, email = $3, formation = $4 WHERE r_u_number = $5', [name, surname, email, formation, r_u_number], (err, results) => {
+//     db.query('UPDATE users SET name = $1, surname = $2, email = $3, formation = $4 WHERE r_u_number = $5 RETURNING r_u_number', [name, surname, email, formation, r_u_number], (err, results) => {
 //         if (err) throw err
 //     })
 // }
 
 const deleteOne = (r_u_number) => {
     return new Promise((resolve, reject) => {
-        db.query('DELETE FROM users WHERE r_u_number = $1', [r_u_number], (err, results) => {
+        db.query('DELETE FROM users WHERE r_u_number = $1 RETURNING r_u_number', [r_u_number], (err, results) => {
             if (err) reject(err)
-            resolve({success: 'User deleted.'})
+            if (results.rowCount == 1) {
+                resolve({success: 'User deleted.'})
+            } else {
+                reject({error: `User #${r_u_number} does not exist.`})
+            }
         })
     })
 }
@@ -62,6 +80,7 @@ const deleteOne = (r_u_number) => {
 module.exports = {
     findAll,
     findOneByEmail,
+    findOneById,
     add,
     // update,
     deleteOne

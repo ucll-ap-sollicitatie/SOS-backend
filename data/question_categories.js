@@ -3,7 +3,7 @@ const db = require('../configuration/db')
 
 const findAll = () => {
     return new Promise((resolve, reject) => {  
-        db.query('SELECT * FROM question_categories', (err, results) => {
+        db.query('SELECT * FROM question_categories ORDER BY question_category_id ASC', (err, results) => {
             if (err) reject(err)
             if (results.rowCount != 0) {
                 resolve(results.rows)

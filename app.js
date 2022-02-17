@@ -1,4 +1,5 @@
 // Routing imports
+const Index = require('./routes/index')
 const User = require('./routes/users')
 const Role = require('./routes/roles')
 const Question = require('./routes/questions')
@@ -18,23 +19,23 @@ const session = require('express-session');
 const express = require('express');
 const app = express();
 const port = 3001;
-const corsOptions = { origin: 'http://localhost:3000' }
+const serverUrl = 'http://localhost:'
+const corsOptions = { origin: serverUrl + 3000 }
 const sessionOptions = { secret: 'test_secret_key', resave: true, saveUninitialized: true }
 
 app.use(responseHelper)
 app.use(helmet())
 app.use(session(sessionOptions))
 app.use(cors(corsOptions))
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
-app.get('/', (req, res) => {
-  res.respond({ message: "Slim op sollicitatie API" })
-})
+app.get('/', Index.welcome)
 
 // Routes for users
 app.get('/users', User.findAll)
-app.get('/users/:r_u_number', User.findOneByEmail)
+app.get('/users/id/:r_u_number', User.findOneById)
+app.get('/users/email/:r_u_number', User.findOneByEmail)
 app.post('/users', User.add)
 app.put('/users/:r_u_number', User.update)
 app.delete('/users/:r_u_number', User.deleteOne)
@@ -63,7 +64,7 @@ app.get('/comments', Comment.findAll)
 app.get('/comments/:comment_id', Comment.findOne)
 app.post('/comments', Comment.add)
 app.put('/comments/:comment_id', Comment.update)
-app.put('/comments/:comment_id', Comment.deleteOne)
+app.delete('/comments/:comment_id', Comment.deleteOne)
 
 // Routes for videos
 app.get('/videos', Video.findAll)
@@ -76,11 +77,11 @@ app.delete('/videos/:video_id', Video.deleteOne)
 app.get('/roles', Role.findAll)
 
 // CRUD routes for formations
-app.get("/formations", Formation.getAllFormations);
-app.get("/formations/:formation_id", Formation.getFormationById);
-app.get("/formations-by-name/:formation", Formation.getFormationByName);
+app.get("/formations", Formation.findAll);
+app.get("/formations/:formation_id", Formation.findOneById);
+app.get("/formations-by-name/:formation", Formation.findOneByName);
 
 // Log in & Register
 app.post('/login', Authentication.logIn)
 
-app.listen(port, () => console.log(`Currently listening on port ${port}`));
+app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port}`));

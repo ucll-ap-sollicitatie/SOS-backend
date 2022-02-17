@@ -19,7 +19,7 @@ const findOneById = (formation_id) => {
   return new Promise((resolve, reject) => { 
     db.query("SELECT * FROM formations WHERE formation_id = $1", [formation_id], (err, results) => {
         if (err) reject(err);
-        checkSingleRow(resolve, results.rowCount, results)
+        checkSingleRow(resolve, reject, results.rowCount, results)
       }
     );
   })
@@ -29,13 +29,13 @@ const findOneByName = (formation_name) => {
   return new Promise((resolve, reject) => { 
     db.query("SELECT * FROM formations WHERE formation = $1", [formation_name], (err, results) => {
         if (err) reject(err);
-        checkSingleRow(resolve, results.rowCount, results)
+        checkSingleRow(resolve, reject, results.rowCount, results)
       }
     );
   })
 };
 
-const checkSingleRow = (resolve, count, results) => {
+const checkSingleRow = (resolve, reject, count, results) => {
   if (count == 1) {
     resolve(results.rows)
   } else {

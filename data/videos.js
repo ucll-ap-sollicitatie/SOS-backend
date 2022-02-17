@@ -38,18 +38,26 @@ const add = (title, r_u_number) => {
 
 const update = (title, video_id) => {
     return new Promise((resolve, reject) => { 
-        db.query('UPDATE videos SET title = $1 WHERE video_id = $2', [title, video_id], (err, results) => {
+        db.query('UPDATE videos SET title = $1 WHERE video_id = $2 RETURNING video_id', [title, video_id], (err, results) => {
             if (err) reject(err)
-            resolve({success: 'Video updated.'})
+            if (results.rowCount == 1) {
+                resolve({success: 'Video updated.'})
+            } else {
+                reject({error: `Video #${video_id} not found.`})
+            }
         })
     })
 }
 
 const deleteOne = (video_id) => {
     return new Promise((resolve, reject) => { 
-        db.query('DELETE FROM videos WHERE video_id = $1', [video_id], (err, results) => {
+        db.query('DELETE FROM videos WHERE video_id = $1 RETURNING video_id', [video_id], (err, results) => {
             if (err) reject(err)
-            resolve({success: 'Video deleted.'})
+            if (results.rowCount == 1) {
+                resolve({success: 'Video deleted.'})
+            } else {
+                reject({error: `Video #${video_id} not found.`})
+            }
         })
     })
 }
