@@ -34,7 +34,7 @@ app.get('/', Index.welcome)
 
 // Routes for users
 app.get('/users', User.findAll)
-app.get('/users/id/:r_u_number', User.findOneById)
+app.get('/users/:r_u_number', User.findOneById)
 app.get('/users/email/:r_u_number', User.findOneByEmail)
 app.post('/users', User.add)
 app.put('/users/:r_u_number', User.update)
@@ -50,13 +50,13 @@ app.get('/questions/category/:question_category_id', Question.findAllQuestionsBy
 
 // Routes for categories
 app.get('/question-categories', Question_categories.findAll)
-app.get('/question-categories/id/:question_category_id', Question_categories.findOneById)
+app.get('/question-categories/:question_category_id', Question_categories.findOneById)
 app.get('/question-categories/category/:category', Question_categories.findOneByCategory)
 app.post('/question-categories', Question_categories.add)
 
 // Routes for formations
 app.get('/formations', Formation.findAll)
-app.get('/formations/id/:formation_id', Formation.findOneById)
+app.get('/formations/:formation_id', Formation.findOneById)
 app.get('/formations/name/:formation_name', Formation.findOneByName)
 
 // Routes for comments
@@ -79,7 +79,7 @@ app.get('/roles', Role.findAll)
 // CRUD routes for formations
 app.get("/formations", Formation.findAll);
 app.get("/formations/:formation_id", Formation.findOneById);
-app.get("/formations-by-name/:formation", Formation.findOneByName);
+app.get("/formations/name/:formation", Formation.findOneByName);
 
 // Log in & Register
 app.post('/login', Authentication.logIn)
