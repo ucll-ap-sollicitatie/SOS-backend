@@ -92,12 +92,12 @@ app.put('/videos/:video_id', Video.updateVideo)
 app.delete('/videos/:video_id', Video.deleteVideo)
 
 // CRUD routes for roles
-app.get("/roles", rolesService.getAllRoles);
+app.get("/roles", Roles.getAllRoles);
 
 // CRUD routes for formations
-app.get("/formations", formationsService.getAllFormations);
-app.get("/formations/:formation_id", formationsService.getFormationById);
-app.get("/formations-by-name/:formation", formationsService.getFormationByName);
+app.get("/formations", Formations.getAllFormations);
+app.get("/formations/:formation_id", Formations.getFormationById);
+app.get("/formations-by-name/:formation", Formations.getFormationByName);
 
 // Log in & Register
 app.post('/login', Authentication.logIn)
