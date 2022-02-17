@@ -5,7 +5,7 @@ const saltRounds = 10;
 
 const findAll = () => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT r_u_number, name, surname, email, photo_url, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) ORDER BY r_u_number ASC', (err, results) => {
+        db.query('SELECT r_u_number, name, surname, email, image, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) ORDER BY r_u_number ASC', (err, results) => {
             if (err) return reject(err)
             if (results.rowCount != 0) {
                 resolve(results.rows)
@@ -18,7 +18,7 @@ const findAll = () => {
 
 const findOneByEmail = (email) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT r_u_number, name, surname, email, photo_url, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE email = $1', [email], (err, results) => {
+        db.query('SELECT r_u_number, name, surname, email, image, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE email = $1', [email], (err, results) => {
             if (err) return reject(err)
             if (results.rowCount == 1) {
                 resolve(results.rows[0])
@@ -31,7 +31,7 @@ const findOneByEmail = (email) => {
 
 const findOneById = (r_u_number) => {
     return new Promise((resolve, reject) => {
-        db.query('SELECT r_u_number, name, surname, email, photo_url, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1', [r_u_number], (err, results) => {
+        db.query('SELECT r_u_number, name, surname, email, image, hashed_password, role, formation FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1', [r_u_number], (err, results) => {
             if (err) return reject(err)
             if (results.rowCount == 1) {
                 resolve(results.rows[0])
