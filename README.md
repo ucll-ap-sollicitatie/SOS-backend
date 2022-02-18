@@ -219,8 +219,16 @@ git clone https://github.com/ucll-ap-sollicitatie/backend.git name-of-folder
 cd path/to/soc-backend
 ```
 Once inside the folder, go ahead and execute the following command: **`npm install`**
-This command will install all needed dependencies for the application to work leaving out the single most important one which we must install seperately, the Express.js framework (v4.17.1 or later).  
-To do this simply execute the command: **`npm install express --save`** and if all went without error we can enjoy the application to the fullest with just one command: **`node app.js`**.
+This command will install most needed dependencies for the application to work leaving out a few that need to be installed manually, this includes the single most important one: Express.js (v4.17.1 or later).  
+To do this simply execute these commands one after another: 
+```
+npm install express --save 
+npm install cors --save
+npm install express-response-helper --save
+npm install express-session --save
+npm install helmet --save
+```
+and if all went without error we can enjoy the application to the fullest with just one command: **`node app.js`**.
 ## Prerequisites
 
 To start up the application you need: 
