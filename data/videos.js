@@ -1,8 +1,12 @@
-1; // Contains all the queries for the table 'videos'
+// Contains all the queries for the table 'videos'
+require("dotenv").config();
 const db = require("../configuration/db");
-const credentials = require("../configuration/secret");
 const cloudinary = require("cloudinary");
-cloudinary.config(credentials.cloudinaryConfig);
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API,
+  api_secret: process.env.CLOUDINARY_SECRET,
+});
 
 const findAll = () => {
   return new Promise((resolve, reject) => {

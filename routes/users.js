@@ -1,5 +1,5 @@
+require("dotenv").config();
 const User = require("../data/users");
-const credentials = require("../configuration/secret");
 const frontEnd = "http:/localhost:3000";
 
 const findAll = async (req, res) => {
@@ -52,7 +52,7 @@ const deleteOne = async (req, res) => {
 const sendMail = async (email, token) => {
   return new Promise((resolve, reject) => {
     const sgMail = require("@sendgrid/mail");
-    sgMail.setApiKey(credentials.transporterConfig.SENDGRID_API_KEY);
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     const msg = {
       to: email,
       from: "slimopsollicitatie2022@gmail.com",
@@ -85,7 +85,9 @@ const activateUser = async (req, res) => {
   } else {
     User.activateUser(token)
       .then(() => {
-        res.redirect(`${frontEnd}/?toast=Account geactiveerd, u mag zich nu inloggen`);
+        res.redirect(
+          `${frontEnd}/?toast=Account geactiveerd, u mag zich nu inloggen`
+        );
       })
       .catch(() =>
         res.redirect(`${frontEnd}/?toast=Account activatie gefaald`)

@@ -14,6 +14,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const responseHelper = require("express-response-helper").helper();
 const fileUpload = require("express-fileupload");
+require("dotenv").config();
 
 // Application
 const express = require("express");
