@@ -104,4 +104,6 @@ dist
 .tern-port
 
 configuration/secret.js
+configuration/db.js
 security
+tmp
