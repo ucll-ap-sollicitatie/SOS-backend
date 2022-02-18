@@ -8,12 +8,14 @@ const Comment = require("./routes/comments");
 const Video = require("./routes/videos");
 const Formation = require("./routes/formations");
 const Authentication = require("./routes/authentication");
+const VideoUpload = require("./routes/videoUpload");
 
 // Middleware
 const cors = require("cors");
 const helmet = require("helmet");
 const responseHelper = require("express-response-helper").helper();
 const session = require("express-session");
+const fileUpload = require("express-fileupload");
 
 // Application
 const express = require("express");
@@ -27,6 +29,7 @@ const sessionOptions = {
   saveUninitialized: true,
 };
 
+app.use(fileUpload({ useTempFiles: true }));
 app.use(responseHelper);
 app.use(helmet());
 app.use(session(sessionOptions));
@@ -91,6 +94,8 @@ app.get("/roles", Role.findAll);
 
 // Log in & Register
 app.post("/login", Authentication.logIn);
+
+app.post("/video-uploading", VideoUpload.uploadVideo);
 
 // Invalid URL handler
 app.use(Index.invalidUrl);
