@@ -265,10 +265,12 @@ The one and of course, only... *Frederic Vogels*.
 ![UCLL](https://user-images.githubusercontent.com/55389806/154109962-3bc1cba1-6d18-4ee0-ba81-bbff7a01f369.png)
 
 ## Secret
-In the `configuration` folder, create a `secret.js` file with following structure:
-```js
-const r_u_number = 'r_u_number'
-const password = 'password'
-
-module.exports = password
+In the root of the application, create a `.env` file with following content:
+```
+DATABASE_USER=soc_user
+DATABASE_PASS=lmao123
+CLOUDINARY_NAME=dou4tgpae
+CLOUDINARY_API=756779964561496
+CLOUDINARY_SECRET=M0VKY4EXVe7e1wAH3-Y7q_y7pJk
+SENDGRID_API_KEY=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
 ``` 
