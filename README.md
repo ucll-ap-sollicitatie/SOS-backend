@@ -2,22 +2,13 @@
 
 An API created for the functioning of the web application '**Slim Op Sollicitatie**', a place to practice job interviews without fear or pressure. Created with the ease and efficiency of Express.js, a Node.js framework.
 
-**[Usage](#Usage) | [Installation](#Installation) | [Prerequisites](#Prerequisites) | [FAQ](#FAQ)**
-
-## Secret
-In the `configuration` folder, create a `secret.js` file with following structure:
-```js
-const r_u_number = 'r_u_number'
-const password = 'password'
-
-module.exports = password
-``` 
+**[Usage](#Usage) | [Installation](#Installation) | [Prerequisites](#Prerequisites) | [FAQ](#FAQ) | [Secret]($Secret)**
 
 ## Usage
 
 To use this API you must make use of JSON. Below are all the possible routes and example request bodies to help you create, read, update and delete data from the used database tables: 
 
-**[Users](#Users) | [Comments](#Comments) | [Videos](#Videos) | [Questions](#Questions)**
+**[Users](#Users) | [Comments](#Comments) | [Videos](#Videos) | [Questions](#Questions) | [Formations](#Formations) | [Roles](#Roles) | [Categories](#Categories)**
 
 ### Users
 The table 'Users' contains data about each user, this includes their full name, business e-mail, r/u number and their role. You can update an user's name, e-mail and course.  
@@ -26,6 +17,7 @@ The table 'Users' contains data about each user, this includes their full name, 
 | ----------- | ----------- |
 | Get all users (/users) | GET |
 | Get user by id (/users/:id) | GET |
+| Get user by email (/users/email/:id) | GET |
 | Create user (/users) | POST |
 | Update user (/users/:id) | PUT |
 | Delete user (/users/:id) | DELETE |
@@ -33,17 +25,18 @@ The table 'Users' contains data about each user, this includes their full name, 
 **Example** usage of json to create an user:
 ```
 {
-    "r_u_nummer": "rXXXXXXX",
-    "voornaam": "First name",
-    "familienaam": "Last name",
-    "e_mail": "example@example.com",
-    "richting": "Example course"
+    "r_u_number": "rXXXXXXX",
+    "name": "First name",
+    "surname": "Last name",
+    "email": "example@example.com",
+    "role_id": "1"
+    "formation_id": "1"
 }
 ```
 
 ### Comments
 The table 'Comments' contains data about every comment, including the text, whether it's feedback, date, author and under which video it is. You can update a comment's text.  
-*Please note: for comments, id means 'commentaar_id'.*
+*Please note: for comments, id means 'comment_id'.*
 | Request (URL) | Request Type |
 | ----------- | ----------- |
 | Get all comments (/comments) | GET |
@@ -76,14 +69,14 @@ The table 'Videos' contains data about every video, including the title, date an
 **Example** usage of json to create a video:
 ```
 {
-    "titel": "Example video title",
-    "eigenaar_r_nummer": "rXXXXXXX"
+    "title": "Example video title",
+    "r_u_number": "rXXXXXXX"
 }
 ```
 
 ### Questions
 The table 'Questions' contains data about every question, including the question itself as its category. You can update a question's text.  
-*Please note: for questions, id means 'vraag_id'.*
+*Please note: for questions, id means 'question_id'.*
 | Request (URL) | Request Type |
 | ----------- | ----------- |
 | Get all questions (/questions) | GET |
@@ -91,11 +84,44 @@ The table 'Questions' contains data about every question, including the question
 | Create question (/questions) | POST |
 | Update question (/questions/:id) | PUT |
 | Delete question (/questions/:id) | DELETE |
+| Get all questions based on category (/questions/category/:question_category_id) | GET |
 
 **Example** usage of json to create a question:
 ```
 {
     "vraag": "I am an example question?"
+}
+```
+
+### Formations
+The table 'Formations' contains data about every formation.  
+*Please note: for formations, id means 'formation_id'.*
+| Request (URL) | Request Type |
+| ----------- | ----------- |
+| Get all formations (/fomrations) | GET |
+| Get formation by id (/formations/:id) | GET |
+| Get formation by name (/formations/name/:name) | POST |
+
+### Roles
+The table 'Roles' is a table that simply contains all the possible roles for authorization.
+| Request (URL) | Request Type |
+| ----------- | ----------- |
+| Get all roles (/roles) | GET |
+
+### Categories
+The table 'Categories' contains data about question categories.
+*Please note: for categories, id means 'question_category_id'.*
+| Request (URL) | Request Type |
+| ----------- | ----------- |
+| Get all categories (/question-questions) | GET |
+| Get category by id (/question-questions/:id) | GET |
+| Get category by name (/question-questions/category/:category) | GET |
+| Create category (/question-questions) | POST |
+
+**Example** usage of json to create a question:
+```
+{
+    "category": "example-category"
 }
 ```
 
@@ -113,51 +139,81 @@ CREATE SCHEMA IF NOT EXISTS solicitaties;
 Under this schema we can create the tables we need.
 Enter the following commands to create the tables:
 
-#### Table 'gebruikers'
-
+#### Table 'roles'
 ```
-CREATE TABLE gebruikers (
-   r_u_nummer SERIAL PRIMARY KEY,
-   voornaam varchar(50) NOT NULL,
-   familienaam varchar(50) NOT NULL,
-   e_mail varchar(100) NOT NULL,
-   rol varchar(7) NOT NULL,
-   richting varchar(100) NOT NULL,
-   table_constraints
+CREATE TABLE roles (
+   role_id SERIAL PRIMARY KEY,
+   role varchar(8) not NULL DEFAULT 'student'
 );
 ```
-#### Table 'commentaar'
+#### Table 'formations'
 ```
-CREATE TABLE commentaar (
-   commentaar_id SERIAL PRIMARY KEY,
-   tekst varchar(256) NOT NULL,
-   feedback boolean NOT NULL,
-   datum TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-   eigenaar varchar(7) NOT NULL,
-   video_id integer NOT NULL,
-   CONSTRAINT fk_video FOREIGN KEY (video_id) REFERENCES video(video_id)
+CREATE TABLE formations (
+   formation_id SERIAL PRIMARY KEY,
+   formation varchar(128) NOT NULL
 );
 ```
-#### Table 'video'
+#### Table 'users'
 ```
-CREATE TABLE video (
+CREATE TABLE users (
+   r_u_number varchar(8) PRIMARY KEY,
+   name varchar(50) NOT NULL,
+   surname varchar(50) NOT NULL,
+   email varchar(100) NOT NULL,
+   photo_url varchar(512) NOT NULL DEFAULT 'temp_link',
+   hashed_password varchar(512) NOT NULL DEFAULT 't',
+   role_id integer NOT NULL,
+   formation_id integer NOT NULL,
+   CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES roles(role_id),
+   CONSTRAINT fk_formation FOREIGN KEY (formation_id) REFERENCES formations(formation_id)
+);
+```
+#### Table 'videos'
+```
+CREATE TABLE videos (
    video_id SERIAL PRIMARY KEY,
-   titel varchar(50) NOT NULL,
-   datum TIMESTAMP WITH TIME ZONE NOT NULL,
-   eigenaar_r_nummer varchar(8) NOT NULL,
-   video_url varchar(256) NOT NULL
+   title varchar(50) NOT NULL,
+   date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   video_url varchar(256) NOT NULL,
+   r_u_number varchar(8) NOT NULL,
+   CONSTRAINT fk_user FOREIGN KEY (r_u_number) REFERENCES users(r_u_number)
 );
 ```
-#### Table 'vragen'
+#### Table 'comments'
 ```
-CREATE TABLE vragen (
-   vraag_id SERIAL PRIMARY KEY,
-   vraag varchar(256) NOT NULL,
-   categorie varchar(100) NOT NULL
+CREATE TABLE comments (
+   comment_id SERIAL PRIMARY KEY,
+   text varchar(256) NOT NULL,
+   feedback boolean NOT NULL,
+   date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+   author varchar(8) NOT NULL,
+   video_id integer NOT NULL,
+   CONSTRAINT fk_video FOREIGN KEY (video_id) REFERENCES videos(video_id)
+);
+```
+#### Table 'question_categories'
+```
+CREATE TABLE question_categories (
+   question_category_id SERIAL PRIMARY KEY,
+   category varchar(100) NOT NULL
+);
+```
+#### Table 'questions'
+```
+CREATE TABLE questions (
+   question_id SERIAL PRIMARY KEY,
+   question varchar(256) NOT NULL,
+   question_category_id integer NOT NULL,
+   CONSTRAINT fk_category FOREIGN KEY (question_category_id) REFERENCES question_categories(question_category_id)
 );
 ```
 
-It's entirely up to you to choose the data you want to insert into the database, you can do it either using a query tool or already set up the API to use that. It's time to clone the repository locally in a place of your choice using a terminal.
+It's entirely up to you to choose the data you want to insert into the database, you can do it either using a query tool or already set up the API to use that. Here are some examples:
+```
+insert into formations (formation) values('Toegepaste informatica');
+insert into users(r_u_number, name, surname, email, role_id, formation_id) values('r0000001', 'Test', 'User', 'test@test.com', 1, 1);
+```
+It's time to clone the repository locally in a place of your choice using a terminal.
 ```
 git clone https://github.com/ucll-ap-sollicitatie/backend.git name-of-folder
 cd path/to/soc-backend
@@ -199,3 +255,12 @@ This is made strictly for and by UC Leuven-Limburg and is not to be used outside
 The one and of course, only... *Frederic Vogels*.
 
 ![UCLL](https://user-images.githubusercontent.com/55389806/154109962-3bc1cba1-6d18-4ee0-ba81-bbff7a01f369.png)
+
+## Secret
+In the `configuration` folder, create a `secret.js` file with following structure:
+```js
+const r_u_number = 'r_u_number'
+const password = 'password'
+
+module.exports = password
+``` 
