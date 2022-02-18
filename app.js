@@ -2,7 +2,8 @@ const express = require('express');
 const usersService = require('./services/users')
 const questionsService = require('./services/questions')
 const commentsService = require('./services/comments')
-const videosService = require('./services/videos')
+const videosService = require('./services/videos');
+const videoUploadingService  = require('./services/video_uploading');
 const app = express();
 const port = 3001;
 
@@ -47,5 +48,8 @@ app.get('/videos/:video_id', videosService.getVideoById)
 app.post('/videos', videosService.createVideo)
 app.put('/videos/:video_id', videosService.updateVideo)
 app.delete('/videos/:video_id', videosService.deleteVideo)
+
+//Upload video to Cloudinary
+app.post('/video-uploading', videoUploadingService.uploadVideo)
 
 app.listen(port, () => console.log(`Currently listening on port ${port}`))
