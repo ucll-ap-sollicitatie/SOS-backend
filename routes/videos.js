@@ -16,7 +16,12 @@ const findOne = async (req, res) => {
 const add = async (req, res) => {
   const { title, r_u_number } = req.body;
   Video.add(title, r_u_number)
-    .then((result) => res.respondCreated(null, result))
+    .then(() => {
+      const newVideo = req.files.newRecording;
+      Video.uploadVideo(newVideo)
+        .then(() => res.respondCreated(null, "Video uploaded."))
+        .catch((e) => res.fail(e));
+    })
     .catch((e) => {
       res.fail(e);
     });

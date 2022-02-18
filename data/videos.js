@@ -1,5 +1,8 @@
 1; // Contains all the queries for the table 'videos'
 const db = require("../configuration/db");
+const credentials = require("../configuration/secret");
+const cloudinary = require("cloudinary");
+cloudinary.config(credentials.cloudinaryConfig);
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
@@ -38,9 +41,16 @@ const add = (title, r_u_number) => {
       [title, r_u_number],
       (err, results) => {
         if (err) reject(err);
-        resolve("Video created.");
+        resolve("Video added.");
       }
     );
+  });
+};
+
+const uploadVideo = (video_file) => {
+  return cloudinary.v2.uploader.upload(video_file.tempFilePath, {
+    resource_type: "auto",
+    public_id: `SOS/${video_file.name}`,
   });
 };
 
@@ -84,4 +94,5 @@ module.exports = {
   add,
   update,
   deleteOne,
+  uploadVideo,
 };

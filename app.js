@@ -8,13 +8,11 @@ const Comment = require("./routes/comments");
 const Video = require("./routes/videos");
 const Formation = require("./routes/formations");
 const Authentication = require("./routes/authentication");
-const VideoUpload = require("./routes/videoUpload");
 
 // Middleware
 const cors = require("cors");
 const helmet = require("helmet");
 const responseHelper = require("express-response-helper").helper();
-const session = require("express-session");
 const fileUpload = require("express-fileupload");
 
 // Application
@@ -23,16 +21,10 @@ const app = express();
 const port = 3001;
 const serverUrl = "http://localhost:";
 const corsOptions = { origin: serverUrl + 3000 };
-const sessionOptions = {
-  secret: "test_secret_key",
-  resave: true,
-  saveUninitialized: true,
-};
 
 app.use(fileUpload({ useTempFiles: true }));
 app.use(responseHelper);
 app.use(helmet());
-app.use(session(sessionOptions));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -42,10 +34,11 @@ app.get("/", Index.welcome);
 // Routes for users
 app.get("/users", User.findAll);
 app.get("/users/:r_u_number", User.findOneById);
-app.get("/users/email/:r_u_number", User.findOneByEmail);
+app.get("/users/email/:email", User.findOneByEmail);
 app.post("/users", User.add);
-app.put("/users/:r_u_number", User.update);
+app.put("/users/:email", User.update);
 app.delete("/users/:r_u_number", User.deleteOne);
+app.get("/users/activation/:token", User.activateUser);
 
 // Routes for questions
 app.get("/questions", Question.findAll);
@@ -94,8 +87,6 @@ app.get("/roles", Role.findAll);
 
 // Log in & Register
 app.post("/login", Authentication.logIn);
-
-app.post("/video-uploading", VideoUpload.uploadVideo);
 
 // Invalid URL handler
 app.use(Index.invalidUrl);
