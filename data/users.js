@@ -74,7 +74,7 @@ const add = (
             "INSERT INTO users (r_u_number, name, surname, email, hashed_password, role_id, formation_id) VALUES ($1, $2, $3, $4, $5, $6, $7)",
             [r_u_number, name, surname, email, hash, role_id, formation_id],
             (err, results) => {
-              if (err) reject(err);
+              if (err) reject(`User already exists.`);
               resolve("User added.");
             }
           );
