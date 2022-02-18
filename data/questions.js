@@ -1,5 +1,4 @@
 // Contains all the queries for the table 'questions'
-const e = require("express");
 const db = require("../configuration/db");
 
 const findAll = () => {

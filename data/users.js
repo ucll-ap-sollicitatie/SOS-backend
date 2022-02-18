@@ -8,7 +8,7 @@ const saltRounds = 10;
 const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activated FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) ORDER BY r_u_number ASC",
+      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) ORDER BY r_u_number ASC",
       (err, results) => {
         if (err) return reject(err);
         if (results.rowCount != 0) {
