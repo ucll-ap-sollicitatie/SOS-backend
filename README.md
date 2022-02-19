@@ -227,6 +227,8 @@ npm install cors --save
 npm install express-response-helper --save
 npm install express-session --save
 npm install helmet --save
+npm install cloudinary --save
+npm install formidable --save
 ```
 and if all went without error we can enjoy the application to the fullest with just one command: **`node app.js`**.
 ## Prerequisites
@@ -260,7 +262,7 @@ This application strictly uses `application/json`.
 This is made strictly for and by UC Leuven-Limburg and is not to be used outside its limits.
 
 ### Who's the mysterious person behind the team?
-The one and of course, only... *Frederic Vogels*.
+The one and of course, only... *Frédéric Vogels*.
 
 ![UCLL](https://user-images.githubusercontent.com/55389806/154109962-3bc1cba1-6d18-4ee0-ba81-bbff7a01f369.png)
 
