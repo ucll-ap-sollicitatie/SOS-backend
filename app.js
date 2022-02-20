@@ -14,7 +14,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const responseHelper = require("express-response-helper").helper();
 const fileUpload = require("express-fileupload");
-require("dotenv").config();
+const compression = require("compression");
 
 // Application
 const express = require("express");
@@ -23,6 +23,7 @@ const port = 3001;
 const serverUrl = "http://localhost:";
 const corsOptions = { origin: serverUrl + 3000 };
 
+app.use(compression());
 app.use(fileUpload({ useTempFiles: true }));
 app.use(responseHelper);
 app.use(helmet());
