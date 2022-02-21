@@ -88,7 +88,7 @@ app.delete("/videos/:video_id", Video.deleteOne);
 app.get("/roles", Role.findAll);
 
 // Log in & Register
-app.post("/login", Authentication.logIn);
+app.post("/auth/login", Authentication.logIn);
 
 // Invalid URL handler
 app.use(Index.invalidUrl);
