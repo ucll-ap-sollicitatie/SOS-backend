@@ -1,4 +1,5 @@
 const Video = require("../data/videos");
+const thumbsupply = require('thumbsupply');
 
 const findAll = async (req, res) => {
   Video.findAll()
@@ -42,10 +43,22 @@ const deleteOne = async (req, res) => {
     .catch((error) => res.fail(error));
 };
 
+const thumbnail = async (req, res) => {
+  const video_id = req.params.video_id;
+  await Video.findOne(video_id)
+    .then((result) => {console.log(`${result.video_url}`);
+                       thumbsupply.generateThumbnail(result.video_url)
+                       .then(thumb => { console.log(thumb);
+                         res.sendFile(thumb)})})
+                       .catch(() => "thumbgeneration error")
+    .catch((error) => res.failNotFound(error));
+}
+
 module.exports = {
   findAll,
   findOne,
   add,
   update,
   deleteOne,
+  thumbnail,
 };

@@ -9,6 +9,7 @@ const Video = require("./routes/videos");
 const Formation = require("./routes/formations");
 const Authentication = require("./routes/authentication");
 
+
 // Middleware
 const cors = require("cors");
 const helmet = require("helmet");
@@ -83,6 +84,7 @@ app.get("/videos/:video_id", Video.findOne);
 app.post("/videos", Video.add);
 app.put("/videos/:video_id", Video.update);
 app.delete("/videos/:video_id", Video.deleteOne);
+app.get("/videos/thumb/:video_id", Video.thumbnail);
 
 // Route for roles
 app.get("/roles", Role.findAll);
