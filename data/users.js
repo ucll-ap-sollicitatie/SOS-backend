@@ -161,6 +161,28 @@ const newToken = (current_user, activation_token) => {
   });
 };
 
+const sendMail = (email, token) => {
+  return new Promise((resolve, reject) => {
+    const sgMail = require("@sendgrid/mail");
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    const msg = {
+      to: email,
+      from: "slimopsollicitatie2022@gmail.com",
+      subject: "SOS - Account activation",
+      html: `
+        <h3>Welcome to Slim op sollicitatie!</h3>
+        <p>Thank you for registering, please click the following link to activate your account.</p>
+        <p><a target="_" href="http://localhost:3001/users/activation/${token}">Activate my account!</a></p>
+        <p>This link expires after 5 hours. You may always resend a new activation mail.</p>`,
+    };
+
+    sgMail
+      .send(msg)
+      .then(() => resolve("Email sent."))
+      .catch((e) => reject(e));
+  });
+}
+
 module.exports = {
   findAll,
   findOneByEmail,
@@ -171,4 +193,5 @@ module.exports = {
   deleteOne,
   activateUser,
   newToken,
+  sendMail
 };
