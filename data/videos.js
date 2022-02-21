@@ -49,11 +49,11 @@ const findOne = (video_id) => {
   });
 };
 
-const add = (title, r_u_number, email, videoUrl) => {
+const add = (title, r_u_number, email, description, videoUrl) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO videos (title, r_u_number, email, video_url) VALUES ($1, $2, $3, $4)",
-      [title, r_u_number, email, videoUrl],
+      "INSERT INTO videos (title, r_u_number, email, description, video_url) VALUES ($1, $2, $3, $4, $5)",
+      [title, r_u_number, email, description, videoUrl],
       (err, results) => {
         if (err) reject(err);
         resolve("Video added.");

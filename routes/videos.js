@@ -22,14 +22,14 @@ const findOne = async (req, res) => {
 
 const add = async (req, res) => {
   const newVideo = req.files.newRecording;
-  const { title, r_u_number, email } = req.body;
+  const { title, r_u_number, email, description } = req.body;
   Video.uploadVideo(newVideo, email)
     .then((result) => {
-      Video.add(title, r_u_number, email, result.url)
+      Video.add(title, r_u_number, email, description, result.url)
         .then(() => res.respondCreated(null, "Video uploaded."))
-        .catch((e) => res.fail("Database entry error."));
+        .catch(() => res.fail("Database entry error."));
     })
-    .catch((e) => {
+    .catch(() => {
       res.fail("Video upload error.");
     });
 };
