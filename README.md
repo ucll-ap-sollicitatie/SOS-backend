@@ -269,10 +269,10 @@ The one and of course, only... *Frédéric Vogels*.
 ## Secret
 In the root of the application, create a `.env` file with following content:
 ```
-DATABASE_USER=soc_user
-DATABASE_PASS=lmao123
-CLOUDINARY_NAME=dou4tgpae
-CLOUDINARY_API=756779964561496
-CLOUDINARY_SECRET=M0VKY4EXVe7e1wAH3-Y7q_y7pJk
-SENDGRID_API_KEY=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
+DATABASE_USER=database_user
+DATABASE_PASS=database_password
+CLOUDINARY_NAME=cloudinary_name
+CLOUDINARY_API=cloudinary_api
+CLOUDINARY_SECRET=cloudinary_secret
+SENDGRID_API_KEY=sendgrid_api_key
 ``` 
