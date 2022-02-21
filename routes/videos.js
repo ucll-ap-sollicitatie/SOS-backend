@@ -6,6 +6,13 @@ const findAll = async (req, res) => {
     .catch((error) => res.failNotFound(error));
 };
 
+const findAllByEmail = async (req, res) => {
+  const { email } = req.params;
+  Video.findAllByEmail(email)
+    .then((result) => res.respond(result))
+    .catch((err) => res.failNotFound(err));
+};
+
 const findOne = async (req, res) => {
   const video_id = req.params.video_id;
   await Video.findOne(video_id)
@@ -14,16 +21,16 @@ const findOne = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { title, r_u_number } = req.body;
-  Video.add(title, r_u_number)
-    .then(() => {
-      const newVideo = req.files.newRecording;
-      Video.uploadVideo(newVideo)
+  const newVideo = req.files.newRecording;
+  const { title, r_u_number, email } = req.body;
+  Video.uploadVideo(newVideo, email)
+    .then((result) => {
+      Video.add(title, r_u_number, email, result.url)
         .then(() => res.respondCreated(null, "Video uploaded."))
-        .catch((e) => res.fail(e));
+        .catch((e) => res.fail("Database entry error."));
     })
     .catch((e) => {
-      res.fail(e);
+      res.fail("Video upload error.");
     });
 };
 
@@ -44,6 +51,7 @@ const deleteOne = async (req, res) => {
 
 module.exports = {
   findAll,
+  findAllByEmail,
   findOne,
   add,
   update,

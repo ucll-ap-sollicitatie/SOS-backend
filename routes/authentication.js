@@ -11,8 +11,7 @@ const logIn = async (req, res) => {
       .then((user) => {
         bcrypt.compare(password, user.hashed_password, (err, result) => {
           if (err || !result) res.fail("Invalid credentials");
-          if (user.activation_token)
-            res.fail("Account not yet confirmed. Please check email.");
+          if (user.activation_token) res.fail("Account not yet confirmed. Please check email.");
           else res.respond(user);
         });
       })

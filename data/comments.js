@@ -3,34 +3,27 @@ const db = require("../configuration/db");
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
-    db.query(
-      "SELECT * FROM comments ORDER BY comment_id ASC",
-      (err, results) => {
-        if (err) reject(err);
-        if (results.rowCount != 0) {
-          resolve(results.rows);
-        } else {
-          reject("No comments found.");
-        }
+    db.query("SELECT * FROM comments ORDER BY comment_id ASC", (err, results) => {
+      if (err) reject(err);
+      if (results.rowCount != 0) {
+        resolve(results.rows);
+      } else {
+        reject("No comments found.");
       }
-    );
+    });
   });
 };
 
 const findOne = (comment_id) => {
   return new Promise((resolve, reject) => {
-    db.query(
-      "SELECT * FROM comments WHERE comment_id = $1",
-      [comment_id],
-      (err, results) => {
-        if (err) reject(err);
-        if (results.rowCount == 1) {
-          resolve(results.rows[0]);
-        } else {
-          reject("Comment not found.");
-        }
+    db.query("SELECT * FROM comments WHERE comment_id = $1", [comment_id], (err, results) => {
+      if (err) reject(err);
+      if (results.rowCount == 1) {
+        resolve(results.rows[0]);
+      } else {
+        reject("Comment not found.");
       }
-    );
+    });
   });
 };
 
@@ -49,35 +42,27 @@ const add = (text, feedback, author, video_id) => {
 
 const update = (text, comment_id) => {
   return new Promise((resolve, reject) => {
-    db.query(
-      "UPDATE comments SET text = $1 WHERE comment_id = $2 RETURNING comment_id",
-      [text, comment_id],
-      (err, results) => {
-        if (err) reject(err);
-        if (results.rowCount == 1) {
-          resolve("Comment updated.");
-        } else {
-          reject(`Comment #${comment_id} does not exist.`);
-        }
+    db.query("UPDATE comments SET text = $1 WHERE comment_id = $2 RETURNING comment_id", [text, comment_id], (err, results) => {
+      if (err) reject(err);
+      if (results.rowCount == 1) {
+        resolve("Comment updated.");
+      } else {
+        reject(`Comment #${comment_id} does not exist.`);
       }
-    );
+    });
   });
 };
 
 const deleteOne = (comment_id) => {
   return new Promise((resolve, reject) => {
-    db.query(
-      "DELETE FROM comments WHERE comment_id = $1",
-      [comment_id],
-      (err, results) => {
-        if (err) reject(err);
-        if (results.rowCount == 1) {
-          resolve("Comment deleted.");
-        } else {
-          reject(`Comment #${comment_id} does not exist.`);
-        }
+    db.query("DELETE FROM comments WHERE comment_id = $1", [comment_id], (err, results) => {
+      if (err) reject(err);
+      if (results.rowCount == 1) {
+        resolve("Comment deleted.");
+      } else {
+        reject(`Comment #${comment_id} does not exist.`);
       }
-    );
+    });
   });
 };
 

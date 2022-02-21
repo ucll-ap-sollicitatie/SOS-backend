@@ -23,8 +23,7 @@ const findOneById = async (req, res) => {
 };
 
 const add = async (req, res) => {
-  const { r_u_number, name, surname, email, password, role_id, formation_id } =
-    req.body;
+  const { r_u_number, name, surname, email, password, role_id, formation_id } = req.body;
   User.add(r_u_number, name, surname, email, password, role_id, formation_id)
     .then((result) => {
       sendMail(email, result.token)
@@ -78,20 +77,14 @@ const activateUser = async (req, res) => {
     const activation_token = crypto.randomBytes(48).toString("hex");
     await User.newToken(current_user, activation_token).then(() => {
       sendMail(current_user.email, activation_token);
-      res.redirect(
-        `${frontEnd}/?toast=Uw activatielink is verlopen, er werd een nieuwe mail verstuurd`
-      );
+      res.redirect(`${frontEnd}/?toast=Uw activatielink is verlopen, er werd een nieuwe mail verstuurd`);
     });
   } else {
     User.activateUser(token)
       .then(() => {
-        res.redirect(
-          `${frontEnd}/?toast=Account geactiveerd, u mag zich nu inloggen`
-        );
+        res.redirect(`${frontEnd}/?toast=Account geactiveerd, u mag zich nu inloggen`);
       })
-      .catch(() =>
-        res.redirect(`${frontEnd}/?toast=Account activatie gefaald`)
-      );
+      .catch(() => res.redirect(`${frontEnd}/?toast=Account activatie gefaald`));
   }
 };
 

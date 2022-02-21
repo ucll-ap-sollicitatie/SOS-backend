@@ -72,15 +72,7 @@ const findOneByToken = (token) => {
   });
 };
 
-const add = (
-  r_u_number,
-  name,
-  surname,
-  email,
-  password,
-  role_id,
-  formation_id
-) => {
+const add = (r_u_number, name, surname, email, password, role_id, formation_id) => {
   return new Promise((resolve, reject) => {
     findOneByEmail(email)
       .then(() => {
@@ -92,16 +84,7 @@ const add = (
           const activation_token = crypto.randomBytes(48).toString("hex");
           db.query(
             "INSERT INTO users (r_u_number, name, surname, email, hashed_password, role_id, formation_id, activation_token) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-            [
-              r_u_number,
-              name,
-              surname,
-              email,
-              hash,
-              role_id,
-              formation_id,
-              activation_token,
-            ],
+            [r_u_number, name, surname, email, hash, role_id, formation_id, activation_token],
             (err, results) => {
               if (err) reject("Add query error.");
               resolve({ message: "User added.", token: activation_token });
@@ -129,18 +112,14 @@ const update = (email, r_u_number, name, surname) => {
 
 const deleteOne = (email) => {
   return new Promise((resolve, reject) => {
-    db.query(
-      "DELETE FROM users WHERE email = $1 RETURNING email",
-      [email],
-      (err, results) => {
-        if (err || !results.rowCount) reject(err);
-        if (results.rowCount == 1) {
-          resolve("User deleted.");
-        } else {
-          reject(`User with email ${email} does not exist.`);
-        }
+    db.query("DELETE FROM users WHERE email = $1 RETURNING email", [email], (err, results) => {
+      if (err || !results.rowCount) reject(err);
+      if (results.rowCount == 1) {
+        resolve("User deleted.");
+      } else {
+        reject(`User with email ${email} does not exist.`);
       }
-    );
+    });
   });
 };
 

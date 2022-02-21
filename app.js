@@ -15,6 +15,7 @@ const helmet = require("helmet");
 const responseHelper = require("express-response-helper").helper();
 const fileUpload = require("express-fileupload");
 const compression = require("compression");
+const fs = require("fs");
 
 // Application
 const express = require("express");
@@ -48,21 +49,12 @@ app.get("/questions/:question_id", Question.findOne);
 app.post("/questions", Question.add);
 app.put("/questions/:question_id", Question.update);
 app.delete("/questions/:question_id", Question.deleteOne);
-app.get(
-  "/questions/category/:question_category_id",
-  Question.findAllQuestionsByQuestionCategory
-);
+app.get("/questions/category/:question_category_id", Question.findAllQuestionsByQuestionCategory);
 
 // Routes for categories
 app.get("/question-categories", Question_categories.findAll);
-app.get(
-  "/question-categories/:question_category_id",
-  Question_categories.findOneById
-);
-app.get(
-  "/question-categories/category/:category",
-  Question_categories.findOneByCategory
-);
+app.get("/question-categories/:question_category_id", Question_categories.findOneById);
+app.get("/question-categories/category/:category", Question_categories.findOneByCategory);
 app.post("/question-categories", Question_categories.add);
 
 // Routes for formations
@@ -79,6 +71,7 @@ app.delete("/comments/:comment_id", Comment.deleteOne);
 
 // Routes for videos
 app.get("/videos", Video.findAll);
+app.get("/videos/email/:email", Video.findAllByEmail);
 app.get("/videos/:video_id", Video.findOne);
 app.post("/videos", Video.add);
 app.put("/videos/:video_id", Video.update);
@@ -93,6 +86,4 @@ app.post("/auth/login", Authentication.logIn);
 // Invalid URL handler
 app.use(Index.invalidUrl);
 
-app.listen(port, () =>
-  console.log(`SOS back-end running on ${serverUrl}${port}`)
-);
+app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port}`));

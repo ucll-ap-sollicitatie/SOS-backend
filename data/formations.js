@@ -3,43 +3,32 @@ const db = require("../configuration/db");
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
-    db.query(
-      "SELECT * FROM formations ORDER BY formation_id ASC",
-      (err, results) => {
-        if (err) reject(err);
-        if (results.rowCount != 0) {
-          resolve(results.rows);
-        } else {
-          reject("No formations found.");
-        }
+    db.query("SELECT * FROM formations ORDER BY formation_id ASC", (err, results) => {
+      if (err) reject(err);
+      if (results.rowCount != 0) {
+        resolve(results.rows);
+      } else {
+        reject("No formations found.");
       }
-    );
+    });
   });
 };
 
 const findOneById = (formation_id) => {
   return new Promise((resolve, reject) => {
-    db.query(
-      "SELECT * FROM formations WHERE formation_id = $1",
-      [formation_id],
-      (err, results) => {
-        if (err) reject(err);
-        checkSingleRow(resolve, reject, results.rowCount, results);
-      }
-    );
+    db.query("SELECT * FROM formations WHERE formation_id = $1", [formation_id], (err, results) => {
+      if (err) reject(err);
+      checkSingleRow(resolve, reject, results.rowCount, results);
+    });
   });
 };
 
 const findOneByName = (formation_name) => {
   return new Promise((resolve, reject) => {
-    db.query(
-      "SELECT * FROM formations WHERE formation = $1",
-      [formation_name],
-      (err, results) => {
-        if (err) reject(err);
-        checkSingleRow(resolve, reject, results.rowCount, results);
-      }
-    );
+    db.query("SELECT * FROM formations WHERE formation = $1", [formation_name], (err, results) => {
+      if (err) reject(err);
+      checkSingleRow(resolve, reject, results.rowCount, results);
+    });
   });
 };
 
