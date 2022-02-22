@@ -110,14 +110,14 @@ const update = (email, r_u_number, name, surname) => {
   );
 };
 
-const deleteOne = (email) => {
+const deleteOne = (r_u_number) => {
   return new Promise((resolve, reject) => {
-    db.query("DELETE FROM users WHERE email = $1 RETURNING email", [email], (err, results) => {
+    db.query("DELETE FROM users WHERE r_u_number = $1 RETURNING r_u_number", [r_u_number], (err, results) => {
       if (err || !results.rowCount) reject(err);
       if (results.rowCount == 1) {
         resolve("User deleted.");
       } else {
-        reject(`User with email ${email} does not exist.`);
+        reject(`User with r_u_number ${r_u_number} does not exist.`);
       }
     });
   });
@@ -181,7 +181,7 @@ const sendMail = (email, token) => {
       .then(() => resolve("Email sent."))
       .catch((e) => reject(e));
   });
-}
+};
 
 module.exports = {
   findAll,
@@ -193,5 +193,5 @@ module.exports = {
   deleteOne,
   activateUser,
   newToken,
-  sendMail
+  sendMail,
 };
