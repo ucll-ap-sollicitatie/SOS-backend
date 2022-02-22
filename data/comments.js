@@ -16,14 +16,18 @@ const findAll = () => {
 
 const findAllByVideo = (video_id) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM comments WHERE video_id = $1 ORDER BY comment_id ASC", [video_id], (err, results) => {
-      if (err) reject(err);
-      if (results.rowCount != 0) {
-        resolve(results.rows);
-      } else {
-        reject("No comments found.");
+    db.query(
+      "SELECT comment_id, date, text, name, surname FROM comments c INNER JOIN users u ON c.author = u.r_u_number WHERE video_id = $1 ORDER BY date DESC",
+      [video_id],
+      (err, results) => {
+        if (err) reject(err);
+        if (results.rowCount != 0) {
+          resolve(results.rows);
+        } else {
+          reject("No comments found.");
+        }
       }
-    });
+    );
   });
 };
 
@@ -42,7 +46,7 @@ const findOne = (comment_id) => {
 
 const add = (text, author, video_id) => {
   return new Promise((resolve, reject) => {
-    db.query("INSERT INTO comments (text, author, video_id) VALUES ($1, $2, $3, $4)", [text, author, video_id], (err, results) => {
+    db.query("INSERT INTO comments (text, author, video_id) VALUES ($1, $2, $3)", [text, author, video_id], (err, results) => {
       if (err) reject(err);
       resolve("Comment added.");
     });

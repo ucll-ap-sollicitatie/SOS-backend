@@ -9,7 +9,8 @@ const findAll = async (req, res) => {
 
 const findAllByVideo = async (req, res) => {
   console.log(`GET /comments/video/video_id`);
-  await Comment.findAllByVideo()
+  const { video_id } = req.params;
+  await Comment.findAllByVideo(video_id)
     .then((result) => res.respond(result))
     .catch((error) => res.failNotFound(error));
 };
