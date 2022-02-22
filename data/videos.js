@@ -10,7 +10,7 @@ cloudinary.config({
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM videos ORDER BY video_id ASC", (err, results) => {
+    db.query("SELECT * FROM videos ORDER BY video_id DESC", (err, results) => {
       if (err) reject(err);
       if (results.rowCount != 0) {
         resolve(results.rows);
@@ -49,11 +49,11 @@ const findOne = (video_id) => {
   });
 };
 
-const add = (title, r_u_number, email, description, videoUrl) => {
+const add = (title, r_u_number, email, description, videoUrl, private) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO videos (title, r_u_number, email, description, video_url) VALUES ($1, $2, $3, $4, $5)",
-      [title, r_u_number, email, description, videoUrl],
+      "INSERT INTO videos (title, r_u_number, email, description, video_url, private) VALUES ($1, $2, $3, $4, $5, $6)",
+      [title, r_u_number, email, description, videoUrl, private],
       (err, results) => {
         if (err) reject(err);
         resolve("Video added.");

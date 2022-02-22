@@ -26,10 +26,10 @@ const findOne = async (req, res) => {
 const add = async (req, res) => {
   console.log(`POST /videos request`);
   const newVideo = req.files.newRecording;
-  const { title, r_u_number, email, description } = req.body;
+  const { title, r_u_number, email, description, private } = req.body;
   await Video.uploadVideo(newVideo, email)
     .then((result) => {
-      Video.add(title, r_u_number, email, description, result.url)
+      Video.add(title, r_u_number, email, description, result.url, private)
         .then(() => res.respondCreated(null, "Video uploaded."))
         .catch(() => res.fail("Database entry error."));
     })
