@@ -4,7 +4,7 @@ const db = require("../configuration/db");
 const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT question_category_id, category, COUNT(question_id) amount_of_questions FROM question_categories FULL OUTER JOIN questions USING(question_category_id) GROUP BY question_category_id, category ORDER BY question_category_id ASC",
+      "SELECT question_category_id, category, COUNT(question_id) AS amount_of_questions FROM question_categories FULL OUTER JOIN questions USING(question_category_id) GROUP BY question_category_id, category ORDER BY category, amount_of_questions ASC",
       (err, results) => {
         if (err) reject(err);
         if (results.rowCount != 0) {
