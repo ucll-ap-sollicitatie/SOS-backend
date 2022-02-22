@@ -17,7 +17,7 @@ const findAll = () => {
 const findAllByVideo = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT comment_id, date, text, name, surname FROM comments c INNER JOIN users u ON c.author = u.r_u_number WHERE video_id = $1 ORDER BY date DESC",
+      "SELECT comment_id, date, text, name, surname, author FROM comments c INNER JOIN users u ON c.author = u.r_u_number WHERE video_id = $1 ORDER BY date DESC",
       [video_id],
       (err, results) => {
         if (err) reject(err);
