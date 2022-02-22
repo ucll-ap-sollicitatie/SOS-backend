@@ -170,10 +170,10 @@ const sendMail = (email, token) => {
       from: "slimopsollicitatie2022@gmail.com",
       subject: "SOS - Account activation",
       html: `
-        <h3>Welcome to Slim op sollicitatie!</h3>
-        <p>Thank you for registering, please click the following link to activate your account.</p>
-        <p><a target="_" href="http://localhost:3001/users/activation/${token}">Activate my account!</a></p>
-        <p>This link expires after 5 hours. You may always resend a new activation mail.</p>`,
+        <h3>Van harte welkom bij Slim op sollicitatie!</h3>
+        <p>Gelieve op de volgende link te drukken om uw account te activeren.</p>
+        <p><a target="_" href="http://localhost:3001/users/activation/${token}">Activeer mijn account</a></p>
+        <p>Deze link verloopt na 1 uur vanaf de tijd van registratie, om een nieuwe activatielink te krijgen kan u na de verlopen tijd op de bovenstaande link drukken.</p>`,
     };
 
     sgMail
