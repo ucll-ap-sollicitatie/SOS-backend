@@ -1,16 +1,19 @@
-// Contains all the queries for the table 'queston categories'
+// Contains all the queries for the table 'question categories'
 const db = require("../configuration/db");
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM question_categories ORDER BY question_category_id ASC", (err, results) => {
-      if (err) reject(err);
-      if (results.rowCount != 0) {
-        resolve(results.rows);
-      } else {
-        reject("No question categories.");
+    db.query(
+      "SELECT question_category_id, category, COUNT(question_id) amount_of_questions FROM question_categories FULL OUTER JOIN questions USING(question_category_id) GROUP BY question_category_id, category ORDER BY question_category_id ASC",
+      (err, results) => {
+        if (err) reject(err);
+        if (results.rowCount != 0) {
+          resolve(results.rows);
+        } else {
+          reject("No question categories.");
+        }
       }
-    });
+    );
   });
 };
 
