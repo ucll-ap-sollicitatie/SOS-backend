@@ -10,7 +10,7 @@ cloudinary.config({
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM videos ORDER BY video_id ASC", (err, results) => {
+    db.query("SELECT * FROM videos ORDER BY video_id DESC", (err, results) => {
       if (err) reject(err);
       if (results.rowCount != 0) {
         resolve(results.rows);
