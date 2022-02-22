@@ -33,8 +33,8 @@ const add = async (req, res) => {
         .then(() => res.respondCreated(null, "Video uploaded."))
         .catch(() => res.fail("Database entry error."));
     })
-    .catch(() => {
-      res.fail("Video upload error.");
+    .catch((e) => {
+      res.fail(e);
     });
 };
 
