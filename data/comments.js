@@ -14,6 +14,19 @@ const findAll = () => {
   });
 };
 
+const findAllByVideo = (video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT * FROM comments WHERE video_id = $1 ORDER BY comment_id ASC", [video_id], (err, results) => {
+      if (err) reject(err);
+      if (results.rowCount != 0) {
+        resolve(results.rows);
+      } else {
+        reject("No comments found.");
+      }
+    });
+  });
+};
+
 const findOne = (comment_id) => {
   return new Promise((resolve, reject) => {
     db.query("SELECT * FROM comments WHERE comment_id = $1", [comment_id], (err, results) => {
@@ -27,16 +40,12 @@ const findOne = (comment_id) => {
   });
 };
 
-const add = (text, feedback, author, video_id) => {
+const add = (text, author, video_id) => {
   return new Promise((resolve, reject) => {
-    db.query(
-      "INSERT INTO comments (text, feedback, author, video_id) VALUES ($1, $2, $3, $4)",
-      [text, feedback, author, video_id],
-      (err, results) => {
-        if (err) reject(err);
-        resolve("Comment added.");
-      }
-    );
+    db.query("INSERT INTO comments (text, author, video_id) VALUES ($1, $2, $3, $4)", [text, author, video_id], (err, results) => {
+      if (err) reject(err);
+      resolve("Comment added.");
+    });
   });
 };
 
@@ -68,6 +77,7 @@ const deleteOne = (comment_id) => {
 
 module.exports = {
   findAll,
+  findAllByVideo,
   findOne,
   add,
   update,
