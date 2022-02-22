@@ -1,6 +1,5 @@
 require("dotenv").config();
 const User = require("../data/users");
-const frontEnd = "http:/localhost:3000";
 
 const findAll = async (req, res) => {
   console.log(`GET /users request`);
@@ -68,14 +67,14 @@ const activateUser = async (req, res) => {
     const activation_token = crypto.randomBytes(48).toString("hex");
     await User.newToken(current_user, activation_token).then(() => {
       sendMail(current_user.email, activation_token);
-      res.redirect(`${frontEnd}/?toast=Uw activatielink is verlopen, er werd een nieuwe mail verstuurd`);
+      res.redirect(301, "http://localhost:3000/?toast=Uw activatielink is verlopen, er werd een nieuwe mail verstuurd");
     });
   } else {
     await User.activateUser(token)
       .then(() => {
-        res.redirect(`${frontEnd}/?toast=Account geactiveerd, u mag zich nu inloggen`);
+        res.redirect(301, "http://localhost:3000/?toast=Account geactiveerd, u mag zich nu inloggen");
       })
-      .catch(() => res.redirect(`${frontEnd}/?toast=Account activatie gefaald`));
+      .catch(() => res.redirect(301, "http://localhost:3000/?toast=Account activatie gefaald"));
   }
 };
 
