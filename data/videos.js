@@ -95,7 +95,6 @@ const deleteOne = (video_id) => {
   });
 };
 
-
 module.exports = {
   findAll,
   findAllByEmail,
