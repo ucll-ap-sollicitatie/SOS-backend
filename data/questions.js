@@ -40,9 +40,26 @@ const findOneByQuestion = (question) => {
   });
 };
 
+const check = (question, question_category_id) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      "SELECT * FROM questions WHERE question = $1 AND question_category_id = $2",
+      [question, question_category_id],
+      (err, results) => {
+        if (err) reject(err);
+        if (results.rowCount == 1) {
+          resolve(results.rows[0]);
+        } else {
+          reject("Question not found.");
+        }
+      }
+    );
+  });
+};
+
 const add = (question, question_category_id) => {
   return new Promise((resolve, reject) => {
-    findOneByQuestion(question)
+    check(question, question_category_id)
       .then(() => {
         reject("Question already exists.");
       })
