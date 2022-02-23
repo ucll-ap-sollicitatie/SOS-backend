@@ -69,6 +69,7 @@ app.post("/comments", Comment.add);
 app.put("/comments/:comment_id", Comment.update);
 app.delete("/comments/:comment_id", Comment.deleteOne);
 app.get("/comments/video/:video_id", Comment.findAllByVideo);
+app.get("/comments/video/:video_id/feedback", Comment.findAllFeedbackByVideo);
 
 // Routes for videos
 app.get("/videos", Video.findAll);

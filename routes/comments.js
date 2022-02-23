@@ -15,6 +15,14 @@ const findAllByVideo = async (req, res) => {
     .catch((error) => res.failNotFound(error));
 };
 
+const findAllFeedbackByVideo = async (req, res) => {
+  console.log(`GET /comments/video/video_id`);
+  const { video_id } = req.params;
+  await Comment.findAllFeedbackByVideo(video_id)
+    .then((result) => res.respond(result))
+    .catch((error) => res.failNotFound(error));
+};
+
 const findOne = async (req, res) => {
   console.log(`GET /comments/:id request`);
   const comment_id = req.params.comment_id;
@@ -25,8 +33,8 @@ const findOne = async (req, res) => {
 
 const add = async (req, res) => {
   console.log(`POST /comments request`);
-  const { text, author, video_id } = req.body;
-  await Comment.add(text, author, video_id)
+  const { text, author, video_id, feedback } = req.body;
+  await Comment.add(text, author, video_id, feedback)
     .then((result) => res.respondCreated(null, result))
     .catch((error) => res.fail(error));
 };
@@ -51,6 +59,7 @@ const deleteOne = async (req, res) => {
 module.exports = {
   findAll,
   findAllByVideo,
+  findAllFeedbackByVideo,
   findOne,
   add,
   update,
