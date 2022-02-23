@@ -73,6 +73,13 @@ const findRandomQuestions = async (req, res) => {
     .catch((error) => res.failNotFound(error));
 };
 
+const findRandomQuestions = async (req, res) => {
+  console.log(`GET /videos/random request`);
+  await Question.findRandomQuestions()
+    .then((result) => res.respond(result))
+    .catch((error) => res.failNotFound(error));
+};
+
 module.exports = {
   findAll,
   findOne,
