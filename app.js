@@ -73,6 +73,7 @@ app.get("/comments/video/:video_id", Comment.findAllByVideo);
 // Routes for videos
 app.get("/videos", Video.findAll);
 app.get("/videos/:video_id", Video.findOne);
+app.get("/videos/email/:email", Video.findAllByEmail);
 app.post("/videos", Video.add);
 app.put("/videos/:video_id", Video.update);
 app.delete("/videos/:video_id", Video.deleteOne);

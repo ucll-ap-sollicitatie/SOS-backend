@@ -23,16 +23,14 @@ const findAll = () => {
 
 const findAllByEmail = (email) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM videos WHERE email = $1"),
-      [email],
-      (err, results) => {
-        if (err) reject(err);
-        if (results.rowCount != 0) {
-          resolve(results.rows);
-        } else {
-          reject(`Videos for email ${email} not found.`);
-        }
-      };
+    db.query("SELECT * FROM videos WHERE email = $1", [email], (err, results) => {
+      if (err) reject(err);
+      if (results.rowCount != 0) {
+        resolve(results.rows);
+      } else {
+        reject(`Videos for email ${email} not found.`);
+      }
+    });
   });
 };
 
