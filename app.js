@@ -52,6 +52,7 @@ app.post("/questions", Question.add);
 app.put("/questions/:question_id", Question.update);
 app.delete("/questions/:question_id", Question.deleteOne);
 app.get("/questions/category/:question_category_id", Question.findAllQuestionsByQuestionCategory);
+app.get("/questions/random/random", Question.findRandomQuestions);
 
 // Routes for categories
 app.get("/question-categories", Question_categories.findAll);
