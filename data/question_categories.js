@@ -58,9 +58,38 @@ const add = (category) => {
   });
 };
 
+const deleteOne = (question_category_id) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      "DELETE FROM questions WHERE question_category_id = $1 RETURNING question_category_id",
+      [question_category_id],
+      (err, results) => {
+        if (err) reject(err);
+        if (results.rowCount === 0 || results.rowCount === 1) {
+          db.query(
+            "DELETE FROM question_categories WHERE question_category_id = $1 RETURNING question_category_id",
+            [question_category_id],
+            (err, results) => {
+              if (err) reject(err);
+              if (results.rowCount == 1) {
+                resolve("Question category deleted.");
+              } else {
+                reject(`Question category #${question_category_id} does not exist.`);
+              }
+            }
+          );
+        } else {
+          reject(`Question #${question_category_id} does not exist.`);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   findAll,
   findOneById,
   findOneByName,
   add,
+  deleteOne,
 };

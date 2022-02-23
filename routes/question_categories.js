@@ -30,9 +30,18 @@ const add = async (req, res) => {
     .catch((error) => res.fail(error));
 };
 
+const deleteOne = async (req, res) => {
+  console.log(`DELETE /question-categories request`);
+  const question_category_id = req.params.question_category_id;
+  await Question_categories.deleteOne(question_category_id)
+    .then((result) => res.respondDeleted(null, result))
+    .catch((error) => res.fail(error));
+};
+
 module.exports = {
   findAll,
   findOneById,
   findOneByCategory,
   add,
+  deleteOne,
 };

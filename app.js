@@ -55,6 +55,7 @@ app.get("/question-categories", Question_categories.findAll);
 app.get("/question-categories/:question_category_id", Question_categories.findOneById);
 app.get("/question-categories/category/:category", Question_categories.findOneByCategory);
 app.post("/question-categories", Question_categories.add);
+app.delete("/question-categories/:question_category_id", Question_categories.deleteOne);
 
 // Routes for formations
 app.get("/formations", Formation.findAll);
