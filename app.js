@@ -7,6 +7,7 @@ const Question_categories = require("./routes/question_categories");
 const Comment = require("./routes/comments");
 const Video = require("./routes/videos");
 const Formation = require("./routes/formations");
+const Preference = require("./routes/preferences");
 const Authentication = require("./routes/authentication");
 
 // Middleware
@@ -62,6 +63,13 @@ app.delete("/question-categories/:question_category_id", Question_categories.del
 app.get("/formations", Formation.findAll);
 app.get("/formations/:formation_id", Formation.findOneById);
 app.get("/formations/name/:formation_name", Formation.findOneByName);
+
+// Routes for preferences
+app.get("/preferences", Preference.findAll);
+app.get("/preferences/:preference_id", Preference.findOneById);
+app.get("/preferences/r_u_number/:preference_r_u_number", Preference.findOneByRUNumber);
+app.post("/preferences", Preference.add);
+
 
 // Routes for comments
 app.get("/comments", Comment.findAll);
