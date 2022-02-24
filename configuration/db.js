@@ -11,9 +11,21 @@ const db = new Pool({
 });
 
 if (process.env.NODE_ENV == "production") {
-  db.query("SET search_path TO prod");
+  db.on("connect", (client) => {
+    client.query("SET search_path TO prod;");
+  });
 } else {
-  db.query("SET search_path TO dev");
+  db.on("connect", (client) => {
+    client.query("SET search_path TO dev;");
+  });
 }
+
+db.on("connect", (client) => {
+  if (process.env.NODE_ENV == "production") {
+    client.query("SET search_path TO prod;");
+  } else {
+    client.query("SET search_path TO dev;");
+  }
+});
 
 module.exports = db;
