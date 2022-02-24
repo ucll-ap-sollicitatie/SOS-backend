@@ -23,29 +23,31 @@ const findAll = () => {
 
 const findAllByEmail = (email) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM videos WHERE email = $1"),
-      [email],
-      (err, results) => {
-        if (err) reject(err);
-        if (results.rowCount != 0) {
-          resolve(results.rows);
-        } else {
-          reject(`Videos for email ${email} not found.`);
-        }
-      };
+    db.query("SELECT * FROM videos WHERE email = $1", [email], (err, results) => {
+      if (err) reject(err);
+      if (results.rowCount != 0) {
+        resolve(results.rows);
+      } else {
+        reject(`Videos for email ${email} not found.`);
+      }
+    });
   });
 };
 
 const findOne = (video_id) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM videos WHERE video_id = $1", [video_id], (err, results) => {
-      if (err) reject(err);
-      if (results.rowCount == 1) {
-        resolve(results.rows[0]);
-      } else {
-        reject("Video not found.");
+    db.query(
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v inner join users u using(r_u_number) WHERE video_id = $1",
+      [video_id],
+      (err, results) => {
+        if (err) reject(err);
+        if (results.rowCount == 1) {
+          resolve(results.rows[0]);
+        } else {
+          reject("Video not found.");
+        }
       }
-    });
+    );
   });
 };
 

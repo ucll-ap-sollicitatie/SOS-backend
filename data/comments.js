@@ -17,7 +17,7 @@ const findAll = () => {
 const findAllByVideo = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT comment_id, date, text, name, surname, author FROM comments c INNER JOIN users u ON c.author = u.r_u_number WHERE video_id = $1 ORDER BY date DESC",
+      "SELECT comment_id, date, text, name, surname, author, feedback FROM comments c INNER JOIN users u ON c.author = u.r_u_number WHERE video_id = $1 AND feedback = false ORDER BY date DESC",
       [video_id],
       (err, results) => {
         if (err) reject(err);
@@ -25,6 +25,23 @@ const findAllByVideo = (video_id) => {
           resolve(results.rows);
         } else {
           reject("No comments found.");
+        }
+      }
+    );
+  });
+};
+
+const findAllFeedbackByVideo = (video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      "SELECT comment_id, date, text, name, surname, author, feedback FROM comments c INNER JOIN users u ON c.author = u.r_u_number WHERE video_id = $1 AND feedback = true ORDER BY date DESC",
+      [video_id],
+      (err, results) => {
+        if (err) reject(err);
+        if (results.rowCount != 0) {
+          resolve(results.rows);
+        } else {
+          reject("No feedback found.");
         }
       }
     );
@@ -44,12 +61,16 @@ const findOne = (comment_id) => {
   });
 };
 
-const add = (text, author, video_id) => {
+const add = (text, author, video_id, feedback) => {
   return new Promise((resolve, reject) => {
-    db.query("INSERT INTO comments (text, author, video_id) VALUES ($1, $2, $3)", [text, author, video_id], (err, results) => {
-      if (err) reject(err);
-      resolve("Comment added.");
-    });
+    db.query(
+      "INSERT INTO comments (text, author, video_id, feedback) VALUES ($1, $2, $3, $4)",
+      [text, author, video_id, feedback],
+      (err, results) => {
+        if (err) reject(err);
+        resolve("Comment added.");
+      }
+    );
   });
 };
 
@@ -82,6 +103,7 @@ const deleteOne = (comment_id) => {
 module.exports = {
   findAll,
   findAllByVideo,
+  findAllFeedbackByVideo,
   findOne,
   add,
   update,

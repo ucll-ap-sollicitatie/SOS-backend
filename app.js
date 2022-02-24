@@ -70,10 +70,12 @@ app.post("/comments", Comment.add);
 app.put("/comments/:comment_id", Comment.update);
 app.delete("/comments/:comment_id", Comment.deleteOne);
 app.get("/comments/video/:video_id", Comment.findAllByVideo);
+app.get("/comments/video/:video_id/feedback", Comment.findAllFeedbackByVideo);
 
 // Routes for videos
 app.get("/videos", Video.findAll);
 app.get("/videos/:video_id", Video.findOne);
+app.get("/videos/email/:email", Video.findAllByEmail);
 app.post("/videos", Video.add);
 app.put("/videos/:video_id", Video.update);
 app.delete("/videos/:video_id", Video.deleteOne);

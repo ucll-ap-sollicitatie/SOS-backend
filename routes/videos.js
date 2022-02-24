@@ -9,7 +9,7 @@ const findAll = async (req, res) => {
 
 const findAllByEmail = async (req, res) => {
   console.log(`GET /videos/email/:email request`);
-  const { email } = req.params;
+  const email = req.params.email;
   await Video.findAllByEmail(email)
     .then((result) => res.respond(result))
     .catch((err) => res.failNotFound(err));
