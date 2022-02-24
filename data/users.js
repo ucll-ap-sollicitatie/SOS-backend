@@ -1,8 +1,5 @@
 // Contains all the queries for the table 'users'
-const db = require("../configuration/db");
-const crypto = require("crypto");
-const bcrypt = require("bcrypt");
-const { resolve } = require("path");
+const { db, bcrypt, crypto, resolve, queryHelpers } = require("./index");
 const saltRounds = 10;
 
 const findAll = () => {
@@ -10,12 +7,7 @@ const findAll = () => {
     db.query(
       "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) ORDER BY r_u_number ASC",
       (err, results) => {
-        if (err) return reject(err);
-        if (results.rowCount != 0) {
-          resolve(results.rows);
-        } else {
-          reject("No users found.");
-        }
+        queryHelpers.handleQuery(resolve, reject, err, results);
       }
     );
   });
@@ -27,12 +19,7 @@ const findOneByEmail = (email) => {
       "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE email = $1",
       [email],
       (err, results) => {
-        if (err || !results.rowCount) reject(err);
-        if (results.rowCount == 1) {
-          resolve(results.rows[0]);
-        } else {
-          reject("User not found.");
-        }
+        queryHelpers.handleQueryOne(resolve, reject, err, results);
       }
     );
   });
@@ -44,12 +31,7 @@ const findOneById = (r_u_number) => {
       "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1",
       [r_u_number],
       (err, results) => {
-        if (err || !results.rowCount) reject(err);
-        if (results.rowCount == 1) {
-          resolve(results.rows[0]);
-        } else {
-          reject("User not found.");
-        }
+        queryHelpers.handleQueryOne(resolve, reject, err, results);
       }
     );
   });
@@ -61,12 +43,7 @@ const findOneByToken = (token) => {
       "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE activation_token = $1",
       [token],
       (err, results) => {
-        if (err || !results.rowCount) reject(err);
-        if (results.rowCount == 1) {
-          resolve(results.rows[0]);
-        } else {
-          reject("User not found.");
-        }
+        queryHelpers.handleQueryOne(resolve, reject, err, results);
       }
     );
   });
@@ -74,24 +51,21 @@ const findOneByToken = (token) => {
 
 const add = (r_u_number, name, surname, email, password, role_id, formation_id) => {
   return new Promise((resolve, reject) => {
-    findOneByEmail(email)
-      .then(() => {
-        reject("User already exists.");
-      })
-      .catch(() => {
-        bcrypt.hash(password, saltRounds, (hash_err, hash) => {
-          if (hash_err) reject(hash_err);
-          const activation_token = crypto.randomBytes(48).toString("hex");
-          db.query(
-            "INSERT INTO users (r_u_number, name, surname, email, hashed_password, role_id, formation_id, activation_token) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-            [r_u_number, name, surname, email, hash, role_id, formation_id, activation_token],
-            (err, results) => {
-              if (err) reject("Add query error.");
-              resolve({ message: "User added.", token: activation_token });
-            }
-          );
-        });
-      });
+    bcrypt.hash(password, saltRounds, (hash_err, hash) => {
+      if (hash_err) reject(hash_err);
+      const activation_token = crypto.randomBytes(48).toString("hex");
+      db.query(
+        "INSERT INTO users (r_u_number, name, surname, email, hashed_password, role_id, formation_id, activation_token) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+        [r_u_number, name, surname, email, hash, role_id, formation_id, activation_token],
+        (err, results) => {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve({ message: "User added.", token: activation_token });
+        }
+      );
+    });
   });
 };
 
@@ -100,12 +74,7 @@ const update = (email, r_u_number, name, surname) => {
     "UPDATE users SET r_u_number = $1, name = $2, surname = $3 WHERE email = $4 RETURNING email",
     [r_u_number, name, surname, email],
     (err, results) => {
-      if (err || !results.rowCount) throw err;
-      if (results.rowCount == 1) {
-        resolve("User updated.");
-      } else {
-        reject(`User with email ${email} does not exist.`);
-      }
+      queryHelpers.handleQueryUpdate(resolve, reject, err, "User");
     }
   );
 };
@@ -113,12 +82,7 @@ const update = (email, r_u_number, name, surname) => {
 const deleteOne = (r_u_number) => {
   return new Promise((resolve, reject) => {
     db.query("DELETE FROM users WHERE r_u_number = $1 RETURNING r_u_number", [r_u_number], (err, results) => {
-      if (err || !results.rowCount) reject(err);
-      if (results.rowCount == 1) {
-        resolve("User deleted.");
-      } else {
-        reject(`User with r_u_number ${r_u_number} does not exist.`);
-      }
+      queryHelpers.handleQueryDelete(resolve, reject, err, "User");
     });
   });
 };
@@ -131,12 +95,11 @@ const activateUser = (token) => {
           "UPDATE users SET activation_token = null, token_expiration_date = null WHERE activation_token = $1 RETURNING email",
           [token],
           (err, results) => {
-            if (err || !results.rowCount) reject(err);
-            if (results.rowCount == 1) {
-              resolve("User activated.");
-            } else {
-              reject(`User does not exist.`);
+            if (err) {
+              reject(err);
+              return;
             }
+            resolve("User activated.");
           }
         );
       })
@@ -150,12 +113,11 @@ const newToken = (current_user, activation_token) => {
       "UPDATE users SET activation_token = $1, token_expiration_date = (now() + '01:00:00'::interval) WHERE email = $2 RETURNING email",
       [activation_token, current_user.email],
       (err, results) => {
-        if (err || !results.rowCount) reject(err);
-        if (results.rowCount == 1) {
-          resolve("New token provided.");
-        } else {
-          reject(`New token failure.`);
+        if (err) {
+          reject(err);
+          return;
         }
+        resolve("New token provided.");
       }
     );
   });

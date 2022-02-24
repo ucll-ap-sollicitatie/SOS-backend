@@ -1,5 +1,4 @@
 // Routing imports
-const Index = require("./routes/index");
 const User = require("./routes/users");
 const Role = require("./routes/roles");
 const Question = require("./routes/questions");
@@ -19,6 +18,7 @@ const compression = require("compression");
 
 // Application
 const express = require("express");
+const e = require("cors");
 const app = express();
 const port = 3001;
 const serverUrl = "http://localhost:";
@@ -32,7 +32,9 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", Index.welcome);
+app.get("/", function (req, res) {
+  res.respond({ message: "Slim op sollicitatie API" });
+});
 
 // Routes for users
 app.get("/users", User.findAll);
@@ -70,7 +72,6 @@ app.get("/preferences/:preference_id", Preference.findOneById);
 app.get("/preferences/r_u_number/:preference_r_u_number", Preference.findOneByRUNumber);
 app.post("/preferences", Preference.add);
 
-
 // Routes for comments
 app.get("/comments", Comment.findAll);
 app.get("/comments/:comment_id", Comment.findOne);
@@ -94,7 +95,18 @@ app.get("/roles", Role.findAll);
 // Log in & Register
 app.post("/auth/login", Authentication.logIn);
 
-// Invalid URL handler
-app.use(Index.invalidUrl);
+// 404
+app.use(function (req, res, next) {
+  return res.status(404).send({ message: "Resource " + req.url + " Not found." });
+});
 
-app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port}`));
+// 500 - Any server error
+app.use(function (err, req, res, next) {
+  return res.status(500).send({ error: err });
+});
+
+if (process.env.NODE_ENV == "development") {
+  app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port} [DEVELOPMENT]`));
+} else {
+  app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port} [PRODUCTION]`));
+}

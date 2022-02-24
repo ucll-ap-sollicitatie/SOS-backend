@@ -1,5 +1,5 @@
 // Contains all the queries for the table 'question categories'
-const db = require("../configuration/db");
+const { db, queryHelpers } = require("./index");
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
@@ -14,12 +14,7 @@ const findAll = () => {
       GROUP BY question_category_id, category)
       ORDER BY amount_of_questions DESC`,
       (err, results) => {
-        if (err) reject(err);
-        if (results.rowCount != 0) {
-          resolve(results.rows);
-        } else {
-          reject("No question categories.");
-        }
+        queryHelpers.handleQuery(resolve, reject, err, results);
       }
     );
   });
@@ -28,12 +23,7 @@ const findAll = () => {
 const findOneById = (question_category_id) => {
   return new Promise((resolve, reject) => {
     db.query("SELECT * FROM question_categories WHERE question_category_id = $1", [question_category_id], (err, results) => {
-      if (err) reject(err);
-      if (results.rowCount == 1) {
-        resolve(results.rows[0]);
-      } else {
-        reject("Question category not found.");
-      }
+      queryHelpers.handleQueryOne(resolve, reject, err, results);
     });
   });
 };
@@ -41,12 +31,7 @@ const findOneById = (question_category_id) => {
 const findOneByName = (category) => {
   return new Promise((resolve, reject) => {
     db.query("SELECT * FROM question_categories WHERE category = $1", [category], (err, results) => {
-      if (err) reject(err);
-      if (results.rowCount == 1) {
-        resolve(results.rows[0]);
-      } else {
-        reject("Question category not found.");
-      }
+      queryHelpers.handleQueryOne(resolve, reject, err, results);
     });
   });
 };
@@ -56,11 +41,11 @@ const add = (category) => {
     findOneByName(category)
       .then(() => {
         reject("Question category already exists.");
+        return;
       })
       .catch(() => {
         db.query("INSERT INTO question_categories (category) VALUES ($1)", [category], (err, results) => {
-          if (err) reject(err);
-          resolve("Question category added.");
+          queryHelpers.handleQueryAdd(resolve, reject, err, "Category");
         });
       });
   });
@@ -72,12 +57,7 @@ const update = (question_category_id, category) => {
       "UPDATE question_categories SET category = $1 WHERE question_category_id = $2 RETURNING question_category_id",
       [category, question_category_id],
       (err, results) => {
-        if (err || !results.rowCount) throw err;
-        if (results.rowCount == 1) {
-          resolve("Question category updated.");
-        } else {
-          reject(`Question category with id ${question_category_id} does not exist.`);
-        }
+        queryHelpers.handleQueryUpdate(resolve, reject, err, "Category");
       }
     );
   });
@@ -85,17 +65,24 @@ const update = (question_category_id, category) => {
 
 const deleteOne = (question_category_id) => {
   return new Promise((resolve, reject) => {
-    db.query("DELETE FROM questions WHERE question_category_id = $1 RETURNING question_category_id", [question_category_id], () => {
-      db.query(
-        "DELETE FROM question_categories WHERE question_category_id = $1 RETURNING question_category_id",
-        [question_category_id],
-        (err, results) => {
-          if (err) reject(err);
-          if (results.rowCount == 1) {
-            resolve("Question category deleted.");
-          } else {
-            reject(`Question category #${question_category_id} does not exist.`);
-          }
+    db.query(
+      "DELETE FROM questions WHERE question_category_id = $1 RETURNING question_category_id",
+      [question_category_id],
+      (err, results) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        if (results.rowCount === 0 || results.rowCount === 1) {
+          db.query(
+            "DELETE FROM question_categories WHERE question_category_id = $1 RETURNING question_category_id",
+            [question_category_id],
+            (err, results) => {
+              queryHelpers.handleQueryDelete(resolve, reject, err, "Category");
+            }
+          );
+        } else {
+          reject(`Question #${question_category_id} does not exist.`);
         }
       );
     });

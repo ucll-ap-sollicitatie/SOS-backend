@@ -10,4 +10,10 @@ const db = new Pool({
   port: 5432,
 });
 
+if (process.env.NODE_ENV == "production") {
+  db.query("SET search_path TO prod");
+} else {
+  db.query("SET search_path TO dev");
+}
+
 module.exports = db;

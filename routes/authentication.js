@@ -1,5 +1,4 @@
-const User = require("../data/users");
-const bcrypt = require("bcrypt");
+const { User, bcrypt } = require("./index");
 
 const logIn = async (req, res) => {
   console.log(`POST /auth/login request`);

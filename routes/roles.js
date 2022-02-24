@@ -1,4 +1,4 @@
-const Role = require("../data/roles");
+const { Role } = require("./index");
 
 const findAll = async (req, res) => {
   console.log(`GET /roles request`);

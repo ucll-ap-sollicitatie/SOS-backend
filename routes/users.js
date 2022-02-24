@@ -1,56 +1,75 @@
 require("dotenv").config();
-const User = require("../data/users");
+const { User } = require("./index");
 
-const findAll = async (req, res) => {
+const findAll = async (req, res, next) => {
   console.log(`GET /users request`);
   await User.findAll()
     .then((result) => res.respond(result))
-    .catch((error) => res.failNotFound(error));
+    .catch((error) => next(error))
+    .catch(() => next());
 };
 
-const findOneByEmail = async (req, res) => {
+const findOneByEmail = async (req, res, next) => {
   console.log(`GET /users/email/:email request`);
   const email = req.params.email;
   await User.findOneByEmail(email)
     .then((result) => res.respond(result))
-    .catch((error) => res.failNotFound(error));
+    .catch((error) => next(error))
+    .catch(() => next());
 };
 
-const findOneById = async (req, res) => {
+const findOneById = async (req, res, next) => {
   console.log(`GET /users/:id request`);
   const r_u_number = req.params.r_u_number;
   await User.findOneById(r_u_number)
     .then((result) => res.respond(result))
-    .catch((error) => res.failNotFound(error));
+    .catch((error) => next(error))
+    .catch(() => next());
 };
 
-const add = async (req, res) => {
+const add = async (req, res, next) => {
   console.log(`POST /users request`);
   const { r_u_number, name, surname, email, password, role_id, formation_id } = req.body;
+  if (!r_u_number || !name || !surname || !email || !password || !role_id || !formation_id) {
+    res.status(400).send({ error: "Invalid request or data." });
+    return;
+  }
   await User.add(r_u_number, name, surname, email, password, role_id, formation_id)
     .then((result) => {
       sendMail(email, result.token)
         .then(() => res.respondCreated(null, result.message))
-        .catch((e) => res.fail(e));
+        .catch((error) => next(error));
     })
-    .catch((error) => res.fail(error));
+    .catch((error) => next(error));
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
   console.log(`PUT /users/:id request`);
   const email = req.params.email;
   const { r_u_number, name, surname } = req.body;
-  await User.update(email, r_u_number, name, surname)
-    .then((result) => res.respondUpdated(null, result))
-    .catch((error) => res.fail(error));
+  if (!r_u_number || !name || !surname) {
+    res.status(400).send({ error: "Invalid request or data." });
+    return;
+  }
+  await User.findOneByEmail(email)
+    .then(() => {
+      User.update(email, r_u_number, name, surname)
+        .then((result) => res.respondUpdated(null, result))
+        .catch((error) => next(error));
+    })
+    .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
 const deleteOne = async (req, res) => {
   console.log(`DELETE /users/:id request`);
   const r_u_number = req.params.r_u_number;
-  await User.deleteOne(r_u_number)
-    .then((result) => res.respondDeleted(null, result))
-    .catch((error) => res.fail(error));
+  await User.findOneById(r_u_number)
+    .then(() => {
+      User.deleteOne(r_u_number)
+        .then((result) => res.respondDeleted(null, result))
+        .catch((error) => next(error));
+    })
+    .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
 const sendMail = async (email, token) => {
