@@ -10,16 +10,6 @@ const db = new Pool({
   port: 5432,
 });
 
-if (process.env.NODE_ENV == "production") {
-  db.on("connect", (client) => {
-    client.query("SET search_path TO prod;");
-  });
-} else {
-  db.on("connect", (client) => {
-    client.query("SET search_path TO dev;");
-  });
-}
-
 db.on("connect", (client) => {
   if (process.env.NODE_ENV == "production") {
     client.query("SET search_path TO prod;");
