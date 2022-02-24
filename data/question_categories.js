@@ -58,6 +58,23 @@ const add = (category) => {
   });
 };
 
+const update = (question_category_id, category) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      "UPDATE question_categories SET category = $1 WHERE question_category_id = $2 RETURNING question_category_id",
+      [category, question_category_id],
+      (err, results) => {
+        if (err || !results.rowCount) throw err;
+        if (results.rowCount == 1) {
+          resolve("Question category updated.");
+        } else {
+          reject(`Question category with id ${question_category_id} does not exist.`);
+        }
+      }
+    );
+  });
+};
+
 const deleteOne = (question_category_id) => {
   return new Promise((resolve, reject) => {
     db.query(
@@ -92,4 +109,5 @@ module.exports = {
   findOneByName,
   add,
   deleteOne,
+  update,
 };

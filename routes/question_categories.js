@@ -30,6 +30,15 @@ const add = async (req, res) => {
     .catch((error) => res.fail(error));
 };
 
+const update = async (req, res) => {
+  console.log(`PUT /question-categories request`);
+  const question_category_id = req.params.question_category_id;
+  const { category } = req.body;
+  await Question_categories.update(question_category_id, category)
+    .then((result) => res.respondUpdated(null, result))
+    .catch((error) => res.fail(error));
+};
+
 const deleteOne = async (req, res) => {
   console.log(`DELETE /question-categories request`);
   const question_category_id = req.params.question_category_id;
@@ -44,4 +53,5 @@ module.exports = {
   findOneByCategory,
   add,
   deleteOne,
+  update,
 };
