@@ -84,8 +84,8 @@ const deleteOne = (question_category_id) => {
         } else {
           reject(`Question #${question_category_id} does not exist.`);
         }
-      );
-    });
+      }
+    );
   });
 };
 
