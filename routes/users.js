@@ -34,13 +34,19 @@ const add = async (req, res, next) => {
     res.status(400).send({ error: "Invalid request or data." });
     return;
   }
-  await User.add(r_u_number, name, surname, email, password, role_id, formation_id)
-    .then((result) => {
-      sendMail(email, result.token)
-        .then(() => res.respondCreated(null, result.message))
-        .catch((error) => next(error));
+  await User.findOneByEmail(email)
+    .then(() => {
+      res.status(409).send({ error: "User already exists." });
     })
-    .catch((error) => next(error));
+    .catch(() => {
+      User.add(r_u_number, name, surname, email, password, role_id, formation_id)
+        .then((result) => {
+          sendMail(email, result.token)
+            .then(() => res.respondCreated(null, result.message))
+            .catch((error) => next(error));
+        })
+        .catch((error) => next(error));
+    });
 };
 
 const update = async (req, res, next) => {
