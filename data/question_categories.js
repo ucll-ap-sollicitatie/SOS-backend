@@ -4,7 +4,15 @@ const db = require("../configuration/db");
 const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT question_category_id, category, COUNT(question_id) AS amount_of_questions FROM question_categories FULL OUTER JOIN questions USING(question_category_id) GROUP BY question_category_id, category ORDER BY category, amount_of_questions ASC",
+      `
+      (SELECT question_category_id, category, COUNT(question_id) AS amount_of_questions 
+      FROM question_categories JOIN questions USING(question_category_id)
+      GROUP BY question_category_id, category)
+      UNION
+      (SELECT question_category_id, category, COUNT(question_id) AS amount_of_questions 
+      FROM question_categories FULL OUTER JOIN questions USING(question_category_id)
+      GROUP BY question_category_id, category)
+      ORDER BY amount_of_questions DESC`,
       (err, results) => {
         if (err) reject(err);
         if (results.rowCount != 0) {
@@ -77,29 +85,20 @@ const update = (question_category_id, category) => {
 
 const deleteOne = (question_category_id) => {
   return new Promise((resolve, reject) => {
-    db.query(
-      "DELETE FROM questions WHERE question_category_id = $1 RETURNING question_category_id",
-      [question_category_id],
-      (err, results) => {
-        if (err) reject(err);
-        if (results.rowCount === 0 || results.rowCount === 1) {
-          db.query(
-            "DELETE FROM question_categories WHERE question_category_id = $1 RETURNING question_category_id",
-            [question_category_id],
-            (err, results) => {
-              if (err) reject(err);
-              if (results.rowCount == 1) {
-                resolve("Question category deleted.");
-              } else {
-                reject(`Question category #${question_category_id} does not exist.`);
-              }
-            }
-          );
-        } else {
-          reject(`Question #${question_category_id} does not exist.`);
+    db.query("DELETE FROM questions WHERE question_category_id = $1 RETURNING question_category_id", [question_category_id], () => {
+      db.query(
+        "DELETE FROM question_categories WHERE question_category_id = $1 RETURNING question_category_id",
+        [question_category_id],
+        (err, results) => {
+          if (err) reject(err);
+          if (results.rowCount == 1) {
+            resolve("Question category deleted.");
+          } else {
+            reject(`Question category #${question_category_id} does not exist.`);
+          }
         }
-      }
-    );
+      );
+    });
   });
 };
 
