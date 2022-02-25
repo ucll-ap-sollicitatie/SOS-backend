@@ -73,7 +73,6 @@ const update = (original_email, email, r_u_number, name, surname, password, role
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (hash_err, hash) => {
       if (hash_err) reject(hash_err);
-      const activation_token = crypto.randomBytes(48).toString("hex");
       db.query(
         "UPDATE users SET email = $1, r_u_number = $2, name = $3, surname = $4, hashed_password = $5, role_id = $6, formation_id = $7 WHERE email = $8 RETURNING email",
         [email, r_u_number, name, surname, hash, role_id, formation_id, original_email],
