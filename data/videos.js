@@ -60,7 +60,7 @@ const uploadVideo = (video_file, email) => {
 const uploadSubtitles = (subtitles, video_file, email) => {
   fs.writeFile("tmp/subtitles.srt", subtitles, (err) => {
     if (err) throw err;
-  })
+  });
   return cloudinary.v2.uploader.upload(`tmp/subtitles.srt`, {
     resource_type: "raw",
     public_id: `SOS/${email}/${video_file.name}.srt`,

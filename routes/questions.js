@@ -66,18 +66,12 @@ const findAllQuestionsByQuestionCategory = async (req, res, next) => {
     .catch(() => next());
 };
 
-const findRandomQuestions = async (req, res) => {
+const findRandomQuestions = async (req, res, next) => {
   console.log(`GET /videos/random request`);
   await Question.findRandomQuestions()
     .then((result) => res.respond(result))
-    .catch((error) => res.failNotFound(error));
-};
-
-const findRandomQuestions = async (req, res) => {
-  console.log(`GET /videos/random request`);
-  await Question.findRandomQuestions()
-    .then((result) => res.respond(result))
-    .catch((error) => res.failNotFound(error));
+    .catch((error) => next(error))
+    .catch(() => next());
 };
 
 module.exports = {

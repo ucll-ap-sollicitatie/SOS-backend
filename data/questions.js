@@ -82,25 +82,7 @@ const findAllQuestionsByQuestionCategory = (question_category_id) => {
 const findRandomQuestions = () => {
   return new Promise((resolve, reject) => {
     db.query("SELECT * FROM questions ORDER BY RANDOM() LIMIT 5", (err, results) => {
-      if (err) reject(err);
-      if (results.rowCount != 0) {
-        resolve(results.rows);
-      } else {
-        reject("No questions found.");
-      }
-    });
-  });
-};
-
-const findRandomQuestions = () => {
-  return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM questions ORDER BY RANDOM() LIMIT 5", (err, results) => {
-      if (err) reject(err);
-      if (results.rowCount != 0) {
-        resolve(results.rows);
-      } else {
-        reject("No questions found.");
-      }
+      queryHelpers.handleQuery(resolve, reject, err, results);
     });
   });
 };

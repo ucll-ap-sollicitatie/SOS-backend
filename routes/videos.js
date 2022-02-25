@@ -47,14 +47,14 @@ const add = async (req, res, next) => {
   await Video.uploadVideo(newVideo, email)
     .then((result) => {
       Video.uploadSubtitles(subtitles, newVideo, email)
-      .then(() => {
-        Video.add(title, r_u_number, email, description, result.url, private)
-        .then(() => res.respondCreated(null, "Video uploaded."))
-        .catch((e) => next(e));
-      })
-      .catch((e) => {
-        next(e);
-      });
+        .then(() => {
+          Video.add(title, r_u_number, email, description, result.url, private)
+            .then(() => res.respondCreated(null, "Video uploaded."))
+            .catch((e) => next(e));
+        })
+        .catch((e) => {
+          next(e);
+        });
     })
     .catch((e) => {
       next(e);
