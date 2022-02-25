@@ -51,15 +51,15 @@ const add = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   console.log(`PUT /users/:id request`);
-  const email = req.params.email;
-  const { r_u_number, name, surname } = req.body;
-  if (!r_u_number || !name || !surname) {
+  const original_email = req.params.email;
+  const { name, surname, r_u_number, email, password, role_id, formation_id } = req.body;
+  if (!original_email || !email || !r_u_number || !name || !surname || !password || !role_id || !formation_id) {
     res.status(400).send({ error: "Invalid request or data." });
     return;
   }
-  await User.findOneByEmail(email)
+  await User.findOneByEmail(original_email)
     .then(() => {
-      User.update(email, r_u_number, name, surname)
+      User.update(original_email, email, r_u_number, name, surname, password, role_id, formation_id)
         .then((result) => res.respondUpdated(null, result))
         .catch((error) => next(error));
     })
