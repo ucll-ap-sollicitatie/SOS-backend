@@ -18,6 +18,14 @@ const findAllByEmail = (email) => {
   });
 };
 
+const findAllPublicByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT * FROM videos WHERE email = $1 AND private = false", [email], (err, results) => {
+      queryHelpers.handleQuery(resolve, reject, err, results);
+    });
+  });
+};
+
 const findOne = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query(
@@ -68,6 +76,7 @@ const deleteOne = (video_id) => {
 module.exports = {
   findAll,
   findAllByEmail,
+  findAllPublicByEmail,
   findOne,
   add,
   update,

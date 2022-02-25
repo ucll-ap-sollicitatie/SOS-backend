@@ -17,6 +17,15 @@ const findAllByEmail = async (req, res, next) => {
     .catch(() => next());
 };
 
+const findAllPublicByEmail = async (req, res, next) => {
+  console.log(`GET /videos/email/:email/public request`);
+  const email = req.params.email;
+  await Video.findAllPublicByEmail(email)
+    .then((result) => res.respond(result))
+    .catch((error) => next(error))
+    .catch(() => next());
+};
+
 const findOne = async (req, res, next) => {
   console.log(`GET /videos/:id request`);
   const video_id = req.params.video_id;
@@ -78,6 +87,7 @@ const deleteOne = async (req, res, next) => {
 module.exports = {
   findAll,
   findAllByEmail,
+  findAllPublicByEmail,
   findOne,
   add,
   update,

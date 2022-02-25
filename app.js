@@ -86,6 +86,7 @@ app.get("/comments/video/:video_id/feedback", Comment.findAllFeedbackByVideo);
 app.get("/videos", Video.findAll);
 app.get("/videos/:video_id", Video.findOne);
 app.get("/videos/email/:email", Video.findAllByEmail);
+app.get("/videos/email/:email/public", Video.findAllPublicByEmail);
 app.post("/videos", Video.add);
 app.put("/videos/:video_id", Video.update);
 app.delete("/videos/:video_id", Video.deleteOne);
