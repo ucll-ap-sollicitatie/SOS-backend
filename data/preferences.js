@@ -37,9 +37,18 @@ const add = (r_u_number, preference_1, preference_2, preference_3) => {
   });
 };
 
+const deleteOne = (r_u_number) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM preferences WHERE r_u_number = $1", [r_u_number], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Preferences");
+    });
+  });
+};
+
 module.exports = {
   findAll,
   findOneById,
   findOneByRUNumber,
   add,
+  deleteOne,
 };

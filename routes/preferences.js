@@ -38,9 +38,18 @@ const add = async (req, res, next) => {
     .catch((error) => next(error));
 };
 
+const deleteOne = async (req, res, next) => {
+  console.log(`DELETE /preferences/:id request`);
+  const r_u_number = req.params.r_u_number;
+  await Preference.delete(r_u_number)
+    .then((result) => res.respondDeleted(null, result))
+    .catch((error) => next(error));
+};
+
 module.exports = {
   findAll,
   findOneById,
   findOneByRUNumber,
   add,
+  deleteOne,
 };

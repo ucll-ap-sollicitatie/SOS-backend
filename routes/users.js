@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { User } = require("./index");
+const { User, Preference } = require("./index");
 
 const findAll = async (req, res, next) => {
   console.log(`GET /users request`);
@@ -66,11 +66,16 @@ const update = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
-const deleteOne = async (req, res) => {
+const deleteOne = async (req, res, next) => {
   console.log(`DELETE /users/:id request`);
   const r_u_number = req.params.r_u_number;
   await User.findOneById(r_u_number)
     .then(() => {
+      console.log("delete pref");
+      Preference.deleteOne(r_u_number)
+        .then((result) => res.respondDeleted(null, result))
+        .catch((error) => next(error));
+      console.log("delete userrr");
       User.deleteOne(r_u_number)
         .then((result) => res.respondDeleted(null, result))
         .catch((error) => next(error));

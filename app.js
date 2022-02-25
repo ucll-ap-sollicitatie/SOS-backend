@@ -71,6 +71,7 @@ app.get("/preferences", Preference.findAll);
 app.get("/preferences/:preference_id", Preference.findOneById);
 app.get("/preferences/r_u_number/:preference_r_u_number", Preference.findOneByRUNumber);
 app.post("/preferences", Preference.add);
+app.delete("/preferences/r_u_number/:r_u_number", Preference.deleteOne);
 
 // Routes for comments
 app.get("/comments", Comment.findAll);
