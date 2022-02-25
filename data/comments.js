@@ -3,16 +3,30 @@ const { db, queryHelpers } = require("./index");
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM comments ORDER BY comment_id ASC", (err, results) => {
-      queryHelpers.handleQuery(resolve, reject, err, results);
-    });
+    db.query(
+      `
+      SELECT comment_id, date, text, name, surname, author, feedback, count(l.email) as likes FROM comments c
+      INNER JOIN users u ON c.author = u.r_u_number
+      LEFT JOIN liked_comments l USING(comment_id)
+      GROUP BY comment_id, name, surname
+      ORDER BY comment_id ASC`,
+      (err, results) => {
+        queryHelpers.handleQuery(resolve, reject, err, results);
+      }
+    );
   });
 };
 
 const findAllByVideo = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT comment_id, date, text, name, surname, author, feedback FROM comments c INNER JOIN users u ON c.author = u.r_u_number WHERE video_id = $1 AND feedback = false ORDER BY date DESC",
+      `   
+      SELECT comment_id, date, text, name, surname, author, feedback, count(l.email) as likes FROM comments c
+      INNER JOIN users u ON c.author = u.r_u_number
+      LEFT JOIN liked_comments l USING(comment_id)
+      WHERE video_id = $1 AND feedback = false 
+      GROUP BY comment_id, name, surname
+      ORDER BY date DESC`,
       [video_id],
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
@@ -69,6 +83,22 @@ const deleteOne = (comment_id) => {
   });
 };
 
+const addLike = (email, comment_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("INSERT INTO liked_comments(email, comment_id) values ($1, $2)", [email, comment_id], (err, results) => {
+      queryHelpers.handleQueryAdd(resolve, reject, err, "Like to comment");
+    });
+  });
+};
+
+const checkLike = (email, comment_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT email, comment_id from liked_comments", [email, comment_id], (err, results) => {
+      queryHelpers.handleQuery(resolve, reject, err, results);
+    });
+  });
+};
+
 module.exports = {
   findAll,
   findAllByVideo,
@@ -77,4 +107,6 @@ module.exports = {
   add,
   update,
   deleteOne,
+  addLike,
+  checkLike,
 };

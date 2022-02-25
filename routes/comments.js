@@ -89,6 +89,24 @@ const deleteOne = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+const addLike = async (req, res, next) => {
+  console.log(`POST /comments/:comment_id/like`);
+  const comment_id = req.params.comment_id;
+  const { email } = req.body;
+  await Comment.addLike(email, comment_id)
+    .then((results) => res.respondCreated(results))
+    .catch((error) => next(error))
+    .catch(() => next());
+};
+
+const checkLike = async (req, res, next) => {
+  console.log(`GET /comments/likes`);
+  await Comment.checkLike(email, comment_id)
+    .then((results) => res.respond(results))
+    .catch((error) => next(error))
+    .catch(() => next());
+};
+
 module.exports = {
   findAll,
   findAllByVideo,
@@ -97,4 +115,6 @@ module.exports = {
   add,
   update,
   deleteOne,
+  addLike,
+  checkLike,
 };

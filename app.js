@@ -82,6 +82,8 @@ app.put("/comments/:comment_id", Comment.update);
 app.delete("/comments/:comment_id", Comment.deleteOne);
 app.get("/comments/video/:video_id", Comment.findAllByVideo);
 app.get("/comments/video/:video_id/feedback", Comment.findAllFeedbackByVideo);
+app.post("/comments/:comment_id/like", Comment.addLike);
+app.get("/comments/likes", Comment.checkLike);
 
 // Routes for videos
 app.get("/videos", Video.findAll);
@@ -105,6 +107,9 @@ app.use(function (req, res, next) {
 
 // 500 - Any server error
 app.use(function (err, req, res, next) {
+  if (process.env.NODE_ENV == "development") {
+    console.log(err);
+  }
   return res.status(500).send({ error: err });
 });
 
