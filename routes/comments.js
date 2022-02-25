@@ -99,9 +99,21 @@ const addLike = async (req, res, next) => {
     .catch(() => next());
 };
 
+const removeLike = async (req, res, next) => {
+  console.log(`POST /comments/:comment_id/unlike`);
+  const comment_id = req.params.comment_id;
+  const { email } = req.body;
+  await Comment.removeLike(email, comment_id)
+    .then((results) => res.respondDeleted(results))
+    .catch((error) => next(error))
+    .catch(() => next());
+};
+
 const checkLike = async (req, res, next) => {
   console.log(`GET /comments/likes`);
-  await Comment.checkLike(email, comment_id)
+  const comment_id = req.params.comment_id;
+  const { email } = req.body;
+  await Comment.checkLike(comment_id, email)
     .then((results) => res.respond(results))
     .catch((error) => next(error))
     .catch(() => next());
@@ -116,5 +128,6 @@ module.exports = {
   update,
   deleteOne,
   addLike,
+  removeLike,
   checkLike,
 };

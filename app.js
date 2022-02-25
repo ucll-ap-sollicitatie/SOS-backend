@@ -82,8 +82,9 @@ app.put("/comments/:comment_id", Comment.update);
 app.delete("/comments/:comment_id", Comment.deleteOne);
 app.get("/comments/video/:video_id", Comment.findAllByVideo);
 app.get("/comments/video/:video_id/feedback", Comment.findAllFeedbackByVideo);
-app.post("/comments/:comment_id/like", Comment.addLike);
-app.get("/comments/likes", Comment.checkLike);
+app.post("/comments/likes/:comment_id/like", Comment.addLike);
+app.post("/comments/likes/:comment_id/unlike", Comment.removeLike);
+app.post("/comments/likes/:comment_id/check", Comment.checkLike);
 
 // Routes for videos
 app.get("/videos", Video.findAll);

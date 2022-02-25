@@ -91,9 +91,17 @@ const addLike = (email, comment_id) => {
   });
 };
 
-const checkLike = (email, comment_id) => {
+const removeLike = (email, comment_id) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT email, comment_id from liked_comments", [email, comment_id], (err, results) => {
+    db.query("DELETE FROM liked_comments WHERE email = $1 AND comment_id = $2", [email, comment_id], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Like from comment");
+    });
+  });
+};
+
+const checkLike = (comment_id, email) => {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT * from liked_comments WHERE comment_id = $1 AND email = $2", [comment_id, email], (err, results) => {
       queryHelpers.handleQuery(resolve, reject, err, results);
     });
   });
@@ -108,5 +116,6 @@ module.exports = {
   update,
   deleteOne,
   addLike,
+  removeLike,
   checkLike,
 };
