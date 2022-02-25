@@ -4,6 +4,8 @@ const cloudinary = require("cloudinary");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const { resolve } = require("path");
+const fs = require("fs");
+
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -18,4 +20,5 @@ module.exports = {
   bcrypt,
   crypto,
   resolve,
+  fs,
 };

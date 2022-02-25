@@ -38,7 +38,7 @@ const findOne = async (req, res, next) => {
 const add = async (req, res, next) => {
   console.log(`POST /videos request`);
   const newVideo = req.files.newRecording;
-  const { title, r_u_number, email, description, private } = req.body;
+  const { title, r_u_number, email, description, private, subtitles } = req.body;
   if (!title || !r_u_number || !email) {
     res.status(400).send({ error: "Invalid request or data." });
     return;
@@ -46,9 +46,15 @@ const add = async (req, res, next) => {
 
   await Video.uploadVideo(newVideo, email)
     .then((result) => {
-      Video.add(title, r_u_number, email, description, result.url, private)
+      Video.uploadSubtitles(subtitles, newVideo, email)
+      .then(() => {
+        Video.add(title, r_u_number, email, description, result.url, private)
         .then(() => res.respondCreated(null, "Video uploaded."))
         .catch((e) => next(e));
+      })
+      .catch((e) => {
+        next(e);
+      });
     })
     .catch((e) => {
       next(e);

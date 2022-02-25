@@ -1,6 +1,6 @@
 // Contains all the queries for the table 'videos'
 require("dotenv").config();
-const { db, cloudinary, queryHelpers } = require("./index");
+const { db, cloudinary, queryHelpers, fs } = require("./index");
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
@@ -57,6 +57,16 @@ const uploadVideo = (video_file, email) => {
   });
 };
 
+const uploadSubtitles = (subtitles, video_file, email) => {
+  fs.writeFile("tmp/subtitles.srt", subtitles, (err) => {
+    if (err) throw err;
+  })
+  return cloudinary.v2.uploader.upload(`tmp/subtitles.srt`, {
+    resource_type: "raw",
+    public_id: `SOS/${email}/${video_file.name}.srt`,
+  });
+};
+
 const update = (title, video_id) => {
   return new Promise((resolve, reject) => {
     db.query("UPDATE videos SET title = $1 WHERE video_id = $2 RETURNING video_id", [title, video_id], (err, results) => {
@@ -82,4 +92,5 @@ module.exports = {
   update,
   deleteOne,
   uploadVideo,
+  uploadSubtitles,
 };
