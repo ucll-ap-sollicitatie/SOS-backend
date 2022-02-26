@@ -113,8 +113,8 @@ app.use(function (err, req, res, next) {
   return res.status(500).send({ error: err });
 });
 
-if (process.env.NODE_ENV == "development") {
-  app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port} [DEVELOPMENT]`));
-} else {
+if (process.env.NODE_ENV == "production") {
   app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port} [PRODUCTION]`));
+} else {
+  app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port} [DEVELOPMENT]`));
 }
