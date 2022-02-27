@@ -7,6 +7,7 @@ const Question = require("../data/questions");
 const Role = require("../data/roles");
 const User = require("../data/users");
 const Video = require("../data/videos");
+const Task = require("../data/tasks");
 const bcrypt = require("bcrypt");
 
 module.exports = {
@@ -20,4 +21,5 @@ module.exports = {
   User,
   Video,
   bcrypt,
+  Task,
 };
