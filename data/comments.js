@@ -5,7 +5,7 @@ const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
       `
-      SELECT comment_id, date, text, name, surname, author, feedback, count(l.email) as likes FROM comments c
+      SELECT comment_id, date, text, name, surname, author, feedback, video_id, count(l.email) as likes FROM comments c
       INNER JOIN users u ON c.author = u.r_u_number
       LEFT JOIN liked_comments l USING(comment_id)
       GROUP BY comment_id, name, surname

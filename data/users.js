@@ -5,7 +5,7 @@ const saltRounds = 10;
 const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) ORDER BY r_u_number ASC",
+      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) ORDER BY r_u_number ASC",
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
       }
@@ -16,7 +16,7 @@ const findAll = () => {
 const findOneByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE email = $1",
+      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE email = $1",
       [email],
       (err, results) => {
         queryHelpers.handleQueryOne(resolve, reject, err, results);
@@ -28,7 +28,7 @@ const findOneByEmail = (email) => {
 const findOneById = (r_u_number) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1",
+      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1",
       [r_u_number],
       (err, results) => {
         queryHelpers.handleQueryOne(resolve, reject, err, results);
@@ -40,7 +40,7 @@ const findOneById = (r_u_number) => {
 const findOneByToken = (token) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE activation_token = $1",
+      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE activation_token = $1",
       [token],
       (err, results) => {
         queryHelpers.handleQueryOne(resolve, reject, err, results);

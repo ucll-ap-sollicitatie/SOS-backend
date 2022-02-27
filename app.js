@@ -8,6 +8,7 @@ const Video = require("./routes/videos");
 const Formation = require("./routes/formations");
 const Preference = require("./routes/preferences");
 const Authentication = require("./routes/authentication");
+const Task = require("./routes/tasks");
 
 // Middleware
 const cors = require("cors");
@@ -94,6 +95,13 @@ app.get("/videos/email/:email/public", Video.findAllPublicByEmail);
 app.post("/videos", Video.add);
 app.put("/videos/:video_id", Video.update);
 app.delete("/videos/:video_id", Video.deleteOne);
+
+// Routes for tasks
+app.get("/tasks", Task.findAll);
+app.get("/tasks/:task_id", Task.findOne);
+app.post("/tasks", Task.add);
+app.put("/tasks/:task_id", Task.update);
+app.delete("/tasks/:task_id", Task.deleteOne);
 
 // Route for roles
 app.get("/roles", Role.findAll);
