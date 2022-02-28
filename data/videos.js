@@ -16,7 +16,7 @@ const findAll = () => {
 const findAllByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE email = $1",
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE v.email = $1",
       [email],
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
@@ -28,7 +28,7 @@ const findAllByEmail = (email) => {
 const findAllPublicByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE email = $1 AND private = false",
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE v.email = $1 AND private = false",
       [email],
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
