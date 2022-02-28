@@ -28,12 +28,12 @@ const findOneByRUNumber = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   console.log(`POST /preferences request`);
-  const { r_u_number, preference_1, preference_2, preference_3 } = req.body;
-  if (!r_u_number || !preference_1) {
+  const { email, preference_1, preference_2, preference_3 } = req.body;
+  if (!email || !preference_1) {
     res.status(400).send({ error: "Invalid request or data." });
     return;
   }
-  await Preference.add(r_u_number, preference_1, preference_2, preference_3)
+  await Preference.add(email, preference_1, preference_2, preference_3)
     .then((result) => res.respondCreated(null, result))
     .catch((error) => next(error));
 };

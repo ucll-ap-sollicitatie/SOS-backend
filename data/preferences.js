@@ -25,11 +25,11 @@ const findOneByRUNumber = (preference_r_u_number) => {
   });
 };
 
-const add = (r_u_number, preference_1, preference_2, preference_3) => {
+const add = (email, preference_1, preference_2, preference_3) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO preferences (r_u_number, preference_1, preference_2, preference_3) VALUES ($1, $2, $3, $4)",
-      [r_u_number, preference_1, preference_2, preference_3],
+      "INSERT INTO preferences (email, preference_1, preference_2, preference_3) VALUES ($1, $2, $3, $4)",
+      [email, preference_1, preference_2, preference_3],
       (err, results) => {
         queryHelpers.handleQueryAdd(resolve, reject, err, "Preferences");
       }

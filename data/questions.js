@@ -79,9 +79,11 @@ const findAllQuestionsByQuestionCategory = (question_category_id) => {
   });
 };
 
-const findRandomQuestions = () => {
+const findRandomQuestions = (email) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM questions ORDER BY RANDOM() LIMIT 5", (err, results) => {
+    db.query("SELECT * FROM questions q INNER JOIN preferences p ON q.question_category_id = p.preference_1 OR q.question_category_id = p.preference_2 OR q.question_category_id = p.preference_3 WHERE email = $1 ORDER BY RANDOM() LIMIT 5", 
+    [email],
+    (err, results) => {
       queryHelpers.handleQuery(resolve, reject, err, results);
     });
   });
