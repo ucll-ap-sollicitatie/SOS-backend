@@ -90,6 +90,36 @@ const deleteOne = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+const likeVideo = async (req, res, next) => {
+  console.log(`POST /videos/:video_id/like`);
+  const video_id = req.params.video_id;
+  const { email } = req.body;
+  await Video.likeVideo(email, video_id)
+    .then((results) => res.respondCreated(results))
+    .catch((error) => next(error))
+    .catch(() => next());
+};
+
+const unlikeVideo = async (req, res, next) => {
+  console.log(`POST /videos/:video_id/unlike`);
+  const video_id = req.params.video_id;
+  const { email } = req.body;
+  await Video.unlikeVideo(email, video_id)
+    .then((results) => res.respondDeleted(results))
+    .catch((error) => next(error))
+    .catch(() => next());
+};
+
+const checkVideoLike = async (req, res, next) => {
+  console.log(`GET /videos/likes`);
+  const video_id = req.params.video_id;
+  const { email } = req.body;
+  await Video.checkVideoLike(video_id, email)
+    .then((results) => res.respond(results))
+    .catch((error) => next(error))
+    .catch(() => next());
+};
+
 module.exports = {
   findAll,
   findAllByEmail,
@@ -98,4 +128,7 @@ module.exports = {
   add,
   update,
   deleteOne,
+  likeVideo,
+  unlikeVideo,
+  checkVideoLike,
 };

@@ -95,6 +95,9 @@ app.get("/videos/email/:email/public", Video.findAllPublicByEmail);
 app.post("/videos", Video.add);
 app.put("/videos/:video_id", Video.update);
 app.delete("/videos/:video_id", Video.deleteOne);
+app.post("/videos/likes/:video_id/like", Video.likeVideo);
+app.post("/videos/likes/:video_id/unlike", Video.unlikeVideo);
+app.post("/videos/likes/:video_id/check", Video.checkVideoLike);
 
 // Routes for tasks
 app.get("/tasks", Task.findAll);
