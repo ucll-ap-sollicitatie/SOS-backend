@@ -8,6 +8,7 @@ const Video = require("./routes/videos");
 const Formation = require("./routes/formations");
 const Preference = require("./routes/preferences");
 const Authentication = require("./routes/authentication");
+const Task = require("./routes/tasks");
 
 // Middleware
 const cors = require("cors");
@@ -82,8 +83,9 @@ app.put("/comments/:comment_id", Comment.update);
 app.delete("/comments/:comment_id", Comment.deleteOne);
 app.get("/comments/video/:video_id", Comment.findAllByVideo);
 app.get("/comments/video/:video_id/feedback", Comment.findAllFeedbackByVideo);
-app.post("/comments/:comment_id/like", Comment.addLike);
-app.get("/comments/likes", Comment.checkLike);
+app.post("/comments/likes/:comment_id/like", Comment.addLike);
+app.post("/comments/likes/:comment_id/unlike", Comment.removeLike);
+app.post("/comments/likes/:comment_id/check", Comment.checkLike);
 
 // Routes for videos
 app.get("/videos", Video.findAll);
@@ -93,6 +95,16 @@ app.get("/videos/email/:email/public", Video.findAllPublicByEmail);
 app.post("/videos", Video.add);
 app.put("/videos/:video_id", Video.update);
 app.delete("/videos/:video_id", Video.deleteOne);
+app.post("/videos/likes/:video_id/like", Video.likeVideo);
+app.post("/videos/likes/:video_id/unlike", Video.unlikeVideo);
+app.post("/videos/likes/:video_id/check", Video.checkVideoLike);
+
+// Routes for tasks
+app.get("/tasks", Task.findAll);
+app.get("/tasks/:task_id", Task.findOne);
+app.post("/tasks", Task.add);
+app.put("/tasks/:task_id", Task.update);
+app.delete("/tasks/:task_id", Task.deleteOne);
 
 // Route for roles
 app.get("/roles", Role.findAll);

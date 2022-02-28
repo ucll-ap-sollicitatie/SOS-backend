@@ -29,7 +29,7 @@ const findAllPublicByEmail = (email) => {
 const findOne = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v inner join users u using(r_u_number) WHERE video_id = $1",
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname, count(l.email) as likes FROM videos v inner join users u using(r_u_number) LEFT JOIN liked_videos l USING(video_id) WHERE video_id = $1 GROUP BY video_id, name, surname",
       [video_id],
       (err, results) => {
         queryHelpers.handleQueryOne(resolve, reject, err, results);
@@ -83,6 +83,30 @@ const deleteOne = (video_id) => {
   });
 };
 
+const likeVideo = (email, video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("INSERT INTO liked_videos(email, video_id) values ($1, $2)", [email, video_id], (err, results) => {
+      queryHelpers.handleQueryAdd(resolve, reject, err, "Like to video");
+    });
+  });
+};
+
+const unlikeVideo = (email, video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM liked_videos WHERE email = $1 AND video_id = $2", [email, video_id], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Like from video");
+    });
+  });
+};
+
+const checkVideoLike = (video_id, email) => {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT * from liked_videos WHERE video_id = $1 AND email = $2", [video_id, email], (err, results) => {
+      queryHelpers.handleQuery(resolve, reject, err, results);
+    });
+  });
+};
+
 module.exports = {
   findAll,
   findAllByEmail,
@@ -93,4 +117,7 @@ module.exports = {
   deleteOne,
   uploadVideo,
   uploadSubtitles,
+  likeVideo,
+  unlikeVideo,
+  checkVideoLike,
 };

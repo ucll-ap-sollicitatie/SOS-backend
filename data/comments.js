@@ -5,7 +5,7 @@ const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
       `
-      SELECT comment_id, date, text, name, surname, author, feedback, count(l.email) as likes FROM comments c
+      SELECT comment_id, date, text, name, surname, author, feedback, video_id, count(l.email) as likes FROM comments c
       INNER JOIN users u ON c.author = u.r_u_number
       LEFT JOIN liked_comments l USING(comment_id)
       GROUP BY comment_id, name, surname
@@ -91,9 +91,17 @@ const addLike = (email, comment_id) => {
   });
 };
 
-const checkLike = (email, comment_id) => {
+const removeLike = (email, comment_id) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT email, comment_id from liked_comments", [email, comment_id], (err, results) => {
+    db.query("DELETE FROM liked_comments WHERE email = $1 AND comment_id = $2", [email, comment_id], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Like from comment");
+    });
+  });
+};
+
+const checkLike = (comment_id, email) => {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT * from liked_comments WHERE comment_id = $1 AND email = $2", [comment_id, email], (err, results) => {
       queryHelpers.handleQuery(resolve, reject, err, results);
     });
   });
@@ -108,5 +116,6 @@ module.exports = {
   update,
   deleteOne,
   addLike,
+  removeLike,
   checkLike,
 };
