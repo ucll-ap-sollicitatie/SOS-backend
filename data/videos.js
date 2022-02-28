@@ -29,7 +29,7 @@ const findAllPublicByEmail = (email) => {
 const findOne = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v inner join users u using(r_u_number) WHERE video_id = $1",
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname, count(l.email) as likes FROM videos v inner join users u using(r_u_number) LEFT JOIN liked_videos l USING(video_id) WHERE video_id = $1 GROUP BY video_id, name, surname",
       [video_id],
       (err, results) => {
         queryHelpers.handleQueryOne(resolve, reject, err, results);
