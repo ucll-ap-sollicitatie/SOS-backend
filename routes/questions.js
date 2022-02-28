@@ -68,7 +68,7 @@ const findAllQuestionsByQuestionCategory = async (req, res, next) => {
 
 const findRandomQuestions = async (req, res, next) => {
   console.log(`GET /videos/random request`);
-  await Question.findRandomQuestions()
+  await Question.findRandomQuestions(req.params.email)
     .then((result) => res.respond(result))
     .catch((error) => next(error))
     .catch(() => next());
