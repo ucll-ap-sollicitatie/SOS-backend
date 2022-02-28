@@ -4,7 +4,7 @@ const { db, queryHelpers } = require("./index");
 const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      `SELECT title, description, deadline, teacher_email, name||' '||surname as full_name FROM tasks t
+      `SELECT task_id, title, description, deadline, teacher_email, name||' '||surname as full_name FROM tasks t
     INNER JOIN users u ON t.teacher_email = u.email
     ORDER BY task_id DESC`,
       (err, results) => {
