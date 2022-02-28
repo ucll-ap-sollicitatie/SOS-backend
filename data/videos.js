@@ -83,6 +83,30 @@ const deleteOne = (video_id) => {
   });
 };
 
+const likeVideo = (email, video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("INSERT INTO liked_videos(email, video_id) values ($1, $2)", [email, video_id], (err, results) => {
+      queryHelpers.handleQueryAdd(resolve, reject, err, "Like to video");
+    });
+  });
+};
+
+const unlikeVideo = (email, video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM liked_videos WHERE email = $1 AND video_id = $2", [email, video_id], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Like from video");
+    });
+  });
+};
+
+const checkVideoLike = (video_id, email) => {
+  return new Promise((resolve, reject) => {
+    db.query("SELECT * from liked_videos WHERE video_id = $1 AND email = $2", [video_id, email], (err, results) => {
+      queryHelpers.handleQuery(resolve, reject, err, results);
+    });
+  });
+};
+
 module.exports = {
   findAll,
   findAllByEmail,
@@ -93,4 +117,7 @@ module.exports = {
   deleteOne,
   uploadVideo,
   uploadSubtitles,
+  likeVideo,
+  unlikeVideo,
+  checkVideoLike,
 };
