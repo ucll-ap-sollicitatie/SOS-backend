@@ -4,32 +4,43 @@ const { db, cloudinary, queryHelpers, fs } = require("./index");
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM videos ORDER BY video_id DESC", (err, results) => {
-      queryHelpers.handleQuery(resolve, reject, err, results);
-    });
+    db.query(
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) ORDER BY video_id DESC",
+      (err, results) => {
+        queryHelpers.handleQuery(resolve, reject, err, results);
+      }
+    );
   });
 };
 
 const findAllByEmail = (email) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM videos WHERE email = $1", [email], (err, results) => {
-      queryHelpers.handleQuery(resolve, reject, err, results);
-    });
+    db.query(
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE email = $1",
+      [email],
+      (err, results) => {
+        queryHelpers.handleQuery(resolve, reject, err, results);
+      }
+    );
   });
 };
 
 const findAllPublicByEmail = (email) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM videos WHERE email = $1 AND private = false", [email], (err, results) => {
-      queryHelpers.handleQuery(resolve, reject, err, results);
-    });
+    db.query(
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE email = $1 AND private = false",
+      [email],
+      (err, results) => {
+        queryHelpers.handleQuery(resolve, reject, err, results);
+      }
+    );
   });
 };
 
 const findOne = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v inner join users u using(r_u_number) WHERE video_id = $1",
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE video_id = $1",
       [video_id],
       (err, results) => {
         queryHelpers.handleQueryOne(resolve, reject, err, results);
