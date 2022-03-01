@@ -1,5 +1,5 @@
 // Contains all the queries for the table 'users'
-const { db, bcrypt, crypto, resolve, queryHelpers } = require("./index");
+const { db, bcrypt, crypto, queryHelpers } = require("./index");
 const saltRounds = 10;
 
 const findAll = () => {

@@ -9,37 +9,37 @@ const findAll = () => {
   });
 };
 
-const findOneById = (preference_id) => {
+const findOneByEmail = (email) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM preferences WHERE preference_id = $1", [preference_id], (err, results) => {
+    db.query("SELECT * FROM dev.preferences WHERE email = $1", [email], (err, results) => {
       queryHelpers.handleQueryOne(resolve, reject, err, results);
     });
   });
 };
 
-const findOneByRUNumber = (preference_r_u_number) => {
+const add = (email) => {
   return new Promise((resolve, reject) => {
-    db.query("SELECT * FROM preferences WHERE r_u_number = $1", [preference_r_u_number], (err, results) => {
-      queryHelpers.handleQueryOne(resolve, reject, err, results);
+    db.query("INSERT INTO preferences (email) VALUES ($1)", [email], (err, results) => {
+      queryHelpers.handleQueryAdd(resolve, reject, err, "Preferences");
     });
   });
 };
 
-const add = (email, preference_1, preference_2, preference_3) => {
+const update = (email, preference_1, preference_2, preference_3) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO preferences (email, preference_1, preference_2, preference_3) VALUES ($1, $2, $3, $4)",
+      "UPDATE preferences SET preference_1 = $2, preference_2 = $3, preference_3 = $4, edited = true WHERE email = $1",
       [email, preference_1, preference_2, preference_3],
       (err, results) => {
-        queryHelpers.handleQueryAdd(resolve, reject, err, "Preferences");
+        queryHelpers.handleQueryUpdate(resolve, reject, err, "Preferences");
       }
     );
   });
 };
 
-const deleteOne = (r_u_number) => {
+const deleteOne = (email) => {
   return new Promise((resolve, reject) => {
-    db.query("DELETE FROM preferences WHERE r_u_number = $1", [r_u_number], (err, results) => {
+    db.query("DELETE FROM preferences WHERE email = $1", [email], (err, results) => {
       queryHelpers.handleQueryDelete(resolve, reject, err, "Preferences");
     });
   });
@@ -47,8 +47,8 @@ const deleteOne = (r_u_number) => {
 
 module.exports = {
   findAll,
-  findOneById,
-  findOneByRUNumber,
+  findOneByEmail,
   add,
+  update,
   deleteOne,
 };
