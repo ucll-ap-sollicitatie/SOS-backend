@@ -70,10 +70,10 @@ app.get("/formations/name/:formation_name", Formation.findOneByName);
 
 // Routes for preferences
 app.get("/preferences", Preference.findAll);
-app.get("/preferences/:preference_id", Preference.findOneById);
-app.get("/preferences/r_u_number/:preference_r_u_number", Preference.findOneByRUNumber);
+app.get("/preferences/:email", Preference.findOneByEmail);
 app.post("/preferences", Preference.add);
-app.delete("/preferences/r_u_number/:r_u_number", Preference.deleteOne);
+app.put("/preferences/:email", Preference.update);
+app.delete("/preferences/:email", Preference.deleteOne);
 
 // Routes for comments
 app.get("/comments", Comment.findAll);

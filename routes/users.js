@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { User, Preference } = require("./index");
+const { User, Preference, crypto } = require("./index");
 
 const findAll = async (req, res, next) => {
   console.log(`GET /users request`);
@@ -41,8 +41,12 @@ const add = async (req, res, next) => {
     .catch(() => {
       User.add(r_u_number, name, surname, email, password, role_id, formation_id)
         .then((result) => {
-          sendMail(email, result.token)
-            .then(() => res.respondCreated(null, result.message))
+          Preference.add(email)
+            .then(() => {
+              sendMail(email, result.token)
+                .then(() => res.respondCreated(null, result.message))
+                .catch((error) => next(error));
+            })
             .catch((error) => next(error));
         })
         .catch((error) => next(error));
@@ -71,13 +75,12 @@ const deleteOne = async (req, res, next) => {
   const r_u_number = req.params.r_u_number;
   await User.findOneById(r_u_number)
     .then(() => {
-      console.log("delete pref");
       Preference.deleteOne(r_u_number)
-        .then((result) => res.respondDeleted(null, result))
-        .catch((error) => next(error));
-      console.log("delete userrr");
-      User.deleteOne(r_u_number)
-        .then((result) => res.respondDeleted(null, result))
+        .then(() => {
+          User.deleteOne(r_u_number)
+            .then((result) => res.respondDeleted(null, result))
+            .catch((error) => next(error));
+        })
         .catch((error) => next(error));
     })
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));

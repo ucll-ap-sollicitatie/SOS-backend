@@ -9,6 +9,7 @@ const User = require("../data/users");
 const Video = require("../data/videos");
 const Task = require("../data/tasks");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 module.exports = {
   queryHelper,
@@ -22,4 +23,5 @@ module.exports = {
   Video,
   bcrypt,
   Task,
+  crypto,
 };

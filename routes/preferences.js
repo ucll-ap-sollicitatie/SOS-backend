@@ -8,19 +8,10 @@ const findAll = async (req, res, next) => {
     .catch(() => next());
 };
 
-const findOneById = async (req, res, next) => {
-  console.log(`GET /preferences/:id request`);
-  const preference_id = req.params.preference_id;
-  await Preference.findOneById(preference_id)
-    .then((result) => res.respond(result))
-    .catch((error) => next(error))
-    .catch(() => next());
-};
-
-const findOneByRUNumber = async (req, res, next) => {
-  console.log(`GET /preferences/r_u_number/:id request`);
-  const preference_r_u_number = req.params.preference_r_u_number;
-  await Preference.findOneByRUNumber(preference_r_u_number)
+const findOneByEmail = async (req, res, next) => {
+  console.log(`GET /preferences/:email request`);
+  const email = req.params.email;
+  await Preference.findOneByEmail(email)
     .then((result) => res.respond(result))
     .catch((error) => next(error))
     .catch(() => next());
@@ -28,13 +19,22 @@ const findOneByRUNumber = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   console.log(`POST /preferences request`);
-  const { email, preference_1, preference_2, preference_3 } = req.body;
-  if (!email || !preference_1) {
+  const { email } = req.body;
+  if (!email) {
     res.status(400).send({ error: "Invalid request or data." });
     return;
   }
-  await Preference.add(email, preference_1, preference_2, preference_3)
+  await Preference.add(email)
     .then((result) => res.respondCreated(null, result))
+    .catch((error) => next(error));
+};
+
+const update = async (req, res, next) => {
+  console.log(`PUT /preferences/:email request`);
+  const email = req.params.email;
+  const { preference_1, preference_2, preference_3 } = req.body;
+  await Preference.update(email, preference_1, preference_2, preference_3)
+    .then((result) => res.respondUpdated(null, result))
     .catch((error) => next(error));
 };
 
@@ -48,8 +48,8 @@ const deleteOne = async (req, res, next) => {
 
 module.exports = {
   findAll,
-  findOneById,
-  findOneByRUNumber,
+  findOneByEmail,
   add,
+  update,
   deleteOne,
 };
