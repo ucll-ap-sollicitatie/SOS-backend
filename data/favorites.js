@@ -23,7 +23,7 @@ const findAllFavoritedVideosByEmail = (email) => {
 
 const findAllFavoritedVideos = () => {
     return new Promise((resolve, reject) => {
-        db.query("SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.email, f.email as favorite_email FROM videos v INNER JOIN favorites f USING(video_id) ",
+        db.query("SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.email, f.email as favorite_email, u.name, u.surname FROM videos v INNER JOIN favorites f USING(video_id) INNER JOIN users u ON v.email = u.email",
         (err, results) => {
             queryHelpers.handleQuery(resolve, reject, err, results);
         });
