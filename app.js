@@ -9,6 +9,7 @@ const Formation = require("./routes/formations");
 const Preference = require("./routes/preferences");
 const Authentication = require("./routes/authentication");
 const Task = require("./routes/tasks");
+const Favorite = require("./routes/favorites");
 
 // Middleware
 const cors = require("cors");
@@ -105,6 +106,13 @@ app.get("/tasks/:task_id", Task.findOne);
 app.post("/tasks", Task.add);
 app.put("/tasks/:task_id", Task.update);
 app.delete("/tasks/:task_id", Task.deleteOne);
+
+// Routes for favorites
+app.get("/favorites", Favorite.findAllFavoritedVideos);
+app.get("favorites/email/:email", Favorite.findAllFavoritedVideosByEmail);
+app.post("/favorites/:video_id/favorite", Favorite.addFavorite);
+app.post("/favorites/:video_id/unfavorite", Favorite.removeFavorite);
+app.post("/favorites/:video_id/check", Favorite.checkVideoFavorite);
 
 // Route for roles
 app.get("/roles", Role.findAll);

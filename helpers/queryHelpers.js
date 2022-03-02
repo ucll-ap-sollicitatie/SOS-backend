@@ -51,7 +51,7 @@ const handleQueryAdd = (resolve, reject, error, object) => {
  *
  * @param {*} resolve Resolve of current promise
  * @param {*} reject Reject of current promise
- * @param {*} error Query error (esults in 500)
+ * @param {*} error Query error (results in 500)
  * @param {*} object Current object you are working with
  */
 const handleQueryUpdate = (resolve, reject, error, object) => {
@@ -66,7 +66,7 @@ const handleQueryUpdate = (resolve, reject, error, object) => {
  *
  * @param {*} resolve Resolve of current promise
  * @param {*} reject Reject of current promise
- * @param {*} error Query error (esults in 500)
+ * @param {*} error Query error (results in 500)
  * @param {*} object Current object you are working with
  */
 const handleQueryDelete = (resolve, reject, error, object) => {
