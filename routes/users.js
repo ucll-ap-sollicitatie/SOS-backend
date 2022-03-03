@@ -134,6 +134,19 @@ const activateUser = async (req, res) => {
   }
 };
 
+const activateUserByAdmin = async (req, res, next) => {
+  console.log("PUT /users/activation/:user_id/admin");
+  const user_id = req.params.user_id;
+  await User.findOneById(user_id)
+    .then((current) => {
+      User.activateUserByAdmin(current)
+        .then((result) => res.respondUpdated(null, result))
+        .catch((error) => next(error));
+    })
+    .catch((error) => next(error))
+    .catch(() => next());
+};
+
 const isExpired = (user) => {
   const current_time = new Date();
   const expiration_time = user.token_expiration_date;
@@ -150,4 +163,5 @@ module.exports = {
   updateByAdmin,
   deleteOne,
   activateUser,
+  activateUserByAdmin,
 };

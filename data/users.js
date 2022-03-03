@@ -124,6 +124,18 @@ const activateUser = (token) => {
   });
 };
 
+const activateUserByAdmin = (user) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      "UPDATE users SET activation_token = null, token_expiration_date = null WHERE user_id = $1",
+      [user.user_id],
+      (err, results) => {
+        queryHelpers.handleQueryUpdate(resolve, reject, err, "User activation");
+      }
+    );
+  });
+};
+
 const newToken = (current_user, activation_token) => {
   return new Promise((resolve, reject) => {
     db.query(
@@ -172,6 +184,7 @@ module.exports = {
   updateByAdmin,
   deleteOne,
   activateUser,
+  activateUserByAdmin,
   newToken,
   sendMail,
 };
