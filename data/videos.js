@@ -5,7 +5,7 @@ const { db, cloudinary, queryHelpers, fs } = require("./index");
 const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) ORDER BY video_id DESC",
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, u.user_id, u.name, u.surname FROM videos v INNER JOIN users u USING(email) ORDER BY video_id DESC",
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
       }
@@ -16,7 +16,7 @@ const findAll = () => {
 const findAllByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE v.email = $1 ORDER BY video_id DESC",
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, u.user_id, u.name, u.surname FROM videos v INNER JOIN users u USING(email) WHERE v.email = $1 ORDER BY video_id DESC",
       [email],
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
@@ -28,7 +28,7 @@ const findAllByEmail = (email) => {
 const findAllPublicByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE v.email = $1 AND private = false",
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, u.user_id, u.name, u.surname FROM videos v INNER JOIN users u USING(email) WHERE v.email = $1 AND private = false",
       [email],
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
@@ -40,7 +40,7 @@ const findAllPublicByEmail = (email) => {
 const findOne = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname, count(l.email) as likes FROM videos v inner join users u using(r_u_number) LEFT JOIN liked_videos l USING(video_id) WHERE video_id = $1 GROUP BY video_id, name, surname",
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.user_id, u.name, u.surname, count(l.email) as likes FROM videos v inner join users u using(email) LEFT JOIN liked_videos l USING(video_id) WHERE video_id = $1 GROUP BY video_id, name, surname",
       [video_id],
       (err, results) => {
         queryHelpers.handleQueryOne(resolve, reject, err, results);
@@ -49,11 +49,11 @@ const findOne = (video_id) => {
   });
 };
 
-const add = (title, r_u_number, email, description, videoUrl, private) => {
+const add = (title, user_id, email, description, videoUrl, private) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO videos (title, r_u_number, email, description, video_url, private) VALUES ($1, $2, $3, $4, $5, $6)",
-      [title, r_u_number, email, description, videoUrl, private],
+      "INSERT INTO videos (title, user_id, email, description, video_url, private) VALUES ($1, $2, $3, $4, $5, $6)",
+      [title, user_id, email, description, videoUrl, private],
       (err, results) => {
         queryHelpers.handleQueryAdd(resolve, reject, err, "Video");
       }
@@ -61,20 +61,20 @@ const add = (title, r_u_number, email, description, videoUrl, private) => {
   });
 };
 
-const uploadVideo = (video_file, email) => {
+const uploadVideo = (video_file, user_id) => {
   return cloudinary.v2.uploader.upload(video_file.tempFilePath, {
     resource_type: "auto",
-    public_id: `SOS/${email}/${video_file.name}`,
+    public_id: `SOS/${user_id}/${video_file.name}`,
   });
 };
 
-const uploadSubtitles = (subtitles, video_file, email) => {
+const uploadSubtitles = (subtitles, video_file, user_id) => {
   fs.writeFile("tmp/subtitles.srt", subtitles, (err) => {
     if (err) throw err;
   });
   return cloudinary.v2.uploader.upload(`tmp/subtitles.srt`, {
     resource_type: "raw",
-    public_id: `SOS/${email}/${video_file.name}.srt`,
+    public_id: `SOS/${user_id}/${video_file.name}.srt`,
   });
 };
 

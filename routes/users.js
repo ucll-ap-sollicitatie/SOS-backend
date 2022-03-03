@@ -20,8 +20,8 @@ const findOneByEmail = async (req, res, next) => {
 
 const findOneById = async (req, res, next) => {
   console.log(`GET /users/:id request`);
-  const r_u_number = req.params.r_u_number;
-  await User.findOneById(r_u_number)
+  const user_id = req.params.user_id;
+  await User.findOneById(user_id)
     .then((result) => res.respond(result))
     .catch((error) => next(error))
     .catch(() => next());
@@ -29,8 +29,8 @@ const findOneById = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   console.log(`POST /users request`);
-  const { r_u_number, name, surname, email, password, role_id, formation_id } = req.body;
-  if (!r_u_number || !name || !surname || !email || !password || !role_id || !formation_id) {
+  const { name, surname, email, password, formation_id } = req.body;
+  if (!name || !surname || !email || !password || !formation_id) {
     res.status(400).send({ error: "Invalid request or data." });
     return;
   }
@@ -39,7 +39,7 @@ const add = async (req, res, next) => {
       res.status(409).send({ error: "User already exists." });
     })
     .catch(() => {
-      User.add(r_u_number, name, surname, email, password, role_id, formation_id)
+      User.add(name, surname, email, password, formation_id)
         .then((result) => {
           Preference.add(email)
             .then(() => {
@@ -55,15 +55,32 @@ const add = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   console.log(`PUT /users/:id request`);
-  const original_email = req.params.email;
-  const { name, surname, r_u_number, email, password, role_id, formation_id } = req.body;
-  if (!original_email || !email || !r_u_number || !name || !surname || !password || !role_id || !formation_id) {
+  const email = req.params.email;
+  const { name, surname, password, formation_id } = req.body;
+  if (!email || !name || !surname || !password || !formation_id) {
     res.status(400).send({ error: "Invalid request or data." });
     return;
   }
-  await User.findOneByEmail(original_email)
+  await User.findOneByEmail(email)
     .then(() => {
-      User.update(original_email, email, r_u_number, name, surname, password, role_id, formation_id)
+      User.update(email, name, surname, password, formation_id)
+        .then((result) => res.respondUpdated(null, result))
+        .catch((error) => next(error));
+    })
+    .catch(() => res.status(400).send({ error: "Invalid request or data." }));
+};
+
+const updateByAdmin = async (req, res, next) => {
+  console.log(`PUT /users/:id/admin request`);
+  const email = req.params.email;
+  const { name, surname, role_id, formation_id } = req.body;
+  if (!email || !name || !surname || !role_id || !formation_id) {
+    res.status(400).send({ error: "Invalid request or data." });
+    return;
+  }
+  await User.findOneByEmail(email)
+    .then(() => {
+      User.updateByAdmin(email, name, surname, role_id, formation_id)
         .then((result) => res.respondUpdated(null, result))
         .catch((error) => next(error));
     })
@@ -72,16 +89,16 @@ const update = async (req, res, next) => {
 
 const deleteOne = async (req, res, next) => {
   console.log(`DELETE /users/:id request`);
-  const r_u_number = req.params.r_u_number;
+  const user_id = req.params.user_id;
 
-  await User.findOneById(r_u_number)
+  await User.findOneById(user_id)
     .then((current) => {
       Task.deleteOneByEmail(current.email)
         .then(() => Video.deleteAllVideoLikesByEmail(current.email))
         .then(() => Comment.deleteAllCommentLikesByEmail(current.email))
         .then(() => Favorite.deleteAllByEmail(current.email))
         .then(() => Favorite.deleteAllByEmail(current.email))
-        .then(() => Comment.deleteAllByEmail(current.r_u_number))
+        .then(() => Comment.deleteAllByEmail(current.email))
         .then(() => Video.deleteAllByEmail(current.email))
         .then(() => Preference.deleteOne(current.email))
         .then(() => User.deleteOne(current.email))
@@ -130,6 +147,7 @@ module.exports = {
   findOneById,
   add,
   update,
+  updateByAdmin,
   deleteOne,
   activateUser,
 };

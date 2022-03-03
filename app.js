@@ -40,11 +40,12 @@ app.get("/", function (req, res) {
 
 // Routes for users
 app.get("/users", User.findAll);
-app.get("/users/:r_u_number", User.findOneById);
+app.get("/users/:user_id", User.findOneById);
 app.get("/users/email/:email", User.findOneByEmail);
 app.post("/users", User.add);
 app.put("/users/:email", User.update);
-app.delete("/users/:r_u_number", User.deleteOne);
+app.put("/users/:email/admin", User.updateByAdmin);
+app.delete("/users/:user_id", User.deleteOne);
 app.get("/users/activation/:token", User.activateUser);
 
 // Routes for questions

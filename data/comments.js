@@ -5,8 +5,8 @@ const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
       `
-      SELECT comment_id, date, text, name, surname, author, feedback, video_id, count(l.email) as likes FROM comments c
-      INNER JOIN users u ON c.author = u.r_u_number
+      SELECT comment_id, date, text, name, surname, author_email, feedback, video_id, count(l.email) as likes FROM comments c
+      INNER JOIN users u ON c.author_email = u.email
       LEFT JOIN liked_comments l USING(comment_id)
       GROUP BY comment_id, name, surname
       ORDER BY comment_id ASC`,
@@ -21,8 +21,8 @@ const findAllByVideo = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query(
       `   
-      SELECT comment_id, date, text, name, surname, author, feedback, count(l.email) as likes FROM comments c
-      INNER JOIN users u ON c.author = u.r_u_number
+      SELECT comment_id, date, text, name, surname, author_email, feedback, count(l.email) as likes FROM comments c
+      INNER JOIN users u ON c.author_email = u.email
       LEFT JOIN liked_comments l USING(comment_id)
       WHERE video_id = $1 AND feedback = false 
       GROUP BY comment_id, name, surname
@@ -38,7 +38,7 @@ const findAllByVideo = (video_id) => {
 const findAllFeedbackByVideo = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT comment_id, date, text, name, surname, author, feedback, start_feedback, end_feedback FROM comments c INNER JOIN users u ON c.author = u.r_u_number WHERE video_id = $1 AND feedback = true ORDER BY date DESC",
+      "SELECT comment_id, date, text, name, surname, author_email, feedback, start_feedback, end_feedback FROM comments c INNER JOIN users u ON c.author_email = u.email WHERE video_id = $1 AND feedback = true ORDER BY date DESC",
       [video_id],
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
@@ -58,7 +58,7 @@ const findOne = (comment_id) => {
 const add = (text, author, video_id, feedback, start_feedback, end_feedback) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "INSERT INTO comments (text, author, video_id, feedback, start_feedback, end_feedback) VALUES ($1, $2, $3, $4, $5, $6) RETURNING comment_id",
+      "INSERT INTO comments (text, author_email, video_id, feedback, start_feedback, end_feedback) VALUES ($1, $2, $3, $4, $5, $6) RETURNING comment_id",
       [text, author, video_id, feedback, start_feedback, end_feedback],
       (err, results) => {
         queryHelpers.handleQueryAdd(resolve, reject, err, "Comment");
@@ -83,9 +83,9 @@ const deleteOne = (comment_id) => {
   });
 };
 
-const deleteAllByEmail = (r_u_number) => {
+const deleteAllByEmail = (email) => {
   return new Promise((resolve, reject) => {
-    db.query("DELETE FROM comments WHERE author = $1 RETURNING comment_id", [r_u_number], (err, results) => {
+    db.query("DELETE FROM comments WHERE author_email = $1 RETURNING comment_id", [email], (err, results) => {
       queryHelpers.handleQueryDelete(resolve, reject, err, "Comment");
     });
   });

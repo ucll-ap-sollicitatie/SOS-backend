@@ -5,7 +5,7 @@ const saltRounds = 10;
 const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) ORDER BY r_u_number ASC",
+      "SELECT user_id, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) ORDER BY user_id DESC",
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
       }
@@ -16,7 +16,7 @@ const findAll = () => {
 const findOneByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE email = $1",
+      "SELECT user_id, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE email = $1",
       [email],
       (err, results) => {
         queryHelpers.handleQueryOne(resolve, reject, err, results);
@@ -25,11 +25,11 @@ const findOneByEmail = (email) => {
   });
 };
 
-const findOneById = (r_u_number) => {
+const findOneById = (user_id) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE r_u_number = $1",
-      [r_u_number],
+      "SELECT user_id, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE user_id = $1",
+      [user_id],
       (err, results) => {
         queryHelpers.handleQueryOne(resolve, reject, err, results);
       }
@@ -40,7 +40,7 @@ const findOneById = (r_u_number) => {
 const findOneByToken = (token) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT r_u_number, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE activation_token = $1",
+      "SELECT user_id, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) WHERE activation_token = $1",
       [token],
       (err, results) => {
         queryHelpers.handleQueryOne(resolve, reject, err, results);
@@ -49,14 +49,14 @@ const findOneByToken = (token) => {
   });
 };
 
-const add = (r_u_number, name, surname, email, password, role_id, formation_id) => {
+const add = (name, surname, email, password, formation_id) => {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (hash_err, hash) => {
       if (hash_err) reject(hash_err);
       const activation_token = crypto.randomBytes(48).toString("hex");
       db.query(
-        "INSERT INTO users (r_u_number, name, surname, email, hashed_password, role_id, formation_id, activation_token) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-        [r_u_number, name, surname, email, hash, role_id, formation_id, activation_token],
+        "INSERT INTO users (name, surname, email, hashed_password, formation_id, activation_token) VALUES ($1, $2, $3, $4, $5, $6)",
+        [name, surname, email, hash, formation_id, activation_token],
         (err, results) => {
           if (err) {
             reject(err);
@@ -69,13 +69,13 @@ const add = (r_u_number, name, surname, email, password, role_id, formation_id) 
   });
 };
 
-const update = (original_email, email, r_u_number, name, surname, password, role_id, formation_id) => {
+const update = (email, name, surname, password, formation_id) => {
   return new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (hash_err, hash) => {
       if (hash_err) reject(hash_err);
       db.query(
-        "UPDATE users SET email = $1, r_u_number = $2, name = $3, surname = $4, hashed_password = $5, role_id = $6, formation_id = $7 WHERE email = $8 RETURNING email",
-        [email, r_u_number, name, surname, hash, role_id, formation_id, original_email],
+        "UPDATE users SET email = $1, name = $2, surname = $3, hashed_password = $4, formation_id = $5 WHERE email = $1 RETURNING email",
+        [email, name, surname, hash, formation_id],
         (err, results) => {
           queryHelpers.handleQueryUpdate(resolve, reject, err, "User");
         }
@@ -84,9 +84,21 @@ const update = (original_email, email, r_u_number, name, surname, password, role
   });
 };
 
-const deleteOne = (email) => {
+const updateByAdmin = (email, name, surname, role_id, formation_id) => {
   return new Promise((resolve, reject) => {
-    db.query(`DELETE FROM users WHERE email = $1`, [email], (err, results) => {
+    db.query(
+      "UPDATE users SET email = $1, name = $2, surname = $3, formation_id = $4, role_id = $5 WHERE email = $1 RETURNING email",
+      [email, name, surname, formation_id, role_id],
+      (err, results) => {
+        queryHelpers.handleQueryUpdate(resolve, reject, err, "User");
+      }
+    );
+  });
+};
+
+const deleteOne = (user_id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`DELETE FROM users WHERE user_id = $1`, [user_id], (err, results) => {
       queryHelpers.handleQueryDelete(resolve, reject, err, "User");
     });
   });
@@ -157,6 +169,7 @@ module.exports = {
   findOneByToken,
   add,
   update,
+  updateByAdmin,
   deleteOne,
   activateUser,
   newToken,
