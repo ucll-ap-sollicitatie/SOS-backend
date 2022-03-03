@@ -16,7 +16,7 @@ const findAll = () => {
 const findAllByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE v.email = $1",
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.r_u_number, u.name, u.surname FROM videos v INNER JOIN users u USING(r_u_number) WHERE v.email = $1 ORDER BY video_id DESC",
       [email],
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
@@ -94,6 +94,14 @@ const deleteOne = (video_id) => {
   });
 };
 
+const deleteAllByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM videos WHERE email = $1", [email], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Video");
+    });
+  });
+};
+
 const likeVideo = (email, video_id) => {
   return new Promise((resolve, reject) => {
     db.query("INSERT INTO liked_videos(email, video_id) values ($1, $2)", [email, video_id], (err, results) => {
@@ -118,6 +126,14 @@ const checkVideoLike = (video_id, email) => {
   });
 };
 
+const deleteAllVideoLikesByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM liked_videos WHERE email = $1 RETURNING video_id", [email], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Likes from videos");
+    });
+  });
+};
+
 module.exports = {
   findAll,
   findAllByEmail,
@@ -126,9 +142,11 @@ module.exports = {
   add,
   update,
   deleteOne,
+  deleteAllByEmail,
   uploadVideo,
   uploadSubtitles,
   likeVideo,
   unlikeVideo,
   checkVideoLike,
+  deleteAllVideoLikesByEmail,
 };

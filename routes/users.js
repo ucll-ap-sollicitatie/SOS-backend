@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { User, Preference, crypto } = require("./index");
+const { User, Preference, Task, Comment, Favorite, Video, crypto } = require("./index");
 
 const findAll = async (req, res, next) => {
   console.log(`GET /users request`);
@@ -73,17 +73,23 @@ const update = async (req, res, next) => {
 const deleteOne = async (req, res, next) => {
   console.log(`DELETE /users/:id request`);
   const r_u_number = req.params.r_u_number;
+
   await User.findOneById(r_u_number)
-    .then(() => {
-      Preference.deleteOne(r_u_number)
-        .then(() => {
-          User.deleteOne(r_u_number)
-            .then((result) => res.respondDeleted(null, result))
-            .catch((error) => next(error));
-        })
-        .catch((error) => next(error));
+    .then((current) => {
+      Task.deleteOneByEmail(current.email)
+        .then(() => Video.deleteAllVideoLikesByEmail(current.email))
+        .then(() => Comment.deleteAllCommentLikesByEmail(current.email))
+        .then(() => Favorite.deleteAllByEmail(current.email))
+        .then(() => Favorite.deleteAllByEmail(current.email))
+        .then(() => Comment.deleteAllByEmail(current.r_u_number))
+        .then(() => Video.deleteAllByEmail(current.email))
+        .then(() => Preference.deleteOne(current.email))
+        .then(() => User.deleteOne(current.email))
+        .catch((error) => next(error))
+        .catch(() => next());
     })
-    .catch(() => res.status(400).send({ error: "Invalid request or data." }));
+    .catch((error) => next(error))
+    .catch(() => next());
 };
 
 const sendMail = async (email, token) => {

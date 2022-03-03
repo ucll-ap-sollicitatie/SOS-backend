@@ -84,9 +84,9 @@ const update = (original_email, email, r_u_number, name, surname, password, role
   });
 };
 
-const deleteOne = (r_u_number) => {
+const deleteOne = (email) => {
   return new Promise((resolve, reject) => {
-    db.query("DELETE FROM users WHERE r_u_number = $1 RETURNING r_u_number", [r_u_number], (err, results) => {
+    db.query(`DELETE FROM users WHERE email = $1`, [email], (err, results) => {
       queryHelpers.handleQueryDelete(resolve, reject, err, "User");
     });
   });

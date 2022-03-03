@@ -54,10 +54,19 @@ const deleteOne = (task_id) => {
   });
 };
 
+const deleteOneByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM tasks WHERE teacher_email = $1 RETURNING task_id", [email], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Task");
+    });
+  });
+};
+
 module.exports = {
   findAll,
   findOne,
   add,
   update,
   deleteOne,
+  deleteOneByEmail,
 };

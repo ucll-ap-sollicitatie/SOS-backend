@@ -83,6 +83,14 @@ const deleteOne = (comment_id) => {
   });
 };
 
+const deleteAllByEmail = (r_u_number) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM comments WHERE author = $1 RETURNING comment_id", [r_u_number], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Comment");
+    });
+  });
+};
+
 const addLike = (email, comment_id) => {
   return new Promise((resolve, reject) => {
     db.query("INSERT INTO liked_comments(email, comment_id) values ($1, $2)", [email, comment_id], (err, results) => {
@@ -107,6 +115,14 @@ const checkLike = (comment_id, email) => {
   });
 };
 
+const deleteAllCommentLikesByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM liked_comments WHERE email = $1", [email], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Likes from comments");
+    });
+  });
+};
+
 module.exports = {
   findAll,
   findAllByVideo,
@@ -115,7 +131,9 @@ module.exports = {
   add,
   update,
   deleteOne,
+  deleteAllByEmail,
   addLike,
   removeLike,
   checkLike,
+  deleteAllCommentLikesByEmail,
 };
