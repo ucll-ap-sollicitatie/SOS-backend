@@ -97,11 +97,10 @@ const deleteOne = async (req, res, next) => {
         .then(() => Video.deleteAllVideoLikesByEmail(current.email))
         .then(() => Comment.deleteAllCommentLikesByEmail(current.email))
         .then(() => Favorite.deleteAllByEmail(current.email))
-        .then(() => Favorite.deleteAllByEmail(current.email))
         .then(() => Comment.deleteAllByEmail(current.email))
         .then(() => Video.deleteAllByEmail(current.email))
         .then(() => Preference.deleteOne(current.email))
-        .then(() => User.deleteOne(current.email))
+        .then(() => User.deleteOne(current.user_id))
         .catch((error) => next(error))
         .catch(() => next());
     })
