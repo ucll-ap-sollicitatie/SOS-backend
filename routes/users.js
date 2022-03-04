@@ -101,6 +101,7 @@ const deleteOne = async (req, res, next) => {
         .then(() => Video.deleteAllByEmail(current.email))
         .then(() => Preference.deleteOne(current.email))
         .then(() => User.deleteOne(current.user_id))
+        .then((res) => res.respondDeleted(null, res))
         .catch((error) => next(error))
         .catch(() => next());
     })
