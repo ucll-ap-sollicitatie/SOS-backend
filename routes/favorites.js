@@ -38,14 +38,22 @@ const removeFavorite = async (req, res, next) => {
 };
 
 const checkVideoFavorite = async (req, res, next) => {
-    console.log(`POST /favorites/:video_id/check`);
-    const video_id = req.params.video_id;
-    const { email } = req.body;
-    await Favorite.checkVideoFavorite(email, video_id)
-      .then((results) => res.respond(results))
-      .catch((error) => next(error))
-      .catch(() => next());
-  };
+  console.log(`POST /favorites/:video_id/check`);
+  const video_id = req.params.video_id;
+  const { email } = req.body;
+  await Favorite.checkVideoFavorite(email, video_id)
+    .then((results) => res.respond(results))
+    .catch((error) => next(error))
+    .catch(() => next());
+};
+
+const getRandomFavoritedVideos = async (req, res, next) => {
+  console.log(`GET /favorites/random/random request`);
+  await Favorite.getRandomFavoritedVideos()
+    .then((result) => res.respond(result))
+    .catch((error) => next(error))
+    .catch(() => next());
+};
 
 module.exports = {
     addFavorite,
@@ -53,4 +61,5 @@ module.exports = {
     findAllFavoritedVideosByEmail,
     removeFavorite,
     checkVideoFavorite,
+    getRandomFavoritedVideos,
 };

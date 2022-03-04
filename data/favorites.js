@@ -12,7 +12,7 @@ const addFavorite = (email, video_id) => {
 const findAllFavoritedVideosByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.email, u.name, u.surname FROM videos v INNER JOIN favorites f USING(email) INNER JOIN user u USING(email) WHERE v.email = $1",
+      "SELECT v.user_id, v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.email, u.name, u.surname FROM videos v INNER JOIN favorites f USING(email) INNER JOIN user u USING(email) WHERE v.email = $1",
       [email],
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
@@ -24,7 +24,7 @@ const findAllFavoritedVideosByEmail = (email) => {
 const findAllFavoritedVideos = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.email, f.email as favorite_email, u.name, u.surname FROM videos v INNER JOIN favorites f USING(video_id) INNER JOIN users u ON v.email = u.email",
+      "SELECT v.user_id, v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.email, f.email as favorite_email, u.name, u.surname FROM videos v INNER JOIN favorites f USING(video_id) INNER JOIN users u ON v.email = u.email",
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
       }
@@ -64,6 +64,17 @@ const deleteAllByVideo = (video_id) => {
   });
 };
 
+const getRandomFavoritedVideos = () => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      "SELECT v.user_id, v.video_id, title, v.date, v.video_url, v.email, v.description, v.private, v.email, f.email as favorite_email, u.name, u.surname FROM videos v INNER JOIN favorites f USING(video_id) INNER JOIN users u ON v.email = u.email WHERE v.private = false ORDER BY RANDOM() LIMIT 4",
+      (err, results) => {
+        queryHelpers.handleQuery(resolve, reject, err, results);
+      }
+    );
+  });
+};
+
 module.exports = {
   addFavorite,
   findAllFavoritedVideos,
@@ -72,4 +83,5 @@ module.exports = {
   deleteAllByEmail,
   checkVideoFavorite,
   deleteAllByVideo,
+  getRandomFavoritedVideos,
 };

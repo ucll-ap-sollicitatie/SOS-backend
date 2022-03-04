@@ -116,6 +116,7 @@ app.get("/favorites/email/:email", Favorite.findAllFavoritedVideosByEmail);
 app.post("/favorites/:video_id/favorite", Favorite.addFavorite);
 app.post("/favorites/:video_id/unfavorite", Favorite.removeFavorite);
 app.post("/favorites/:video_id/check", Favorite.checkVideoFavorite);
+app.get("/favorites/random/random", Favorite.getRandomFavoritedVideos);
 
 // Route for roles
 app.get("/roles", Role.findAll);
