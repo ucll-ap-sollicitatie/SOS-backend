@@ -154,6 +154,19 @@ const isExpired = (user) => {
   return time_difference > 0;
 };
 
+const uploadImage = async (req, res, next) => {
+  console.log(`PUT /users/:user_id/image`);
+  const newImage = req.files.newImage;
+  newImage.name = newImage.name.split(".")[0];
+  const user_id = req.params.user_id;
+
+  await User.uploadImage(newImage, user_id)
+    .then((result) => {
+      User.uploadImageQuery(user_id, result.url).then(() => res.respondUpdated(null, "Image uploaded."));
+    })
+    .catch((e) => next(e));
+};
+
 module.exports = {
   findAll,
   findOneByEmail,
@@ -164,4 +177,5 @@ module.exports = {
   deleteOne,
   activateUser,
   activateUserByAdmin,
+  uploadImage,
 };

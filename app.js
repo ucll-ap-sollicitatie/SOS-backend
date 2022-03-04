@@ -48,6 +48,7 @@ app.put("/users/:email/admin", User.updateByAdmin);
 app.delete("/users/:user_id", User.deleteOne);
 app.get("/users/activation/:token", User.activateUser);
 app.put("/users/activation/:user_id/admin", User.activateUserByAdmin);
+app.put("/users/:user_id/image", User.uploadImage);
 
 // Routes for questions
 app.get("/questions", Question.findAll);

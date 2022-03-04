@@ -1,5 +1,5 @@
 // Contains all the queries for the table 'users'
-const { db, bcrypt, crypto, queryHelpers } = require("./index");
+const { db, bcrypt, crypto, queryHelpers, cloudinary } = require("./index");
 const saltRounds = 10;
 
 const findAll = () => {
@@ -174,6 +174,21 @@ const sendMail = (email, token) => {
   });
 };
 
+const uploadImage = (image_file, user_id) => {
+  return cloudinary.v2.uploader.upload(image_file.tempFilePath, {
+    resource_type: "auto",
+    public_id: `SOS_image/${user_id}/${image_file.name}`,
+  });
+};
+
+const uploadImageQuery = (user_id, newUrl) => {
+  return new Promise((resolve, reject) => {
+    db.query("UPDATE users set image = $1 WHERE user_id = $2", [newUrl, user_id], (err, results) => {
+      queryHelpers.handleQueryUpdate(resolve, reject, err, "Image for user");
+    });
+  });
+};
+
 module.exports = {
   findAll,
   findOneByEmail,
@@ -187,4 +202,6 @@ module.exports = {
   activateUserByAdmin,
   newToken,
   sendMail,
+  uploadImage,
+  uploadImageQuery,
 };

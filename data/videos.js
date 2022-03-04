@@ -25,6 +25,18 @@ const findAllByEmail = (email) => {
   });
 };
 
+const findOneByEmailAndTitle = (email, title) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, u.user_id, u.name, u.surname FROM videos v INNER JOIN users u USING(email) WHERE v.email = $1 AND v.title = $2 ORDER BY video_id DESC",
+      [email, title],
+      (err, results) => {
+        queryHelpers.handleQuery(resolve, reject, err, results);
+      }
+    );
+  });
+};
+
 const findAllPublicByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
@@ -80,9 +92,13 @@ const uploadSubtitles = (subtitles, video_file, user_id) => {
 
 const update = (title, description, private, video_id) => {
   return new Promise((resolve, reject) => {
-    db.query("UPDATE videos SET title = $1, description = $2, private = $3 WHERE video_id = $4 RETURNING video_id", [title, description, private, video_id], (err, results) => {
-      queryHelpers.handleQueryUpdate(resolve, reject, err, "Video");
-    });
+    db.query(
+      "UPDATE videos SET title = $1, description = $2, private = $3 WHERE video_id = $4 RETURNING video_id",
+      [title, description, private, video_id],
+      (err, results) => {
+        queryHelpers.handleQueryUpdate(resolve, reject, err, "Video");
+      }
+    );
   });
 };
 
@@ -136,13 +152,11 @@ const deleteAllVideoLikesByEmail = (email) => {
 
 const deleteVideo = (video_id) => {
   return new Promise((resolve, reject) => {
-    db.query(`DELETE FROM videos WHERE video_id = $1`,
-              [video_id],
-              (err, results) => {
-                queryHelpers.handleQueryDelete(resolve, reject, err, "Delete video");
-              })
-  })
-}
+    db.query(`DELETE FROM videos WHERE video_id = $1`, [video_id], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Delete video");
+    });
+  });
+};
 
 const deleteAllVideoLikesByVideo = (video_id) => {
   return new Promise((resolve, reject) => {
@@ -153,20 +167,38 @@ const deleteAllVideoLikesByVideo = (video_id) => {
 };
 
 const deleteCloudinary = (title, user_id) => {
-  return cloudinary.v2.uploader.destroy(`SOS/${user_id}/${title}`, {resource_type: 'video'}, function(error,result) {console.log(result, error) });
-}
+  return cloudinary.v2.uploader.destroy(`SOS/${user_id}/${title}`, { resource_type: "video" }, function (error, result) {
+    console.log(result, error);
+  });
+};
 
 const deleteSubtitles = (title, user_id) => {
-  return cloudinary.v2.uploader.destroy(`SOS/${user_id}/${title}.srt`, {resource_type: 'raw'}, function(error,result) {console.log(result, error) });
-}
+  return cloudinary.v2.uploader.destroy(`SOS/${user_id}/${title}.srt`, { resource_type: "raw" }, function (error, result) {
+    console.log(result, error);
+  });
+};
 
 const updateCloudinary = (old_title, new_title, user_id) => {
-  return cloudinary.v2.uploader.rename(`SOS/${user_id}/${old_title}`, `SOS/${user_id}/${new_title}`, {resource_type: "video"}, function(error,result) {console.log(result, error) });
-}
+  return cloudinary.v2.uploader.rename(
+    `SOS/${user_id}/${old_title}`,
+    `SOS/${user_id}/${new_title}`,
+    { resource_type: "video" },
+    function (error, result) {
+      console.log(result, error);
+    }
+  );
+};
 
 const updateSubtitles = (old_title, new_title, user_id) => {
-  return cloudinary.v2.uploader.rename(`SOS/${user_id}/${old_title}.srt`, `SOS/${user_id}/${new_title}.srt`, {resource_type: "raw"}, function(error,result) {console.log(result, error) });
-}
+  return cloudinary.v2.uploader.rename(
+    `SOS/${user_id}/${old_title}.srt`,
+    `SOS/${user_id}/${new_title}.srt`,
+    { resource_type: "raw" },
+    function (error, result) {
+      console.log(result, error);
+    }
+  );
+};
 
 module.exports = {
   findAll,
@@ -189,4 +221,5 @@ module.exports = {
   deleteCloudinary,
   deleteSubtitles,
   deleteAllVideoLikesByVideo,
+  findOneByEmailAndTitle,
 };

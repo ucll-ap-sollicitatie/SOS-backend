@@ -44,20 +44,24 @@ const add = async (req, res, next) => {
     return;
   }
 
-  await Video.uploadVideo(newVideo, user_id)
-    .then((result) => {
-      Video.uploadSubtitles(subtitles, newVideo, user_id)
-        .then(() => {
-          Video.add(title, user_id, email, description, result.url, private)
-            .then(() => res.respondCreated(null, "Video uploaded."))
-            .catch((e) => next(e));
+  await Video.findOneByEmailAndTitle(email, title)
+    .then(() => res.status(409).send({ error: "Video with this title for user " + user_id + " already exists." }))
+    .catch(() => {
+      Video.uploadVideo(newVideo, user_id)
+        .then((result) => {
+          Video.uploadSubtitles(subtitles, newVideo, user_id)
+            .then(() => {
+              Video.add(title, user_id, email, description, result.url, private)
+                .then(() => res.respondCreated(null, "Video uploaded."))
+                .catch((e) => next(e));
+            })
+            .catch((e) => {
+              next(e);
+            });
         })
         .catch((e) => {
           next(e);
         });
-    })
-    .catch((e) => {
-      next(e);
     });
 };
 
