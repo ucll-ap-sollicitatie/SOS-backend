@@ -123,6 +123,24 @@ const deleteAllCommentLikesByEmail = (email) => {
   });
 };
 
+const deleteAllCommentLikesByVideo = (video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`DELETE FROM liked_comments WHERE comment_id IN (SELECT comment_id FROM comments WHERE video_id = $1)`,
+    [video_id],
+    (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Delete video");
+    })
+  })
+}
+
+const deleteAllByVideo = (video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM comments WHERE video_id = $1 RETURNING comment_id", [video_id], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Comment");
+    });
+  });
+};
+
 module.exports = {
   findAll,
   findAllByVideo,
@@ -136,4 +154,6 @@ module.exports = {
   removeLike,
   checkLike,
   deleteAllCommentLikesByEmail,
+  deleteAllCommentLikesByVideo,
+  deleteAllByVideo,
 };

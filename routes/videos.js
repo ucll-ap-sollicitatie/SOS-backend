@@ -1,4 +1,4 @@
-const { Video } = require("./index");
+const { Video, Comment, Favorite } = require("./index");
 
 const findAll = async (req, res, next) => {
   console.log(`GET /videos request`);
@@ -64,17 +64,28 @@ const add = async (req, res, next) => {
 const update = async (req, res, next) => {
   console.log(`PUT /videos/:id request`);
   const video_id = req.params.video_id;
-  const { title } = req.body;
-  if (!title) {
+  const { new_title, description, private, old_title, user_id } = req.body;
+  if (!new_title || !description || !old_title || !user_id) {
     res.status(400).send({ error: "Invalid request or data." });
     return;
   }
   await Video.findOne(video_id)
     .then(() => {
-      Video.update(title, video_id)
+      if (old_title === new_title) {
+        Video.update(new_title, description, private, video_id)
         .then((result) => res.respondUpdated(null, result))
-        .catch((error) => next(error));
+      } else {
+        Video.updateCloudinary(old_title, new_title, user_id)
+        .then(() => {
+          Video.updateSubtitles(old_title, new_title, user_id);
+          Video.update(new_title, description, private, video_id)
+          .then((result) => res.respondUpdated(null, result))
+        })
+        .catch((error) => next(error))
+      }
+
     })
+    .catch((error) => next(error))
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
@@ -82,10 +93,16 @@ const deleteOne = async (req, res, next) => {
   console.log(`DELETE /videos/:id request`);
   const video_id = req.params.video_id;
   await Video.findOne(video_id)
-    .then(() => {
-      Video.deleteOne(video_id)
-        .then((result) => res.respondDeleted(null, result))
-        .catch((error) => next(error));
+    .then((current) => {
+      Video.deleteCloudinary(current.title, current.user_id)
+      .then(() => Video.deleteSubtitles(current.title, current.user_id))
+      .then(() => Comment.deleteAllCommentLikesByVideo(video_id))
+      .then(() => Comment.deleteAllByVideo(video_id))
+      .then(() => Favorite.deleteAllByVideo(video_id))
+      .then(() => Video.deleteAllVideoLikesByVideo(video_id))
+      .then(() => Video.deleteVideo(video_id))
+      .catch((error) => next(error))
+      .catch(() => next());
     })
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };

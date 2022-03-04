@@ -56,6 +56,14 @@ const checkVideoFavorite = (email, video_id) => {
   });
 };
 
+const deleteAllByVideo = (video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM favorites WHERE video_id = $1", [video_id], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Favorite from video");
+    });
+  });
+};
+
 module.exports = {
   addFavorite,
   findAllFavoritedVideos,
@@ -63,4 +71,5 @@ module.exports = {
   removeFavorite,
   deleteAllByEmail,
   checkVideoFavorite,
+  deleteAllByVideo,
 };

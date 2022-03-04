@@ -1,6 +1,6 @@
 // Contains all the queries for the table 'videos'
 require("dotenv").config();
-const { db, cloudinary, queryHelpers, fs } = require("./index");
+const { db, cloudinary, queryHelpers, fs, resolve } = require("./index");
 
 const findAll = () => {
   return new Promise((resolve, reject) => {
@@ -78,9 +78,9 @@ const uploadSubtitles = (subtitles, video_file, user_id) => {
   });
 };
 
-const update = (title, video_id) => {
+const update = (title, description, private, video_id) => {
   return new Promise((resolve, reject) => {
-    db.query("UPDATE videos SET title = $1 WHERE video_id = $2 RETURNING video_id", [title, video_id], (err, results) => {
+    db.query("UPDATE videos SET title = $1, description = $2, private = $3 WHERE video_id = $4 RETURNING video_id", [title, description, private, video_id], (err, results) => {
       queryHelpers.handleQueryUpdate(resolve, reject, err, "Video");
     });
   });
@@ -134,6 +134,40 @@ const deleteAllVideoLikesByEmail = (email) => {
   });
 };
 
+const deleteVideo = (video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`DELETE FROM videos WHERE video_id = $1`,
+              [video_id],
+              (err, results) => {
+                queryHelpers.handleQueryDelete(resolve, reject, err, "Delete video");
+              })
+  })
+}
+
+const deleteAllVideoLikesByVideo = (video_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM liked_videos WHERE video_id = $1 RETURNING video_id", [video_id], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Likes from videos");
+    });
+  });
+};
+
+const deleteCloudinary = (title, user_id) => {
+  return cloudinary.v2.uploader.destroy(`SOS/${user_id}/${title}`, {resource_type: 'video'}, function(error,result) {console.log(result, error) });
+}
+
+const deleteSubtitles = (title, user_id) => {
+  return cloudinary.v2.uploader.destroy(`SOS/${user_id}/${title}.srt`, {resource_type: 'raw'}, function(error,result) {console.log(result, error) });
+}
+
+const updateCloudinary = (old_title, new_title, user_id) => {
+  return cloudinary.v2.uploader.rename(`SOS/${user_id}/${old_title}`, `SOS/${user_id}/${new_title}`, {resource_type: "video"}, function(error,result) {console.log(result, error) });
+}
+
+const updateSubtitles = (old_title, new_title, user_id) => {
+  return cloudinary.v2.uploader.rename(`SOS/${user_id}/${old_title}.srt`, `SOS/${user_id}/${new_title}.srt`, {resource_type: "raw"}, function(error,result) {console.log(result, error) });
+}
+
 module.exports = {
   findAll,
   findAllByEmail,
@@ -149,4 +183,10 @@ module.exports = {
   unlikeVideo,
   checkVideoLike,
   deleteAllVideoLikesByEmail,
+  updateCloudinary,
+  updateSubtitles,
+  deleteVideo,
+  deleteCloudinary,
+  deleteSubtitles,
+  deleteAllVideoLikesByVideo,
 };
