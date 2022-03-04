@@ -77,6 +77,7 @@ app.get("/preferences/:email", Preference.findOneByEmail);
 app.post("/preferences", Preference.add);
 app.put("/preferences/:email", Preference.update);
 app.delete("/preferences/:email", Preference.deleteOne);
+app.put("/preferences/:email/introduction", Preference.toggleIntroduction);
 
 // Routes for comments
 app.get("/comments", Comment.findAll);

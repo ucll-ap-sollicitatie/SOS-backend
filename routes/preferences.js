@@ -46,10 +46,19 @@ const deleteOne = async (req, res, next) => {
     .catch((error) => next(error));
 };
 
+const toggleIntroduction = async (req, res, next) => {
+  console.log("PUT /preferences/introduction");
+  const email = req.params.email;
+  Preference.toggleIntroduction(email)
+    .then((result) => res.respondUpdated(null, result))
+    .catch((error) => next(error));
+};
+
 module.exports = {
   findAll,
   findOneByEmail,
   add,
   update,
   deleteOne,
+  toggleIntroduction,
 };

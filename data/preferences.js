@@ -45,10 +45,19 @@ const deleteOne = (email) => {
   });
 };
 
+const toggleIntroduction = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query("UPDATE preferences SET introduced = NOT introduced WHERE email = $1", [email], (err, results) => {
+      queryHelpers.handleQueryUpdate(resolve, reject, err, "Preferences");
+    });
+  });
+};
+
 module.exports = {
   findAll,
   findOneByEmail,
   add,
   update,
   deleteOne,
+  toggleIntroduction,
 };
