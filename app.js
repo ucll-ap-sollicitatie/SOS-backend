@@ -17,14 +17,14 @@ const helmet = require("helmet");
 const responseHelper = require("express-response-helper").helper();
 const fileUpload = require("express-fileupload");
 const compression = require("compression");
+const fs = require("fs");
 
-// Application
 const express = require("express");
 const e = require("cors");
 const app = express();
 const port = 3001;
 const serverUrl = "http://localhost:";
-const corsOptions = { origin: `${serverUrl}3000` };
+const corsOptions = { origin: "https://szymon-nidecki.sb.uclllabs.be" };
 
 app.use(compression());
 app.use(fileUpload({ useTempFiles: true }));
@@ -137,6 +137,11 @@ app.use(function (err, req, res, next) {
   }
   return res.status(500).send({ error: err });
 });
+
+//var httpServer = http.createServer(app);
+//var httpsServer = https.createServer(credentials, app);
+
+//httpsServer.listen(3001);
 
 if (process.env.NODE_ENV == "production") {
   app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port} [PRODUCTION]`));
