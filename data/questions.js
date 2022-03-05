@@ -89,6 +89,14 @@ const findRandomQuestions = (email) => {
   });
 };
 
+const deleteAllByCategory = (question_category_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("DELETE FROM questions WHERE question_category_id = $1 RETURNING question_id", [question_category_id], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Question");
+    });
+  });
+}
+
 module.exports = {
   findAll,
   findOne,
@@ -97,4 +105,5 @@ module.exports = {
   deleteOne,
   findAllQuestionsByQuestionCategory,
   findRandomQuestions,
+  deleteAllByCategory,
 };
