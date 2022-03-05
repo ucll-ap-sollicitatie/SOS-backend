@@ -53,6 +53,30 @@ const toggleIntroduction = (email) => {
   });
 };
 
+const setPreference1ToAlgemeen = (preference_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("UPDATE preferences SET preference_1 = 2 WHERE preference_1 = $1", [preference_id], (err, results) => {
+      queryHelpers.handleQueryUpdate(resolve, reject, err, "Preferences");
+    });
+  });
+}
+
+const setPreference2ToAlgemeen = (preference_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("UPDATE preferences SET preference_2 = 2 WHERE preference_2 = $1", [preference_id], (err, results) => {
+      queryHelpers.handleQueryUpdate(resolve, reject, err, "Preferences");
+    });
+  });
+}
+
+const setPreference3ToAlgemeen = (preference_id) => {
+  return new Promise((resolve, reject) => {
+    db.query("UPDATE preferences SET preference_3 = 2 WHERE preference_3 = $1", [preference_id], (err, results) => {
+      queryHelpers.handleQueryUpdate(resolve, reject, err, "Preferences");
+    });
+  });
+}
+
 module.exports = {
   findAll,
   findOneByEmail,
@@ -60,4 +84,7 @@ module.exports = {
   update,
   deleteOne,
   toggleIntroduction,
+  setPreference1ToAlgemeen,
+  setPreference2ToAlgemeen,
+  setPreference3ToAlgemeen,
 };

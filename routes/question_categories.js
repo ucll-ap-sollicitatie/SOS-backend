@@ -1,4 +1,4 @@
-const { Question_categories } = require("./index");
+const { Question_categories, Preference, Question } = require("./index");
 
 const findAll = async (req, res, next) => {
   console.log(`GET /question-categories request`);
@@ -59,6 +59,10 @@ const deleteOne = async (req, res, next) => {
   const question_category_id = req.params.question_category_id;
   await Question_categories.findOneById(question_category_id)
     .then(() => {
+      Preference.setPreference1ToAlgemeen(question_category_id);
+      Preference.setPreference2ToAlgemeen(question_category_id);
+      Preference.setPreference3ToAlgemeen(question_category_id);
+      Question.deleteAllByCategory(question_category_id);
       Question_categories.deleteOne(question_category_id)
         .then((result) => res.respondDeleted(null, result))
         .catch((error) => next(error));
