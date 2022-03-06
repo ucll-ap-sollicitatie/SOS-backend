@@ -23,8 +23,8 @@ const express = require("express");
 const e = require("cors");
 const app = express();
 const port = 3001;
-const serverUrl = "http://localhost:";
-const corsOptions = { origin: "https://szymon-nidecki.sb.uclllabs.be" };
+const serverUrl = "http://localhost:3000";
+const corsOptions = { origin: `${process.env.FRONTEND_URL}` };
 
 app.use(compression());
 app.use(fileUpload({ useTempFiles: true }));
@@ -144,7 +144,7 @@ app.use(function (err, req, res, next) {
 //httpsServer.listen(3001);
 
 if (process.env.NODE_ENV == "production") {
-  app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port} [PRODUCTION]`));
+  app.listen(port, () => console.log(`SOS back-end running on ${serverUrl} [PRODUCTION]`));
 } else {
-  app.listen(port, () => console.log(`SOS back-end running on ${serverUrl}${port} [DEVELOPMENT]`));
+  app.listen(port, () => console.log(`SOS back-end running on ${serverUrl} [DEVELOPMENT]`));
 }
