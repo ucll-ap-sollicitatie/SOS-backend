@@ -5,13 +5,13 @@ const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
       `
-      (SELECT question_category_id, category, COUNT(question_id) AS amount_of_questions 
+      (SELECT question_category_id, category, description, COUNT(question_id) AS amount_of_questions 
       FROM question_categories JOIN questions USING(question_category_id)
-      GROUP BY question_category_id, category)
+      GROUP BY question_category_id, category, description)
       UNION
-      (SELECT question_category_id, category, COUNT(question_id) AS amount_of_questions 
+      (SELECT question_category_id, category, description, COUNT(question_id) AS amount_of_questions 
       FROM question_categories FULL OUTER JOIN questions USING(question_category_id)
-      GROUP BY question_category_id, category)
+      GROUP BY question_category_id, category, description)
       ORDER BY amount_of_questions DESC`,
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
@@ -51,11 +51,11 @@ const add = (category) => {
   });
 };
 
-const update = (question_category_id, category) => {
+const update = (question_category_id, category, description) => {
   return new Promise((resolve, reject) => {
     db.query(
-      "UPDATE question_categories SET category = $1 WHERE question_category_id = $2 RETURNING question_category_id",
-      [category, question_category_id],
+      "UPDATE question_categories SET category = $1, description = $2 WHERE question_category_id = $3 RETURNING question_category_id",
+      [category, description, question_category_id],
       (err, results) => {
         queryHelpers.handleQueryUpdate(resolve, reject, err, "Category");
       }

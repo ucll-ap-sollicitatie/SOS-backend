@@ -40,14 +40,14 @@ const add = async (req, res, next) => {
 const update = async (req, res, next) => {
   console.log(`PUT /question-categories request`);
   const question_category_id = req.params.question_category_id;
-  const { category } = req.body;
+  const { category, description } = req.body;
   if (!category) {
     res.status(400).send({ error: "Invalid request or data." });
     return;
   }
   await Question_categories.findOneById(question_category_id)
     .then(() => {
-      Question_categories.update(question_category_id, category)
+      Question_categories.update(question_category_id, category, description)
         .then((result) => res.respondUpdated(null, result))
         .catch((error) => next(error));
     })
@@ -57,6 +57,11 @@ const update = async (req, res, next) => {
 const deleteOne = async (req, res, next) => {
   console.log(`DELETE /question-categories request`);
   const question_category_id = req.params.question_category_id;
+
+  if (!question_category_id === 0) {
+    res.status(400).send({ error: "Question category with id 0 can't be deleted." });
+  }
+
   await Question_categories.findOneById(question_category_id)
     .then(() => {
       Preference.setPreference1ToAlgemeen(question_category_id);
