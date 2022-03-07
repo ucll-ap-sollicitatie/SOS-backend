@@ -23,7 +23,7 @@ const express = require("express");
 const e = require("cors");
 const app = express();
 const port = 3001;
-const serverUrl = "http://localhost:3000";
+const serverUrl = `${process.env.BACKEND_URL}`;
 const corsOptions = { origin: `${process.env.FRONTEND_URL}` };
 
 app.use(compression());
