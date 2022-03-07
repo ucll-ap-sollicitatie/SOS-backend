@@ -27,12 +27,12 @@ const findOneByCategory = async (req, res, next) => {
 
 const add = async (req, res, next) => {
   console.log(`POST /question-categories request`);
-  const { category } = req.body;
+  const { category, description } = req.body;
   if (!category) {
     res.status(400).send({ error: "Invalid request or data." });
     return;
   }
-  await Question_categories.add(category)
+  await Question_categories.add(category, description)
     .then((result) => res.respondCreated(null, result))
     .catch((error) => next(error));
 };

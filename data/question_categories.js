@@ -36,7 +36,7 @@ const findOneByName = (category) => {
   });
 };
 
-const add = (category) => {
+const add = (category, description) => {
   return new Promise((resolve, reject) => {
     findOneByName(category)
       .then(() => {
@@ -44,7 +44,7 @@ const add = (category) => {
         return;
       })
       .catch(() => {
-        db.query("INSERT INTO question_categories (category) VALUES ($1)", [category], (err, results) => {
+        db.query("INSERT INTO question_categories (category, description) VALUES ($1, $2)", [category, description], (err, results) => {
           queryHelpers.handleQueryAdd(resolve, reject, err, "Category");
         });
       });
