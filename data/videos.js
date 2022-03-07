@@ -5,7 +5,11 @@ const { db, cloudinary, queryHelpers, fs, resolve } = require("./index");
 const findAll = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      "SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, u.user_id, u.name, u.surname FROM videos v INNER JOIN users u USING(email) ORDER BY video_id DESC",
+      `SELECT v.video_id, v.title, v.date, v.video_url, v.email, v.description, v.private, v.user_id, u.name, u.surname, count(l.email) as likes 
+      FROM videos v 
+      inner join users u using(email) 
+      LEFT JOIN liked_videos l USING(video_id) 
+      GROUP BY video_id, name, surname`,
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
       }

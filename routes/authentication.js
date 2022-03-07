@@ -5,14 +5,20 @@ const logIn = async (req, res) => {
     console.log(`POST /auth/login request`);
     const { email, password } = req.body;
     if (!email || !password) {
-      res.fail("Email or password not provided");
+      res.status(400).send({ error: "Email or password not provided" });
     } else {
       User.findOneByEmail(email)
         .then((user) => {
           bcrypt.compare(password, user.hashed_password, (err, result) => {
-            if (err || !result) res.fail("Invalid credentials");
-            else if (user.activation_token) res.fail("Account not yet confirmed. Please check email.");
-            else res.respond(user);
+            if (err || !result) {
+              console.log("Invalid creds");
+              res.status(400).send({ error: "Invalid credentials" });
+              return;
+            } else if (user.activation_token) {
+              console.log("unactivated");
+              res.status(401).send({ error: "Account not yet confirmed. Please check email." });
+              return;
+            } else res.respond(user);
           });
         })
         .catch((error) => {

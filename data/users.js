@@ -152,7 +152,7 @@ const newToken = (current_user, activation_token) => {
   });
 };
 
-const sendMail = (email, token) => {
+const sendActivationMail = (email, token) => {
   return new Promise((resolve, reject) => {
     const sgMail = require("@sendgrid/mail");
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -163,7 +163,7 @@ const sendMail = (email, token) => {
       html: `
         <h3>Van harte welkom bij Slim op sollicitatie!</h3>
         <p>Gelieve op de volgende link te drukken om uw account te activeren.</p>
-        <p><a target="_" href="${process.env.FRONTEND_URL}/users/activation/${token}">Activeer mijn account</a></p>
+        <p><a target="_" href="${process.env.BACKEND_URL}/users/activation/${token}">Activeer mijn account</a></p>
         <p>Deze link verloopt na 1 uur vanaf de tijd van registratie, om een nieuwe activatielink te krijgen kan u na de verlopen tijd op de bovenstaande link drukken.</p>`,
     };
 
@@ -201,7 +201,7 @@ module.exports = {
   activateUser,
   activateUserByAdmin,
   newToken,
-  sendMail,
+  sendActivationMail,
   uploadImage,
   uploadImageQuery,
 };

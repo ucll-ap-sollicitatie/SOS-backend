@@ -43,7 +43,7 @@ const add = async (req, res, next) => {
         .then((result) => {
           Preference.add(email)
             .then(() => {
-              sendMail(email, result.token)
+              sendActivationMail(email, result.token)
                 .then(() => res.respondCreated(null, result.message))
                 .catch((error) => next(error));
             })
@@ -109,9 +109,9 @@ const deleteOne = async (req, res, next) => {
     .catch(() => next());
 };
 
-const sendMail = async (email, token) => {
-  await User.sendMail(email, token)
-    .then(() => console.log("Mail sent successfully"))
+const sendActivationMail = async (email, token) => {
+  await User.sendActivationMail(email, token)
+    .then(() => console.log("Activation mail sent successfully"))
     .catch((e) => console.log(e));
 };
 
@@ -122,7 +122,7 @@ const activateUser = async (req, res) => {
   if (isExpired(current_user)) {
     const activation_token = crypto.randomBytes(48).toString("hex");
     await User.newToken(current_user, activation_token).then(() => {
-      sendMail(current_user.email, activation_token);
+      sendActivationMail(current_user.email, activation_token);
       res.redirect(301, `${process.env.FRONTEND_URL}/?toast=Uw activatielink is verlopen, er werd een nieuwe mail verstuurd`);
     });
   } else {
