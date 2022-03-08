@@ -1,5 +1,8 @@
 const { Comment } = require("./index");
 
+/**
+ * [GET] Handles result of query for all comments.
+ */
 const findAll = async (req, res, next) => {
   console.log(`GET /comments request`);
   await Comment.findAll()
@@ -8,6 +11,9 @@ const findAll = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for all comments of a video by video_id.
+ */
 const findAllByVideo = async (req, res, next) => {
   console.log(`GET /comments/video/video_id`);
   const { video_id } = req.params;
@@ -17,6 +23,9 @@ const findAllByVideo = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for all feedback of a video by video_id.
+ */
 const findAllFeedbackByVideo = async (req, res, next) => {
   console.log(`GET /comments/video/video_id`);
   const { video_id } = req.params;
@@ -26,6 +35,9 @@ const findAllFeedbackByVideo = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for a single comment by id.
+ */
 const findOne = async (req, res, next) => {
   console.log(`GET /comments/:id request`);
   const comment_id = req.params.comment_id;
@@ -35,6 +47,9 @@ const findOne = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [POST] Handles result of query to add a comment.
+ */
 const add = async (req, res, next) => {
   console.log(`POST /comments request`);
   console.log(req.body);
@@ -60,6 +75,9 @@ const add = async (req, res, next) => {
     .catch((error) => next(error));
 };
 
+/**
+ * [PUT] Handles result of query to update a comment.
+ */
 const update = async (req, res, next) => {
   console.log(`PUT /comments/:id request`);
   const comment_id = req.params.comment_id;
@@ -77,6 +95,9 @@ const update = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+/**
+ * [DELETE] Handles result of query to delete a comment.
+ */
 const deleteOne = async (req, res, next) => {
   console.log(`DELETE /comments/:id request`);
   const comment_id = req.params.comment_id;
@@ -89,6 +110,9 @@ const deleteOne = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+/**
+ * [POST] Handles result of query for adding a like to a comment.
+ */
 const addLike = async (req, res, next) => {
   console.log(`POST /comments/:comment_id/like`);
   const comment_id = req.params.comment_id;
@@ -99,6 +123,9 @@ const addLike = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [POST] Handles result of query for removing a like to a comment.
+ */
 const removeLike = async (req, res, next) => {
   console.log(`POST /comments/:comment_id/unlike`);
   const comment_id = req.params.comment_id;
@@ -109,6 +136,9 @@ const removeLike = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for checking whether current user by email has already liked a comment.
+ */
 const checkLike = async (req, res, next) => {
   console.log(`GET /comments/likes`);
   const comment_id = req.params.comment_id;

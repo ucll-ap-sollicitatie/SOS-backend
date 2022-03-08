@@ -1,5 +1,8 @@
 const { Video, Comment, Favorite } = require("./index");
 
+/**
+ * [GET] Handles result of query for finding all videos.
+ */
 const findAll = async (req, res, next) => {
   console.log(`GET /videos request`);
   await Video.findAll()
@@ -8,6 +11,9 @@ const findAll = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for finding all videos by email.
+ */
 const findAllByEmail = async (req, res, next) => {
   console.log(`GET /videos/email/:email request`);
   const email = req.params.email;
@@ -17,6 +23,9 @@ const findAllByEmail = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for finding all public videos by email.
+ */
 const findAllPublicByEmail = async (req, res, next) => {
   console.log(`GET /videos/email/:email/public request`);
   const email = req.params.email;
@@ -26,6 +35,9 @@ const findAllPublicByEmail = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for finding one video by id.
+ */
 const findOne = async (req, res, next) => {
   console.log(`GET /videos/:id request`);
   const video_id = req.params.video_id;
@@ -35,6 +47,12 @@ const findOne = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [POST] Handles result of query for adding a video.
+ * * Uploads video to cloudinary
+ * * Uploads subtitles to cloudinary
+ * * Adds video to database
+ */
 const add = async (req, res, next) => {
   console.log(`POST /videos request`);
   const newVideo = req.files.newRecording;
@@ -65,6 +83,9 @@ const add = async (req, res, next) => {
     });
 };
 
+/**
+ * [PUT] Handles result of query for updating a video.
+ */
 const update = async (req, res, next) => {
   console.log(`PUT /videos/:id request`);
   const video_id = req.params.video_id;
@@ -90,6 +111,16 @@ const update = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+/**
+ * [DELETE] Handles result of query for deleting a video.
+ * * Deletes video from cloudinary
+ * * Deletes all video's subtitles
+ * * Deletes all video's comment likes
+ * * Deletes all video's video likes
+ * * Deletes all video's coments
+ * * Deletes all video's favorites
+ * * Deletes video
+ */
 const deleteOne = async (req, res, next) => {
   console.log(`DELETE /videos/:id request`);
   const video_id = req.params.video_id;
@@ -109,6 +140,9 @@ const deleteOne = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+/**
+ * [POST] Handles result of query for liking a video with user email.
+ */
 const likeVideo = async (req, res, next) => {
   console.log(`POST /videos/:video_id/like`);
   const video_id = req.params.video_id;
@@ -119,6 +153,9 @@ const likeVideo = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [POST] Handles result of query for unliking a video with user email.
+ */
 const unlikeVideo = async (req, res, next) => {
   console.log(`POST /videos/:video_id/unlike`);
   const video_id = req.params.video_id;
@@ -129,6 +166,9 @@ const unlikeVideo = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for checking if user by email has already liked a video.
+ */
 const checkVideoLike = async (req, res, next) => {
   console.log(`GET /videos/likes`);
   const video_id = req.params.video_id;

@@ -1,5 +1,16 @@
 const { User, bcrypt } = require("./index");
 
+/**
+ * Checks posted credentials.
+ * * Fails if email or password empty.
+ * * Fails if user with email does not exist.
+ * * Fails if credentials are wrong.
+ * * Fails if user not activated.
+ * * Responds with user properties on success.
+ * @param {request} req
+ * @param {response} res
+ * @returns user props
+ */
 const logIn = async (req, res) => {
   return new Promise((resolve, reject) => {
     console.log(`POST /auth/login request`);

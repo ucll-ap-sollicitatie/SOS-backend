@@ -1,5 +1,8 @@
 const { Question_categories, Preference, Question } = require("./index");
 
+/**
+ * [GET] Handles result of query for finding all question categories.
+ */
 const findAll = async (req, res, next) => {
   console.log(`GET /question-categories request`);
   await Question_categories.findAll()
@@ -8,6 +11,9 @@ const findAll = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for finding a question category by id.
+ */
 const findOneById = async (req, res, next) => {
   console.log(`GET /question-categories/:id request`);
   await Question_categories.findOneById(req.params.question_category_id)
@@ -16,6 +22,9 @@ const findOneById = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for finding a question category by category.
+ */
 const findOneByCategory = async (req, res, next) => {
   console.log(`GET /question-categories/category/:category request`);
   const category = req.params.category;
@@ -25,6 +34,9 @@ const findOneByCategory = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [POST] Handles result of query for adding a question category.
+ */
 const add = async (req, res, next) => {
   console.log(`POST /question-categories request`);
   const { category, description } = req.body;
@@ -37,6 +49,9 @@ const add = async (req, res, next) => {
     .catch((error) => next(error));
 };
 
+/**
+ * [PUT] Handles result of query for updating a question category.
+ */
 const update = async (req, res, next) => {
   console.log(`PUT /question-categories request`);
   const question_category_id = req.params.question_category_id;
@@ -54,6 +69,9 @@ const update = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+/**
+ * [DELETE] Handles result of query for deleting a question category.
+ */
 const deleteOne = async (req, res, next) => {
   console.log(`DELETE /question-categories request`);
   const question_category_id = req.params.question_category_id;
