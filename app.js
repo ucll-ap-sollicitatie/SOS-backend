@@ -41,6 +41,7 @@ app.get("/", function (req, res) {
 
 // Routes for users
 app.get("/users", User.findAll);
+app.get("/users/role/:role_id", User.findAllByRole);
 app.get("/users/:user_id", User.findOneById);
 app.get("/users/email/:email", User.findOneByEmail);
 app.post("/users", User.add);

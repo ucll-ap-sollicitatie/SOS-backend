@@ -1,4 +1,4 @@
-const { Task } = require("./index");
+const { Task, User } = require("./index");
 
 /**
  * [GET] Handles result of query for finding all tasks.
@@ -34,8 +34,25 @@ const add = async (req, res, next) => {
     return;
   }
   await Task.add(title, description, deadline, teacher_email)
-    .then((result) => res.respondCreated(result))
+    .then((result) => {
+      User.findAllByRole(1).then((students) => {
+        students.forEach((student) => {
+          sendNewTaskToStudentsEmail(student.email);
+        });
+      });
+
+      res.respondCreated(result);
+    })
     .catch((error) => next(error));
+};
+
+/**
+ * Sends email to all students when getting a new task.
+ */
+const sendNewTaskToStudentsEmail = async (userEmail) => {
+  await Task.sendNewTaskToStudentsEmail(userEmail)
+    .then(() => console.log("New task email sent successfully"))
+    .catch((e) => console.log(e));
 };
 
 /**

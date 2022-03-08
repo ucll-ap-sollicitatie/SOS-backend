@@ -67,6 +67,29 @@ const add = (text, author, video_id, feedback, start_feedback, end_feedback) => 
   });
 };
 
+const sendFeedbackEmail = (userEmail, video_id) => {
+  return new Promise((resolve, reject) => {
+    const sgMail = require("@sendgrid/mail");
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    const msg = {
+      to: userEmail,
+      from: "slimopsollicitatie2022@gmail.com",
+      subject: "SOS - Nieuwe feedback",
+      html: `
+        <h3>Nieuwe feedback op Slim op sollicitatie!</h3>
+        <p>Beste, u heeft zojuist nieuwe feedback gekregen op een van uw video's. Klik op volgende link om de feedback te bekijken.</p>
+        <p><a target="_" href="${process.env.FRONTEND_URL}/videos/${video_id}">Bekijk feedback</a></p>
+        `,
+    };
+
+    sgMail
+      .send(msg)
+      .then(() => resolve("Email sent."))
+      .catch((e) => reject(e));
+  });
+};
+
 const update = (text, comment_id) => {
   return new Promise((resolve, reject) => {
     db.query("UPDATE comments SET text = $1 WHERE comment_id = $2 RETURNING comment_id", [text, comment_id], (err, results) => {
@@ -125,13 +148,15 @@ const deleteAllCommentLikesByEmail = (email) => {
 
 const deleteAllCommentLikesByVideo = (video_id) => {
   return new Promise((resolve, reject) => {
-    db.query(`DELETE FROM liked_comments WHERE comment_id IN (SELECT comment_id FROM comments WHERE video_id = $1)`,
-    [video_id],
-    (err, results) => {
-      queryHelpers.handleQueryDelete(resolve, reject, err, "Delete video");
-    })
-  })
-}
+    db.query(
+      `DELETE FROM liked_comments WHERE comment_id IN (SELECT comment_id FROM comments WHERE video_id = $1)`,
+      [video_id],
+      (err, results) => {
+        queryHelpers.handleQueryDelete(resolve, reject, err, "Delete video");
+      }
+    );
+  });
+};
 
 const deleteAllByVideo = (video_id) => {
   return new Promise((resolve, reject) => {
@@ -147,6 +172,7 @@ module.exports = {
   findAllFeedbackByVideo,
   findOne,
   add,
+  sendFeedbackEmail,
   update,
   deleteOne,
   deleteAllByEmail,
