@@ -1,5 +1,8 @@
 const { Task } = require("./index");
 
+/**
+ * [GET] Handles result of query for finding all tasks.
+ */
 const findAll = async (req, res, next) => {
   console.log(`GET /tasks request`);
   await Task.findAll()
@@ -8,6 +11,9 @@ const findAll = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for finding one task.
+ */
 const findOne = async (req, res, next) => {
   console.log(`GET /tasks/:id request`);
   const task_id = req.params.task_id;
@@ -17,6 +23,9 @@ const findOne = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [POST] Handles result of query for adding a task.
+ */
 const add = async (req, res, next) => {
   console.log(`POST /tasks request`);
   const { title, description, deadline, teacher_email } = req.body;
@@ -29,6 +38,9 @@ const add = async (req, res, next) => {
     .catch((error) => next(error));
 };
 
+/**
+ * [PUT] Handles result of query for updating a task.
+ */
 const update = async (req, res, next) => {
   console.log(`PUT /tasks/:id request`);
   const task_id = req.params.task_id;
@@ -46,6 +58,9 @@ const update = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+/**
+ * [DELETE] Handles result of query for deleting a task.
+ */
 const deleteOne = async (req, res, next) => {
   console.log(`DELETE /tasks/:id request`);
   const task_id = req.params.task_id;

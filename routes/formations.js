@@ -1,5 +1,8 @@
 const { Formation } = require("./index");
 
+/**
+ * [GET] Handles result of query for getting all formations.
+ */
 const findAll = async (req, res, next) => {
   console.log(`GET /formations request`);
   await Formation.findAll()
@@ -8,6 +11,9 @@ const findAll = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for finding a formation by id.
+ */
 const findOneById = async (req, res, next) => {
   console.log(`GET /formations/:id request`);
   const formation_id = req.params.formation_id;
@@ -17,6 +23,9 @@ const findOneById = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for finding a formation by name.
+ */
 const findOneByName = async (req, res, next) => {
   console.log(`GET /formations/name/:id request`);
   const formation_name = req.params.formation_name;

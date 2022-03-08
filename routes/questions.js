@@ -1,5 +1,8 @@
 const { Question } = require("./index");
 
+/**
+ * [GET] Handles result of query for finding all questions.
+ */
 const findAll = async (req, res, next) => {
   console.log(`GET /questions request`);
   await Question.findAll()
@@ -8,6 +11,9 @@ const findAll = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for finding one question by id.
+ */
 const findOne = async (req, res, next) => {
   console.log(`GET /questions/:id request`);
   const question_id = req.params.question_id;
@@ -17,6 +23,9 @@ const findOne = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [POST] Handles result of query for adding a question.
+ */
 const add = async (req, res, next) => {
   console.log(`POST /questions request`);
   const { question, question_category_id } = req.body;
@@ -29,6 +38,9 @@ const add = async (req, res, next) => {
     .catch((error) => next(error));
 };
 
+/**
+ * [PUT] Handles result of query for updating a question.
+ */
 const update = async (req, res, next) => {
   console.log(`PUT /questions/:id request`);
   const question_id = req.params.question_id;
@@ -46,6 +58,9 @@ const update = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+/**
+ * [DELETE] Handles result of query for deleting a question.
+ */
 const deleteOne = async (req, res, next) => {
   console.log(`DELETE /questions/:id request`);
   const question_id = req.params.question_id;
@@ -58,6 +73,9 @@ const deleteOne = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+/**
+ * [GET] Handles result of query for finding all questions by category.
+ */
 const findAllQuestionsByQuestionCategory = async (req, res, next) => {
   console.log(`GET /questions/category/:category_id request`);
   await Question.findAllQuestionsByQuestionCategory(req.params.question_category_id)
@@ -66,6 +84,9 @@ const findAllQuestionsByQuestionCategory = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [GET] Handles result of query for finding random questions.
+ */
 const findRandomQuestions = async (req, res, next) => {
   console.log(`GET /videos/random request`);
   await Question.findRandomQuestions(req.params.email)

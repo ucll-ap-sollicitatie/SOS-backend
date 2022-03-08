@@ -1,6 +1,9 @@
 require("dotenv").config();
 const { User, Preference, Task, Comment, Favorite, Video, crypto } = require("./index");
 
+/**
+ * [GET] Handles result of query for finding all users.
+ */
 const findAll = async (req, res, next) => {
   console.log(`GET /users request`);
   await User.findAll()
@@ -9,6 +12,9 @@ const findAll = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [PUT] Handles result of query for finding one user by email.
+ */
 const findOneByEmail = async (req, res, next) => {
   console.log(`GET /users/email/:email request`);
   const email = req.params.email;
@@ -18,6 +24,9 @@ const findOneByEmail = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [PUT] Handles result of query for finding one user by id.
+ */
 const findOneById = async (req, res, next) => {
   console.log(`GET /users/:id request`);
   const user_id = req.params.user_id;
@@ -27,6 +36,13 @@ const findOneById = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * [POST] Handles result of query for adding one user by id.
+ * * Adds preferences for new user.
+ * * Sends account activation email [1 hour expiration]
+ * * 409 - User already exists
+ * * 201 - User created
+ */
 const add = async (req, res, next) => {
   console.log(`POST /users request`);
   const { name, surname, email, password, formation_id } = req.body;
@@ -53,6 +69,9 @@ const add = async (req, res, next) => {
     });
 };
 
+/**
+ * [PUT] Handles result of query for updating a user by id.
+ */
 const update = async (req, res, next) => {
   console.log(`PUT /users/:id request`);
   const email = req.params.email;
@@ -70,6 +89,10 @@ const update = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+/**
+ * [PUT] Handles result of query for updating a user by id as admin.
+ * * As admin = adjustment of user's role.
+ */
 const updateByAdmin = async (req, res, next) => {
   console.log(`PUT /users/:id/admin request`);
   const email = req.params.email;
@@ -87,6 +110,17 @@ const updateByAdmin = async (req, res, next) => {
     .catch(() => res.status(400).send({ error: "Invalid request or data." }));
 };
 
+/**
+ * [DELETE] Handles result of query for deleting a user.
+ * * Deletes all users' tasks
+ * * Deletes all users' comment likes
+ * * Deletes all users' video likes
+ * * Deletes all users' favorites
+ * * Deletes all users' comments
+ * * Deletes all users' videos
+ * * Deletes all users' preferences
+ * * Deletes user
+ */
 const deleteOne = async (req, res, next) => {
   console.log(`DELETE /users/:id request`);
   const user_id = req.params.user_id;
@@ -109,12 +143,19 @@ const deleteOne = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * Sends activation email to new user.
+ */
 const sendActivationMail = async (email, token) => {
   await User.sendActivationMail(email, token)
     .then(() => console.log("Activation mail sent successfully"))
     .catch((e) => console.log(e));
 };
 
+/**
+ * Handles result of query for activating a user.
+ * * Fails if expired, resends new email.
+ */
 const activateUser = async (req, res) => {
   const token = req.params.token;
   const current_user = await User.findOneByToken(token);
@@ -134,6 +175,10 @@ const activateUser = async (req, res) => {
   }
 };
 
+/**
+ * Handles result of query for activating a user by admin.
+ * * By admin = forcefully, without the user's input.
+ */
 const activateUserByAdmin = async (req, res, next) => {
   console.log("PUT /users/activation/:user_id/admin");
   const user_id = req.params.user_id;
@@ -147,6 +192,11 @@ const activateUserByAdmin = async (req, res, next) => {
     .catch(() => next());
 };
 
+/**
+ * Checks if user's activation token has expired.
+ * @param {User} user
+ * @returns true if expired, false if still valid.
+ */
 const isExpired = (user) => {
   const current_time = new Date();
   const expiration_time = user.token_expiration_date;
@@ -154,6 +204,9 @@ const isExpired = (user) => {
   return time_difference > 0;
 };
 
+/**
+ * [PUT] Handles result of query for uploading a new image for a user.
+ */
 const uploadImage = async (req, res, next) => {
   console.log(`PUT /users/:user_id/image`);
   const newImage = req.files.newImage;
