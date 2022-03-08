@@ -2,7 +2,10 @@ const crypto = require("crypto");
 
 const verifyApiKey = (req, res, next) => {
   const givenApiKey = req.headers["X-API-KEY"];
-  if (req.hostname === "api.szymon-nidecki.sb.uclllabs.be") next();
+  if (req.hostname === "api.szymon-nidecki.sb.uclllabs.be") {
+    next();
+    return;
+  }
   if (!givenApiKey) {
     res.status(401).send("Please provide a correct 'x-api-key' header to gain access.");
     return;
