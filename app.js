@@ -11,6 +11,7 @@ const {
   Authentication,
   Task,
   Favorite,
+  ApiVerifier,
 } = require("./app/index");
 
 // Middleware
@@ -34,6 +35,7 @@ app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(ApiVerifier.verifyApiKey);
 
 app.get("/", function (req, res) {
   res.respond({ message: "Slim op sollicitatie API" });

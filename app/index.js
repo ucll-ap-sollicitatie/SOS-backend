@@ -9,6 +9,7 @@ const Preference = require("../routes/preferences");
 const Authentication = require("../routes/authentication");
 const Task = require("../routes/tasks");
 const Favorite = require("../routes/favorites");
+const ApiVerifier = require("../helpers/apiKeyVerifier");
 
 module.exports = {
   User,
@@ -22,4 +23,5 @@ module.exports = {
   Authentication,
   Task,
   Favorite,
+  ApiVerifier,
 };
