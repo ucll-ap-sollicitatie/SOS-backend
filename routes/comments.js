@@ -1,4 +1,4 @@
-const { Comment } = require("./index");
+const { Comment, Video } = require("./index");
 
 /**
  * [GET] Handles result of query for all comments.
@@ -71,8 +71,26 @@ const add = async (req, res, next) => {
     end_feedback_parsed = `00:${end_feedback_date.getMinutes()}:${end_feedback_date.getSeconds()}`;
   }
   await Comment.add(text, author, video_id, feedback, start_feedback_parsed, end_feedback_parsed)
-    .then((result) => res.respondCreated(result))
+    .then((result) => {
+      if (feedback) {
+        const video_res = Video.findOne(video_id);
+        Promise.resolve(video_res).then((video) => {
+          sendFeedbackEmail(video.email, video_id).catch((error) => next(error));
+        });
+      }
+
+      res.respondCreated(result);
+    })
     .catch((error) => next(error));
+};
+
+/**
+ * Sends email to user when getting feedback.
+ */
+const sendFeedbackEmail = async (userEmail, video_id) => {
+  await Comment.sendFeedbackEmail(userEmail, video_id)
+    .then(() => console.log("Feedback mail sent successfully"))
+    .catch((e) => console.log(e));
 };
 
 /**
@@ -155,6 +173,7 @@ module.exports = {
   findAllFeedbackByVideo,
   findOne,
   add,
+  sendFeedbackEmail,
   update,
   deleteOne,
   addLike,
