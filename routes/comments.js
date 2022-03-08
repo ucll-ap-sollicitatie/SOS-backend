@@ -173,7 +173,6 @@ module.exports = {
   findAllFeedbackByVideo,
   findOne,
   add,
-  sendFeedbackEmail,
   update,
   deleteOne,
   addLike,

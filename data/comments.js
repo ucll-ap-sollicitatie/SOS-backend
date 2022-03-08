@@ -75,10 +75,10 @@ const sendFeedbackEmail = (userEmail, video_id) => {
     const msg = {
       to: userEmail,
       from: "slimopsollicitatie2022@gmail.com",
-      subject: "SOS - Feedback",
+      subject: "SOS - Nieuwe feedback",
       html: `
         <h3>Nieuwe feedback op Slim op sollicitatie!</h3>
-        <p>Beste, u heeft zojuist nieuwe feedback gekregen op een van uw video's. Klink op volgende link om dit te zien.</p>
+        <p>Beste, u heeft zojuist nieuwe feedback gekregen op een van uw video's. Klik op volgende link om de feedback te bekijken.</p>
         <p><a target="_" href="${process.env.FRONTEND_URL}/videos/${video_id}">Bekijk feedback</a></p>
         `,
     };

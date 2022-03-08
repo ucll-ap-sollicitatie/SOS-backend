@@ -13,6 +13,18 @@ const findAll = async (req, res, next) => {
 };
 
 /**
+ * [GET] Handles result of query for finding all by role.
+ */
+const findAllByRole = async (req, res, next) => {
+  console.log(`GET /users/role/:role_id request`);
+  const role_id = req.params.role_id;
+  await User.findAllByRole(role_id)
+    .then((result) => res.respond(result))
+    .catch((error) => next(error))
+    .catch(() => next());
+};
+
+/**
  * [PUT] Handles result of query for finding one user by email.
  */
 const findOneByEmail = async (req, res, next) => {
@@ -222,6 +234,7 @@ const uploadImage = async (req, res, next) => {
 
 module.exports = {
   findAll,
+  findAllByRole,
   findOneByEmail,
   findOneById,
   add,
