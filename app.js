@@ -1,26 +1,27 @@
 // Routing imports
-const User = require("./routes/users");
-const Role = require("./routes/roles");
-const Question = require("./routes/questions");
-const Question_categories = require("./routes/question_categories");
-const Comment = require("./routes/comments");
-const Video = require("./routes/videos");
-const Formation = require("./routes/formations");
-const Preference = require("./routes/preferences");
-const Authentication = require("./routes/authentication");
-const Task = require("./routes/tasks");
-const Favorite = require("./routes/favorites");
+const {
+  User,
+  Role,
+  Question,
+  Question_categories,
+  Comment,
+  Video,
+  Formation,
+  Preference,
+  Authentication,
+  Task,
+  Favorite,
+} = require("./app/index");
 
 // Middleware
-const cors = require("cors");
-const helmet = require("helmet");
-const responseHelper = require("express-response-helper").helper();
-const fileUpload = require("express-fileupload");
-const compression = require("compression");
-const fs = require("fs");
+const cors = require("cors"); // Allows CORS headers to front end
+const helmet = require("helmet"); // Library that adds security headers to responses and requests
+const responseHelper = require("express-response-helper").helper(); // Library to make responding easier
+const fileUpload = require("express-fileupload"); // Helper for uploading files
+const compression = require("compression"); // gzip compression of requests and responses
 
+// Server and CORS requirements
 const express = require("express");
-const e = require("cors");
 const app = express();
 const port = 3001;
 const serverUrl = `${process.env.BACKEND_URL}`;
@@ -122,26 +123,21 @@ app.get("/favorites/random/random", Favorite.getRandomFavoritedVideos);
 // Route for roles
 app.get("/roles", Role.findAll);
 
-// Log in & Register
+// Authentication handler
 app.post("/auth/login", Authentication.logIn);
 
-// 404
+// 404 - Resource not found
 app.use(function (req, res, next) {
   return res.status(404).send({ message: "Resource " + req.url + " Not found." });
 });
 
-// 500 - Any server error
+// 500 - Server error
 app.use(function (err, req, res, next) {
   if (process.env.NODE_ENV != "production") {
     console.log(err);
   }
   return res.status(500).send({ error: err });
 });
-
-//var httpServer = http.createServer(app);
-//var httpsServer = https.createServer(credentials, app);
-
-//httpsServer.listen(3001);
 
 if (process.env.NODE_ENV == "production") {
   app.listen(port, () => console.log(`SOS back-end running on ${serverUrl} [PRODUCTION]`));

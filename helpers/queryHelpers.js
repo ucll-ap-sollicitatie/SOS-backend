@@ -1,5 +1,8 @@
 /**
- *
+ * Handles rejection and resolution of a query promise.
+ * Rejects with error if server error.
+ * Rejects without error if query has no results.
+ * Resolves by returning the results.
  * @param {*} resolve Resolve of current promise
  * @param {*} reject Reject of current promise
  * @param {*} error Query error (results in 500)
@@ -16,7 +19,10 @@ const handleQueryFindAll = (resolve, reject, error, results) => {
 };
 
 /**
- *
+ * Handles rejection and resolution of a query promise.
+ * Rejects with error if server error.
+ * Rejects without error if query has no results.
+ * Resolves by returning the first (and should be) only row.
  * @param {*} resolve Resolve of current promise
  * @param {*} reject Reject of current promise
  * @param {*} error Query error (results in 500)
@@ -33,7 +39,9 @@ const handleQueryFindOne = (resolve, reject, error, results) => {
 };
 
 /**
- *
+ * Handles rejection and resolution of a query promise.
+ * Rejects with error if server error.
+ * Resolves by returning a string '{object} created.'
  * @param {*} resolve Resolve of current promise
  * @param {*} reject Reject of current promise
  * @param {*} error Query error (results in 500)
@@ -48,7 +56,9 @@ const handleQueryAdd = (resolve, reject, error, object) => {
 };
 
 /**
- *
+ * Handles rejection and resolution of a query promise.
+ * Rejects with error if server error.
+ * Resolves by returning a string '{object} updated.'
  * @param {*} resolve Resolve of current promise
  * @param {*} reject Reject of current promise
  * @param {*} error Query error (results in 500)
@@ -63,7 +73,9 @@ const handleQueryUpdate = (resolve, reject, error, object) => {
 };
 
 /**
- *
+ * Handles rejection and resolution of a query promise.
+ * Rejects with error if server error.
+ * Resolves by returning a string '{object} deleted.'
  * @param {*} resolve Resolve of current promise
  * @param {*} reject Reject of current promise
  * @param {*} error Query error (results in 500)
