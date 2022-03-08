@@ -8,7 +8,6 @@ const verifyApiKey = (req, res, next) => {
     next();
     return;
   }
-
   if (!givenApiKey) {
     res.status(401).send("Please provide a correct 'x-api-key' header to gain access.");
     return;
