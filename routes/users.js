@@ -227,7 +227,7 @@ const uploadImage = async (req, res, next) => {
 
   await User.uploadImage(newImage, user_id)
     .then((result) => {
-      User.uploadImageQuery(user_id, result.url).then(() => res.respondUpdated(null, "Image uploaded."));
+      User.uploadImageQuery(user_id, result.secure_url).then(() => res.respondUpdated(null, "Image uploaded."));
     })
     .catch((e) => next(e));
 };
