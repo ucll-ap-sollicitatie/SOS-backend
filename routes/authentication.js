@@ -19,21 +19,21 @@ const logIn = async (req, res) => {
   } else {
     await User.findOneByEmail(email)
       .then((user) => {
-        bcrypt
-          .compare(password, user.hashed_password)
-          .then((result) => {
-            if (!result) {
-              console.log("Invalid creds");
-              res.status(400).send({ error: "Invalid credentials" });
-              return;
-            } else if (user.activation_token) {
-              console.log("unactivated");
-              res.status(401).send({ error: "Account not yet confirmed. Please check email." });
-              return;
-            } else res.respond(user);
-          })
-          .catch((error) => console.log(error));
-});
+        bcrypt.compare(password, user.hashed_password, (err, result) => {
+          if (err || !result) {
+            console.log("Invalid creds");
+            res.status(400).send({ error: "Invalid credentials" });
+            return;
+          } else if (user.activation_token) {
+            console.log("Unactivated");
+            res.status(401).send({ error: "Account not yet confirmed. Please check email." });
+            return;
+          } else res.respond(user);
+        });
+      })
+      .catch((error) => {
+        res.failNotFound(error);
+      });
   }
 };
 

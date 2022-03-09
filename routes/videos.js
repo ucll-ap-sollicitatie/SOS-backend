@@ -69,7 +69,7 @@ const add = async (req, res, next) => {
         .then((result) => {
           Video.uploadSubtitles(subtitles, newVideo, user_id)
             .then(() => {
-              Video.add(title, user_id, email, description, result.url, private)
+              Video.add(title, user_id, email, description, result.secure_url, private)
                 .then(() => res.respondCreated(null, "Video uploaded."))
                 .catch((e) => next(e));
             })

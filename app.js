@@ -142,6 +142,11 @@ app.use(function (err, req, res, next) {
   return res.status(500).send({ error: err });
 });
 
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+  // application specific logging, throwing an error, or other logic here
+});
+
 if (process.env.NODE_ENV == "production") {
   app.listen(port, () => console.log(`SOS back-end running on ${serverUrl} [PRODUCTION]`));
 } else {
