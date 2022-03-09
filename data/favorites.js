@@ -1,5 +1,5 @@
 // Contains all the queries for the table 'favorites'
-const { db, queryHelpers, resolve } = require("./index");
+const { db, queryHelpers } = require("./index");
 
 const addFavorite = (email, video_id) => {
   return new Promise((resolve, reject) => {
