@@ -59,7 +59,7 @@ const setPreference1ToAlgemeen = (preference_id) => {
       queryHelpers.handleQueryUpdate(resolve, reject, err, "Preferences");
     });
   });
-}
+};
 
 const setPreference2ToAlgemeen = (preference_id) => {
   return new Promise((resolve, reject) => {
@@ -67,7 +67,7 @@ const setPreference2ToAlgemeen = (preference_id) => {
       queryHelpers.handleQueryUpdate(resolve, reject, err, "Preferences");
     });
   });
-}
+};
 
 const setPreference3ToAlgemeen = (preference_id) => {
   return new Promise((resolve, reject) => {
@@ -75,7 +75,7 @@ const setPreference3ToAlgemeen = (preference_id) => {
       queryHelpers.handleQueryUpdate(resolve, reject, err, "Preferences");
     });
   });
-}
+};
 
 module.exports = {
   findAll,
