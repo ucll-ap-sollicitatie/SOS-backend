@@ -1,12 +1,13 @@
 # Slim Op Sollicitatie API
 
 An API created for the functioning of the web application '**Slim Op Sollicitatie**', a place to practice job interviews without fear or pressure. Created with the ease and efficiency of Express.js, a Node.js framework.
+_Please be advised: We refer to multiple files in a different repository to make this guide more readable. The other repository is nothing more than a supplementary place which holds files that help us reduce clutter in this guide._
 
 **[Usage](#Usage) | [Installation](#Installation) | [Prerequisites](#Prerequisites) | [FAQ](#FAQ) | [Secret](#Secret)**
 
 ## Usage
 
-To use this API you must make use of JSON. [Click-here-to-view-all-possible-routing.](https://github.com/ucll-ap-sollicitatie/database-scripts/blob/main/REQUESTS.md) For exemplary json requests, please view our exported Postman compilations.
+To use this API you must make use of JSON. Click [here](https://github.com/ucll-ap-sollicitatie/database-scripts/blob/main/REQUESTS.md) to view all possible routing. For exemplary json requests, please view our exported Postman compilations.
 
 ## Installation
 
