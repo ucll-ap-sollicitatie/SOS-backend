@@ -79,6 +79,7 @@ _Please note: for videos, id means 'video_id'._
     "r_u_number": "rXXXXXXX"
 }
 ```
+The video files are uploaded to a Cloudinary server, you can find how to manage a Cloudinary server [here](https://cloudinary.com/documentation).
 
 ### Questions
 

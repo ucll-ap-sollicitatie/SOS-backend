@@ -13,6 +13,18 @@ const findAll = () => {
   });
 };
 
+const findAllByRole = (role_id) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      "SELECT user_id, name, surname, email, image, hashed_password, role, formation, activation_token, token_expiration_date, last_login, introduced, edited FROM users INNER JOIN roles using(role_id) INNER JOIN formations using(formation_id) INNER JOIN preferences using(email) WHERE role_id = $1 ORDER BY user_id DESC",
+      [role_id],
+      (err, results) => {
+        queryHelpers.handleQuery(resolve, reject, err, results);
+      }
+    );
+  });
+};
+
 const findOneByEmail = (email) => {
   return new Promise((resolve, reject) => {
     db.query(
@@ -191,6 +203,7 @@ const uploadImageQuery = (user_id, newUrl) => {
 
 module.exports = {
   findAll,
+  findAllByRole,
   findOneByEmail,
   findOneById,
   findOneByToken,
