@@ -6,7 +6,7 @@ An API created for the functioning of the web application '**Slim Op Sollicitati
 
 ## Usage
 
-To use this API you must make use of JSON. Go here to view all possible routing. For exemplary json requests, please view our exported Postman compilations.
+To use this API you must make use of JSON. [Click-here-to-view-all-possible-routing.](https://github.com/ucll-ap-sollicitatie/database-scripts/blob/main/REQUESTS.md) For exemplary json requests, please view our exported Postman compilations.
 
 ## Installation
 
@@ -21,9 +21,9 @@ CREATE SCHEMA IF NOT EXISTS solicitaties;
 ```
 
 Under this schema we can create the tables we need.
-All 'CREATE TABLE' queries are listed in [this](#test) file.
+All 'CREATE TABLE' queries are listed in [this](https://github.com/ucll-ap-sollicitatie/database-scripts/blob/main/TABLES.md) file.
 
-It's entirely up to you to choose the data you want to insert into the database, you can do it either using a query tool or already set up the API to use that. For examples and sample data, go here.
+It's entirely up to you to choose the data you want to insert into the database, you can do it either using a query tool or already set up the API to use that. For examples and sample data, go [here](https://github.com/ucll-ap-sollicitatie/database-scripts/blob/main/INSERTS.md).
 
 It's time to clone the repository locally in a place of your choice using a terminal.
 
