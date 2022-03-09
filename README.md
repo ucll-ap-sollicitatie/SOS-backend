@@ -32,12 +32,12 @@ It's entirely up to you to choose the data you want to insert into the database,
 It's time to clone the repository locally in a place of your choice using a terminal.
 
 ```
-git clone https://github.com/ucll-ap-sollicitatie/backend.git name-of-folder
+git clone https://github.com/ucll-ap-sollicitatie/backend.git desired-name-of-directory
 cd path/to/soc-backend
 ```
 
-Once inside the folder, go ahead and execute the following command: **`npm install`**
-This command will install most needed dependencies for the application to work leaving out a few that need to be installed manually, this includes the single most important one: Express.js (v4.17.1 or later).  
+Once inside the folder, go ahead and execute the following command: **`npm install`**.
+This command will install most needed dependencies for the application to work leaving out a few that need to be installed manually, this includes the single most important one: **Express.js (v4.17.1 or later)**.  
 To do this simply execute this command:
 
 ```
@@ -99,11 +99,19 @@ DATABASE_USER=your_database_username
 DATABASE_PASS=your_database_password
 DATABASE_HOST=your_database_address
 DATABASE_DB=your_database_name
+
 [Following 3 entries are only if you use cloudinary]
+--------------------------------------------------------
 CLOUDINARY_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API=your_cloudinary_api_key
 CLOUDINARY_SECRET=your_cloudinary_secret_key
+--------------------------------------------------------
+
+[Following entry is if you use Sendgrid as your SMTP service
+--------------------------------------------------------
 SENDGRID_API_KEY=your_sendgrid_api_key
+--------------------------------------------------------
+
 FRONTEND_URL=http://localhost:3000
 BACKEND_URL=http://localhost:3001
 API_ALLOW_HOST=localhost
