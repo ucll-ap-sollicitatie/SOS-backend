@@ -4,7 +4,7 @@ const crypto = require("crypto");
 const verifyApiKey = (req, res, next) => {
   const givenApiKey = req.headers["x-api-key"];
 
-  if (req.hostname === "api.szymon-nidecki.sb.uclllabs.be") {
+  if (req.hostname === process.env.API_ALLOW_HOST) {
     next();
     return;
   }
