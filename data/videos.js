@@ -9,7 +9,8 @@ const findAll = () => {
       FROM videos v 
       inner join users u using(email) 
       LEFT JOIN liked_videos l USING(video_id) 
-      GROUP BY video_id, name, surname`,
+      GROUP BY video_id, name, surname
+      ORDER BY v.date DESC`,
       (err, results) => {
         queryHelpers.handleQuery(resolve, reject, err, results);
       }
