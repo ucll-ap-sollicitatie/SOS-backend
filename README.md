@@ -107,7 +107,7 @@ CLOUDINARY_API=your_cloudinary_api_key
 CLOUDINARY_SECRET=your_cloudinary_secret_key
 --------------------------------------------------------
 
-[Following entry is if you use Sendgrid as your SMTP service
+[Following entry is if you use Sendgrid as your SMTP service]
 --------------------------------------------------------
 SENDGRID_API_KEY=your_sendgrid_api_key
 --------------------------------------------------------
