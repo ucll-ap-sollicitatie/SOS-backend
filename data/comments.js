@@ -158,6 +158,14 @@ const deleteAllCommentLikesByVideo = (video_id) => {
   });
 };
 
+const deleteAllCommentLikesById = (comment_id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`DELETE FROM liked_comments WHERE comment_id = $1`, [comment_id], (err, results) => {
+      queryHelpers.handleQueryDelete(resolve, reject, err, "Delete video");
+    });
+  });
+};
+
 const deleteAllByVideo = (video_id) => {
   return new Promise((resolve, reject) => {
     db.query("DELETE FROM comments WHERE video_id = $1 RETURNING comment_id", [video_id], (err, results) => {
@@ -181,5 +189,6 @@ module.exports = {
   checkLike,
   deleteAllCommentLikesByEmail,
   deleteAllCommentLikesByVideo,
+  deleteAllCommentLikesById,
   deleteAllByVideo,
 };

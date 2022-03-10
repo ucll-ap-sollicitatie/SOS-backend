@@ -121,6 +121,7 @@ const deleteOne = async (req, res, next) => {
   const comment_id = req.params.comment_id;
   await Comment.findOne(comment_id)
     .then(() => {
+      Comment.deleteAllCommentLikesById(comment_id);
       Comment.deleteOne(comment_id)
         .then((result) => res.respondDeleted(result))
         .catch((error) => next(error));
