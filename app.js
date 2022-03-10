@@ -136,9 +136,9 @@ app.use(function (req, res, next) {
 
 // 500 - Server error
 app.use(function (err, req, res, next) {
-  // if (process.env.NODE_ENV != "production") {
+   if (process.env.NODE_ENV != "production") {
   console.log(err);
-  // }
+   }
   return res.status(500).send({ error: err });
 });
 
