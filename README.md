@@ -29,6 +29,8 @@ All 'CREATE TABLE' queries are listed in [this](https://github.com/ucll-ap-solli
 
 It's entirely up to you to choose the data you want to insert into the database, you can do it either using a query tool or already set up the API to use that. For examples and sample data, go [here](https://github.com/ucll-ap-sollicitatie/database-scripts/blob/main/INSERTS.md).
 
+For exemplary queries, together with the request body, go [here](https://github.com/ucll-ap-sollicitatie/database-scripts/tree/main/SOS%20API%20queries). Import these files have been tested on Postman and Insomnia.
+
 It's time to clone the repository locally in a place of your choice using a terminal.
 
 ```
