@@ -4,11 +4,7 @@ const crypto = require("crypto");
 const verifyApiKey = (req, res, next) => {
   const givenApiKey = req.headers["x-api-key"];
 
-  if (
-    req.get("origin") === process.env.FRONTEND_URL ||
-    req.body.callbackUrl === `${process.env.FRONTEND_URL}/auth/login` || // NextAuth callbackUrl because they provide no origin in their request. [REMOVE IF NOT USING NEXTAUTH]
-    req.originalUrl.includes("/users/activation/")
-  ) {
+  if (req.get("origin") === process.env.FRONTEND_URL || req.originalUrl.includes("/users/activation/")) {
     next();
     return;
   }
