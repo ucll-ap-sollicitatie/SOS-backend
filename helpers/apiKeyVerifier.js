@@ -4,7 +4,9 @@ const crypto = require("crypto");
 const verifyApiKey = (req, res, next) => {
   const givenApiKey = req.headers["x-api-key"];
 
-  if (req.hostname === process.env.API_ALLOW_HOST) {
+  console.log(req);
+
+  if (req.origin === process.env.FRONTEND_URL) {
     next();
     return;
   }
