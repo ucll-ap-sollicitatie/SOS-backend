@@ -11,7 +11,7 @@ const {
   Authentication,
   Task,
   Favorite,
-  ApiVerifier,
+  // ApiVerifier,
 } = require("./app/index");
 
 // Middleware
@@ -36,9 +36,9 @@ app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-if (process.env.NODE_ENV === "production") {
-  app.use(ApiVerifier.verifyApiKey);
-}
+// if (process.env.NODE_ENV === "production") {
+//   app.use(ApiVerifier.verifyApiKey);
+// }
 
 app.get("/", function (req, res) {
   res.respond({ message: "Slim op sollicitatie API" });
@@ -145,10 +145,11 @@ app.use(function (err, req, res, next) {
   return res.status(500).send({ error: err });
 });
 
+process.on("unhandledRejection", (reason, p) => {
+  console.log("Unhandled Rejection at: Promise", p, "reason:", reason);
+});
+
 if (process.env.NODE_ENV !== "production") {
-  process.on("unhandledRejection", (reason, p) => {
-    console.log("Unhandled Rejection at: Promise", p, "reason:", reason);
-  });
   app.listen(port, () => console.log(`SOS back-end running on ${serverUrl} [DEVELOPMENT]`));
 } else {
   app.listen(port, () => console.log(`SOS back-end running on ${serverUrl} [PRODUCTION]`));
