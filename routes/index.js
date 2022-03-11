@@ -1,4 +1,7 @@
 const queryHelper = require("../helpers/queryHelpers");
+const emailSenders = require("../helpers/emailSenders");
+const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 const Comment = require("../data/comments");
 const Formation = require("../data/formations");
 const Preference = require("../data/preferences");
@@ -8,12 +11,13 @@ const Role = require("../data/roles");
 const User = require("../data/users");
 const Video = require("../data/videos");
 const Task = require("../data/tasks");
-const bcrypt = require("bcrypt");
-const crypto = require("crypto");
 const Favorite = require("../data/favorites");
 
 module.exports = {
   queryHelper,
+  emailSenders,
+  bcrypt,
+  crypto,
   Comment,
   Formation,
   Preference,
@@ -22,8 +26,6 @@ module.exports = {
   Role,
   User,
   Video,
-  bcrypt,
   Task,
-  crypto,
   Favorite,
 };

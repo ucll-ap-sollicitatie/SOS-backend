@@ -34,29 +34,6 @@ const add = (title, description, deadline, teacher_email) => {
   });
 };
 
-const sendNewTaskToStudentsEmail = (userEmail) => {
-  return new Promise((resolve, reject) => {
-    const sgMail = require("@sendgrid/mail");
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-    const msg = {
-      to: userEmail,
-      from: "slimopsollicitatie2022@gmail.com",
-      subject: "SOS - Nieuwe taak",
-      html: `
-        <h3>Nieuwe taak op Slim op sollicitatie!</h3>
-        <p>Beste, u heeft zojuist een nieuwe taak gekregen. Klik op volgende link om de taak te bekijken.</p>
-        <p><a target="_" href="${process.env.FRONTEND_URL}/tasks">Bekijk taak</a></p>
-        `,
-    };
-
-    sgMail
-      .send(msg)
-      .then(() => resolve("Email sent."))
-      .catch((e) => reject(e));
-  });
-};
-
 const update = (title, description, deadline, task_id) => {
   return new Promise((resolve, reject) => {
     db.query(
@@ -89,7 +66,6 @@ module.exports = {
   findAll,
   findOne,
   add,
-  sendNewTaskToStudentsEmail,
   update,
   deleteOne,
   deleteOneByEmail,

@@ -23,6 +23,7 @@ const compression = require("compression"); // gzip compression of requests and 
 
 // Server and CORS requirements
 const express = require("express");
+const e = require("cors");
 const app = express();
 const port = 3001;
 const serverUrl = `${process.env.BACKEND_URL}`;
@@ -35,7 +36,9 @@ app.use(helmet());
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(ApiVerifier.verifyApiKey);
+if (process.env.NODE_ENV === "production") {
+  app.use(ApiVerifier.verifyApiKey);
+}
 
 app.get("/", function (req, res) {
   res.respond({ message: "Slim op sollicitatie API" });
@@ -136,19 +139,18 @@ app.use(function (req, res, next) {
 
 // 500 - Server error
 app.use(function (err, req, res, next) {
-   if (process.env.NODE_ENV != "production") {
-  console.log(err);
-   }
+  if (process.env.NODE_ENV !== "production") {
+    console.log(err);
+  }
   return res.status(500).send({ error: err });
 });
 
-process.on("unhandledRejection", (reason, p) => {
-  console.log("Unhandled Rejection at: Promise", p, "reason:", reason);
-  // application specific logging, throwing an error, or other logic here
-});
-
-if (process.env.NODE_ENV == "production") {
-  app.listen(port, () => console.log(`SOS back-end running on ${serverUrl} [PRODUCTION]`));
-} else {
+if (process.env.NODE_ENV !== "production") {
+  process.on("unhandledRejection", (reason, p) => {
+    console.log("Unhandled Rejection at: Promise", p, "reason:", reason);
+    // application specific logging, throwing an error, or other logic here
+  });
   app.listen(port, () => console.log(`SOS back-end running on ${serverUrl} [DEVELOPMENT]`));
+} else {
+  app.listen(port, () => console.log(`SOS back-end running on ${serverUrl} [PRODUCTION]`));
 }

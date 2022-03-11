@@ -1,4 +1,4 @@
-const { Comment, Video } = require("./index");
+const { Comment, Video, emailSenders } = require("./index");
 
 /**
  * [GET] Handles result of query for all comments.
@@ -88,7 +88,8 @@ const add = async (req, res, next) => {
  * Sends email to user when getting feedback.
  */
 const sendFeedbackEmail = async (userEmail, video_id) => {
-  await Comment.sendFeedbackEmail(userEmail, video_id)
+  await emailSenders
+    .sendFeedbackEmail(userEmail, video_id)
     .then(() => console.log("Feedback mail sent successfully"))
     .catch((e) => console.log(e));
 };

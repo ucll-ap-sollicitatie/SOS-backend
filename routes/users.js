@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { User, Preference, Task, Comment, Favorite, Video, crypto } = require("./index");
+const { User, Preference, Task, Comment, Favorite, Video, crypto, emailSenders } = require("./index");
 
 /**
  * [GET] Handles result of query for finding all users.
@@ -137,8 +137,6 @@ const deleteOne = async (req, res, next) => {
   console.log(`DELETE /users/:id request`);
   const user_id = req.params.user_id;
 
-  Video.findAllByEmail;
-
   await User.findOneById(user_id)
     .then((current) => {
       Video.findAllByEmail(current.email).then((videoList) => {
@@ -170,7 +168,8 @@ const deleteOne = async (req, res, next) => {
  * Sends activation email to new user.
  */
 const sendActivationMail = async (email, token) => {
-  await User.sendActivationMail(email, token)
+  await emailSenders
+    .sendActivationMail(email, token)
     .then(() => console.log("Activation mail sent successfully"))
     .catch((e) => console.log(e));
 };

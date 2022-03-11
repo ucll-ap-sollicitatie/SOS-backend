@@ -1,4 +1,4 @@
-const { Task, User } = require("./index");
+const { Task, User, emailSenders } = require("./index");
 
 /**
  * [GET] Handles result of query for finding all tasks.
@@ -50,7 +50,8 @@ const add = async (req, res, next) => {
  * Sends email to all students when getting a new task.
  */
 const sendNewTaskToStudentsEmail = async (userEmail) => {
-  await Task.sendNewTaskToStudentsEmail(userEmail)
+  await emailSenders
+    .sendNewTaskToStudentsEmail(userEmail)
     .then(() => console.log("New task email sent successfully"))
     .catch((e) => console.log(e));
 };

@@ -9,6 +9,10 @@ const verifyApiKey = (req, res, next) => {
     return;
   }
 
+  if (req.originalUrl.includes("/users/activation/")) {
+    next();
+    return;
+  }
   if (!givenApiKey) {
     res.status(401).send("Please provide a correct 'x-api-key' header to gain access.");
     return;
