@@ -137,8 +137,19 @@ const deleteOne = async (req, res, next) => {
   console.log(`DELETE /users/:id request`);
   const user_id = req.params.user_id;
 
+  Video.findAllByEmail;
+
   await User.findOneById(user_id)
     .then((current) => {
+      Video.findAllByEmail(current.email).then((videoList) => {
+        videoList.forEach((video) => {
+          Comment.deleteAllCommentLikesByVideo(video.video_id);
+          Comment.deleteAllByVideo(video.video_id);
+          Video.deleteAllVideoLikesByVideo(video.video_id);
+          Favorite.deleteAllByVideo(video.video_id);
+        });
+      });
+
       Task.deleteOneByEmail(current.email)
         .then(() => Video.deleteAllVideoLikesByEmail(current.email))
         .then(() => Comment.deleteAllCommentLikesByEmail(current.email))

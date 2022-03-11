@@ -136,14 +136,14 @@ app.use(function (req, res, next) {
 
 // 500 - Server error
 app.use(function (err, req, res, next) {
-  if (process.env.NODE_ENV != "production") {
-    console.log(err);
-  }
+   if (process.env.NODE_ENV != "production") {
+  console.log(err);
+   }
   return res.status(500).send({ error: err });
 });
 
-process.on('unhandledRejection', (reason, p) => {
-  console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+process.on("unhandledRejection", (reason, p) => {
+  console.log("Unhandled Rejection at: Promise", p, "reason:", reason);
   // application specific logging, throwing an error, or other logic here
 });
 
